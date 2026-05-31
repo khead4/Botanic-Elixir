@@ -266,6 +266,64 @@
       font-size:14px;
       margin:0;
     }
+    .bag-list{
+      display:grid;
+      gap:14px;
+    }
+    .bag-item{
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.035);
+      border-radius:16px;
+      padding:16px;
+      display:grid;
+      grid-template-columns: 1fr auto;
+      gap:16px;
+      align-items:center;
+    }
+    .bag-name{
+      margin:0 0 6px;
+      font-size:15px;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      color:rgba(255,255,255,.90);
+    }
+    .bag-desc{
+      margin:0;
+      color:rgba(255,255,255,.58);
+      font-size:13px;
+      line-height:1.55;
+    }
+    .bag-controls{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      justify-content:flex-end;
+      flex-wrap:wrap;
+    }
+    .qty-btn{
+      width:34px;
+      height:34px;
+      border-radius:999px;
+      border:1px solid var(--border2);
+      background:var(--btn);
+      color:var(--ink);
+      cursor:pointer;
+    }
+    .remove-btn{
+      border:0;
+      background:transparent;
+      color:rgba(255,255,255,.56);
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-size:11px;
+      cursor:pointer;
+    }
+    .line-price{
+      min-width:70px;
+      text-align:right;
+      color:rgba(255,255,255,.86);
+      font-size:14px;
+    }
 
     /* Clear bag button */
     .clear{
@@ -359,6 +417,8 @@
         gap: 30px;
       }
       .summary{ max-width: 520px; }
+      .bag-item{ grid-template-columns:1fr; }
+      .bag-controls{ justify-content:flex-start; }
     }
   </style>
 </head>
@@ -375,7 +435,7 @@
       <a href="experiences.html">Experiences</a>
       <a href="how-it-works.html">How It Works</a>
       <a href="menu.html">Menu</a>
-      <a href="About-Connect.html">Connect</div>
+      <a href="About-Connect.html">Connect</a>
       <a href="contact.html">Contact</a>
 
       <!-- ABOUT DROPDOWN -->
@@ -439,8 +499,9 @@
 
     <!-- ITEMS -->
     <div>
-      <h2>ITEMS <a class="clear" href="#">CLEAR BAG</a></h2>
-      <p class="empty">Your bag is empty.</p>
+      <h2>ITEMS <a class="clear" href="#" id="clearBag">CLEAR BAG</a></h2>
+      <div class="bag-list" id="bagList"></div>
+      <p class="empty" id="emptyBag">Your bag is empty.</p>
     </div>
 
     <!-- SUMMARY -->
@@ -449,29 +510,124 @@
       <h2>SUMMARY</h2>
 
       <div class="summary-row">
-        <span>Items</span><span>0</span>
+        <span>Items</span><span id="summaryItems">0</span>
       </div>
       <div class="summary-row">
-        <span>Subtotal</span><span>£0</span>
+        <span>Subtotal</span><span id="summarySubtotal">£0</span>
       </div>
       <div class="summary-row">
-        <span>Service</span><span>£0</span>
+        <span>Service</span><span id="summaryService">£0</span>
       </div>
 
       <div class="summary-row total">
-        <span><h2>TOTAL</h2></span><span>£0</span>
+        <span><h2>TOTAL</h2></span><span id="summaryTotal">£0</span>
       </div>
 
       <div class="bag-actions">
         <div class="continue-links">
           <a class="exp-cta" href="experiences.html">CONTINUE TO EXPERIENCES &gt;</a>
           <a class="exp-cta" href="menu.html">CONTINUE TO MENU &gt;</a>
-          <a class="exp-cta checkout primary" href="confirmed.html">CHECK OUT &gt;</a>
+          <a class="exp-cta checkout primary" id="checkoutLink" href="checkout.html">CHECK OUT &gt;</a>
         </div>
       </div>
     </div>
 
   </section>
 
+  <script>
+    (function(){
+      const list = document.getElementById("bagList");
+      const empty = document.getElementById("emptyBag");
+      const clear = document.getElementById("clearBag");
+      const checkoutLink = document.getElementById("checkoutLink");
+      const money = value => "£" + value.toFixed(2).replace(".00", "");
+      const priceNumber = item => Number(String(item.price || "0").replace(/[^0-9.]/g, "")) || 0;
+
+      function readCart(){
+        try { return JSON.parse(localStorage.getItem("be_cart") || "[]"); }
+        catch (error) { return []; }
+      }
+
+      function writeCart(cart){
+        localStorage.setItem("be_cart", JSON.stringify(cart));
+      }
+
+      function normalize(cart){
+        const grouped = new Map();
+        cart.forEach(item => {
+          const key = item.stripeKey || item.name;
+          const existing = grouped.get(key);
+          const qty = Number(item.qty || 1);
+          if (existing) existing.qty += qty;
+          else grouped.set(key, Object.assign({}, item, { qty }));
+        });
+        return Array.from(grouped.values());
+      }
+
+      function render(){
+        const cart = normalize(readCart());
+        writeCart(cart);
+        list.innerHTML = "";
+        const count = cart.reduce((sum, item) => sum + Number(item.qty || 1), 0);
+        const subtotal = cart.reduce((sum, item) => sum + priceNumber(item) * Number(item.qty || 1), 0);
+        const service = subtotal > 0 ? Math.max(1, subtotal * 0.06) : 0;
+        const total = subtotal + service;
+
+        empty.style.display = cart.length ? "none" : "block";
+        checkoutLink.setAttribute("aria-disabled", cart.length ? "false" : "true");
+        checkoutLink.style.opacity = cart.length ? "1" : ".45";
+        document.getElementById("summaryItems").textContent = String(count);
+        document.getElementById("summarySubtotal").textContent = money(subtotal);
+        document.getElementById("summaryService").textContent = money(service);
+        document.getElementById("summaryTotal").textContent = money(total);
+
+        cart.forEach((item, index) => {
+          const row = document.createElement("article");
+          row.className = "bag-item";
+          row.innerHTML = `
+            <div>
+              <h3 class="bag-name">${item.name || "Item"}</h3>
+              <p class="bag-desc">${item.desc || "Botanic Elixir menu item"}</p>
+            </div>
+            <div class="bag-controls">
+              <button class="qty-btn" type="button" data-action="minus" data-index="${index}" aria-label="Decrease quantity">-</button>
+              <span>Qty ${Number(item.qty || 1)}</span>
+              <button class="qty-btn" type="button" data-action="plus" data-index="${index}" aria-label="Increase quantity">+</button>
+              <span class="line-price">${money(priceNumber(item) * Number(item.qty || 1))}</span>
+              <button class="remove-btn" type="button" data-action="remove" data-index="${index}">Remove</button>
+            </div>
+          `;
+          list.appendChild(row);
+        });
+      }
+
+      list.addEventListener("click", event => {
+        const button = event.target.closest("button[data-action]");
+        if (!button) return;
+        const cart = normalize(readCart());
+        const index = Number(button.dataset.index);
+        const action = button.dataset.action;
+        if (!cart[index]) return;
+        if (action === "plus") cart[index].qty = Number(cart[index].qty || 1) + 1;
+        if (action === "minus") cart[index].qty = Math.max(1, Number(cart[index].qty || 1) - 1);
+        if (action === "remove") cart.splice(index, 1);
+        writeCart(cart);
+        render();
+      });
+
+      clear.addEventListener("click", event => {
+        event.preventDefault();
+        localStorage.removeItem("be_cart");
+        render();
+      });
+
+      checkoutLink.addEventListener("click", event => {
+        if (normalize(readCart()).length) return;
+        event.preventDefault();
+      });
+
+      render();
+    })();
+  </script>
 </body>
 </html>

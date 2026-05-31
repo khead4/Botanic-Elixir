@@ -635,27 +635,17 @@
             <hr class="divider" />
 
             <h2 class="panel-title">Payment</h2>
-            <p class="muted">This is a visual layout only (no real payment processing).</p><br>
+            <p class="muted">Payment is taken at pickup or on arrival. No card details are collected in this prototype.</p><br>
 
             <div class="form-grid">
               <div class="field full">
-                <label for="cardName">Name on card</label>
-                <input id="cardName" name="cardName" type="text" placeholder="Name on card">
-              </div>
-
-              <div class="field full">
-                <label for="cardNumber">Card number</label><br>
-                <input id="cardNumber" name="cardNumber" type="text" placeholder="1234 5678 9012 3456">
-              </div>
-
-              <div class="field">
-                <label for="exp">Expiry</label>
-                <input id="exp" name="exp" type="text" placeholder="MM/YY">
-              </div>
-
-              <div class="field">
-                <label for="cvc">CVC</label>
-                <input id="cvc" name="cvc" type="text" placeholder="123">
+                <label for="paymentMethod">Payment method</label>
+                <select id="paymentMethod" name="paymentMethod" required>
+                  <option value="" selected disabled>Choose one</option>
+                  <option value="pay-at-pickup">Pay at pickup</option>
+                  <option value="pay-on-arrival">Pay on arrival</option>
+                  <option value="send-invoice">Send invoice for event/group booking</option>
+                </select>
               </div>
             </div>
 
@@ -665,7 +655,7 @@
                 <a class="exp-cta" href="menu.html">Continue to Menu &gt;</a>
               </div>
 
-              <a class="exp-cta primary" href="confirmation.html">Place Order &gt;</a>
+              <button class="exp-cta primary" type="submit">Place Order &gt;</button>
             </div>
 
             <p class="tiny-note">
@@ -681,7 +671,7 @@
           <h2 class="panel-title">Order Summary<br></h2>
        
 
-          <div class="summary-list">
+          <div class="summary-list" id="checkoutSummary">
             <div class="sum-row">
               <div class="sum-left">
                 <div class="sum-name"><br>Clarity Tonic</div>
@@ -710,21 +700,21 @@
           <div class="totals">
             <div class="total-line">
               <span>Subtotal</span>
-              <span>£16</span>
+              <span id="checkoutSubtotal">£0</span>
             </div>
             <div class="total-line">
               <span>Service</span>
-              <span>£0</span>
+              <span id="checkoutService">£0</span>
             </div>
             <div class="total-line grand">
               <span><br>Total</span>
-              <span><br>£16</span>
+              <span id="checkoutTotal"><br>£0</span>
             </div>
           </div>
 
           <div class="actions-row" style="margin-top:22px;">
             <a class="exp-cta" href="experiences.html"><br>Continue to Experiences &gt;</a>
-            <a class="exp-cta primary" href="confirmation.html">Check Out &gt;</a>
+            <a class="exp-cta primary" href="#checkoutForm">Review Details &gt;</a>
           </div>
 
           <p class="tiny-note">
@@ -752,6 +742,101 @@
         sel.addEventListener("change", apply);
         apply();
       });
+    })();
+
+    (function(){
+      const form = document.getElementById("checkoutForm");
+      const summary = document.getElementById("checkoutSummary");
+      const money = value => "£" + value.toFixed(2).replace(".00", "");
+      const priceNumber = item => Number(String(item.price || "0").replace(/[^0-9.]/g, "")) || 0;
+
+      function readCart(){
+        try { return JSON.parse(localStorage.getItem("be_cart") || "[]"); }
+        catch (error) { return []; }
+      }
+
+      function writeCart(cart){
+        localStorage.setItem("be_cart", JSON.stringify(cart));
+      }
+
+      function normalize(cart){
+        const grouped = new Map();
+        cart.forEach(item => {
+          const key = item.stripeKey || item.name;
+          const existing = grouped.get(key);
+          const qty = Number(item.qty || 1);
+          if (existing) existing.qty += qty;
+          else grouped.set(key, Object.assign({}, item, { qty }));
+        });
+        return Array.from(grouped.values());
+      }
+
+      function totals(cart){
+        const subtotal = cart.reduce((sum, item) => sum + priceNumber(item) * Number(item.qty || 1), 0);
+        const service = subtotal > 0 ? Math.max(1, subtotal * 0.06) : 0;
+        return { subtotal, service, total: subtotal + service };
+      }
+
+      function renderSummary(){
+        const cart = normalize(readCart());
+        writeCart(cart);
+        const calculated = totals(cart);
+        summary.innerHTML = "";
+
+        if (!cart.length) {
+          summary.innerHTML = '<div class="sum-row"><div class="sum-left"><div class="sum-name">Your bag is empty</div><div class="sum-meta">Add drinks or food from the menu to continue.</div></div><div class="sum-price">£0</div></div>';
+        } else {
+          cart.forEach(item => {
+            const qty = Number(item.qty || 1);
+            const row = document.createElement("div");
+            row.className = "sum-row";
+            row.innerHTML = `
+              <div class="sum-left">
+                <div class="sum-name">${item.name || "Item"}</div>
+                <div class="sum-meta">Menu item · Qty ${qty}</div>
+              </div>
+              <div class="sum-price">${money(priceNumber(item) * qty)}</div>
+            `;
+            summary.appendChild(row);
+          });
+        }
+
+        document.getElementById("checkoutSubtotal").textContent = money(calculated.subtotal);
+        document.getElementById("checkoutService").textContent = money(calculated.service);
+        document.getElementById("checkoutTotal").innerHTML = "<br>" + money(calculated.total);
+        return { cart, calculated };
+      }
+
+      form.addEventListener("submit", event => {
+        event.preventDefault();
+        if (!form.reportValidity()) return;
+        const current = renderSummary();
+        if (!current.cart.length) {
+          window.location.href = "menu.html";
+          return;
+        }
+
+        const fd = new FormData(form);
+        const order = {
+          id: "BE-" + Date.now().toString(36).toUpperCase(),
+          createdAt: new Date().toISOString(),
+          items: current.cart,
+          totals: current.calculated,
+          customer: {}
+        };
+        for (const [key, value] of fd.entries()){
+          order.customer[key] = String(value || "").trim();
+        }
+
+        localStorage.setItem("be_last_order", JSON.stringify(order));
+        const orders = JSON.parse(localStorage.getItem("be_orders") || "[]");
+        orders.unshift(order);
+        localStorage.setItem("be_orders", JSON.stringify(orders.slice(0, 20)));
+        localStorage.removeItem("be_cart");
+        window.location.href = "confirmation.html?order=" + encodeURIComponent(order.id);
+      });
+
+      renderSummary();
     })();
   </script>
 </body>

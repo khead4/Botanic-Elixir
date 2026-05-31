@@ -571,19 +571,19 @@
 
           <div class="kv">
             <div class="k">Order #</div>
-            <div class="v">BE-10482</div>
+            <div class="v" id="confirmOrderId">BE-10482</div>
 
             <div class="k">Email</div>
-            <div class="v">you@email.com</div>
+            <div class="v" id="confirmEmail">you@email.com</div>
 
             <div class="k">Fulfillment</div>
-            <div class="v">Pickup</div>
+            <div class="v" id="confirmFulfillment">Pickup</div>
 
             <div class="k">Estimated</div>
-            <div class="v">Today · 20–30 minutes</div>
+            <div class="v" id="confirmEstimated">Today - 20 to 30 minutes</div>
 
             <div class="k">Notes</div>
-            <div class="v">—</div>
+            <div class="v" id="confirmNotes">—</div>
           </div>
 
           <hr class="divider" />
@@ -608,9 +608,9 @@
           <div class="cap" aria-hidden="true"></div>
 
           <h2 class="label">Summary</h2>
-          <p class="muted">Example layout — swap these values with your saved bag later.</p>
+          <p class="muted">Your saved order summary.</p>
 
-          <div class="items">
+          <div class="items" id="confirmItems">
             <div class="row">
               <div class="left">
                 <div class="name">Clarity Tonic</div>
@@ -637,13 +637,14 @@
           </div>
 
           <div class="totals">
-            <div class="line"><span>Subtotal</span><span>£16</span></div>
-            <div class="line"><span>Service</span><span>£0</span></div>
-            <div class="line grand"><span>Total</span><span>£16</span></div>
+            <div class="line"><span>Subtotal</span><span id="confirmSubtotal">£16</span></div>
+            <div class="line"><span>Service</span><span id="confirmService">£0</span></div>
+            <div class="line grand"><span>Total</span><span id="confirmTotal">£16</span></div>
           </div>
 
           <div class="actions" style="margin-top:22px;">
             <a class="exp-cta" href="bag.html">View Your Bag &gt;</a>
+            <a class="exp-cta" id="receiptLink" href="mailto:hello@botanicelixir.com">Email Receipt &gt;</a>
             <a class="exp-cta primary" href="book-consultation.html">Book Consultation &gt;</a>
           </div>
         </aside>
@@ -652,5 +653,74 @@
 
     </div>
   </main>
+  <script>
+    (function(){
+      let order = null;
+      try {
+        order = JSON.parse(localStorage.getItem("be_last_order") || "null");
+      } catch (error) {
+        order = null;
+      }
+      if (!order) return;
+
+      const money = value => "£" + Number(value || 0).toFixed(2).replace(".00", "");
+      const priceNumber = item => Number(String(item.price || "0").replace(/[^0-9.]/g, "")) || 0;
+      const setText = (id, value) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = value && String(value).trim() ? value : "—";
+      };
+
+      setText("confirmOrderId", order.id);
+      setText("confirmEmail", order.customer && order.customer.email);
+      setText("confirmFulfillment", order.customer && order.customer.pickup ? order.customer.pickup.replace(/-/g, " ") : "Pickup");
+      setText("confirmEstimated", "Today - 20 to 30 minutes");
+      setText("confirmNotes", order.customer && order.customer.notes);
+
+      const items = document.getElementById("confirmItems");
+      items.innerHTML = "";
+      (order.items || []).forEach(item => {
+        const qty = Number(item.qty || 1);
+        const row = document.createElement("div");
+        row.className = "row";
+        row.innerHTML = `
+          <div class="left">
+            <div class="name">${item.name || "Item"}</div>
+            <div class="meta">Menu item · Qty ${qty}</div>
+          </div>
+          <div class="price">${money(priceNumber(item) * qty)}</div>
+        `;
+        items.appendChild(row);
+      });
+
+      const totals = order.totals || {};
+      setText("confirmSubtotal", money(totals.subtotal || 0));
+      setText("confirmService", money(totals.service || 0));
+      setText("confirmTotal", money(totals.total || 0));
+
+      const receiptLines = [
+        "Botanic Elixir order confirmation",
+        "Order: " + (order.id || ""),
+        "Email: " + ((order.customer && order.customer.email) || ""),
+        "Fulfillment: " + ((order.customer && order.customer.pickup) || ""),
+        "",
+        "Items:",
+        ...(order.items || []).map(item => {
+          const qty = Number(item.qty || 1);
+          return "- " + (item.name || "Item") + " x " + qty + " - " + money(priceNumber(item) * qty);
+        }),
+        "",
+        "Total: " + money(totals.total || 0),
+        "",
+        "Notes:",
+        (order.customer && order.customer.notes) || ""
+      ];
+      const receiptLink = document.getElementById("receiptLink");
+      if (receiptLink) {
+        receiptLink.href = "mailto:" + encodeURIComponent((order.customer && order.customer.email) || "hello@botanicelixir.com") +
+          "?subject=" + encodeURIComponent("Botanic Elixir receipt " + (order.id || "")) +
+          "&body=" + encodeURIComponent(receiptLines.join("\n"));
+      }
+    })();
+  </script>
 </body>
 </html>

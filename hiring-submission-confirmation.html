@@ -511,10 +511,10 @@
   <main class="page-content">
     <div class="wrap">
       <section class="hero">
-        <h1>Application Delivered</h1>
+        <h1>Application Prepared</h1>
         <p>
-          Your hiring application details were exported successfully.
-          You can copy/share this link, or go back to edit before submitting.
+          Your application has been saved in this browser. Use the email action below
+          to send the prepared summary to the Botanic Elixir team.
         </p>
       </section>
 
@@ -543,6 +543,11 @@
             </div>
 
             <div class="row">
+              <div class="k">Phone</div>
+              <div class="v" id="v-phone">—</div>
+            </div>
+
+            <div class="row">
               <div class="k">Role</div>
               <div class="v" id="v-role">—</div>
             </div>
@@ -553,8 +558,17 @@
             </div>
 
             <div class="row">
+              <div class="k">Earliest start</div>
+              <div class="v" id="v-startDate">—</div>
+            </div>
+            <div class="row">
               <div class="k">Why this role?</div>
               <div class="v" id="v-why">—</div>
+            </div>
+
+            <div class="row">
+              <div class="k">Experience</div>
+              <div class="v" id="v-experience">—</div>
             </div>
 
             <div class="row">
@@ -565,7 +579,7 @@
 
           <div class="actions">
             <a class="exp-cta" id="editLink" href="hiring.html">Edit Draft &gt;</a>
-            <a class="exp-cta primary" id="submitLink" href="hiring-confirmation.html">Proceed to Submit &gt;</a>
+            <a class="exp-cta primary" id="submitLink" href="mailto:hello@botanicelixir.com">Send to Team &gt;</a>
             <button class="exp-cta" type="button" id="copyLinkBtn">Copy Share Link &gt;</button>
           </div>
 
@@ -578,17 +592,17 @@
         <aside class="glass glass--purple" aria-label="Next steps">
           <h2 class="label">What happens next</h2>
           <p class="muted">
-            This page reads your saved values from the URL. If you want true saving,
-            we can store drafts in <strong>localStorage</strong> next.
+            Once the email is sent, the team can reply with interview timing, availability
+            questions, or a paid trial shift invitation.
           </p>
 
           <hr class="divider" />
 
           <h3 class="label" style="margin-bottom:10px;">Tips</h3>
           <ul class="muted" style="margin:0; padding-left:18px; line-height:1.9;">
-            <li>Use “Copy Share Link” to send your draft to yourself.</li>
-            <li>Edit anytime — your changes will export into a new link.</li>
-            <li>When ready, “Proceed to Submit” keeps the same fields.</li>
+            <li>Use Copy Share Link to keep a copy of the application.</li>
+            <li>Edit anytime if your availability or links change.</li>
+            <li>A production email service can replace the mail link later.</li>
           </ul>
 
           <hr class="divider" />
@@ -663,7 +677,7 @@
 
       if (qs) {
         editLink.href = "hiring.html#apply";
-        submitLink.href = "hiring-confirmation.html?" + qs;
+        submitLink.href = "mailto:hello@botanicelixir.com";
       }
 
       const requiredKeys = ["fullName","email","role","availability","why"];
@@ -682,6 +696,90 @@
           window.prompt("Copy this link:", window.location.href);
         }
       });
+    })();
+  </script>
+  <script>
+    (function(){
+      const params = new URLSearchParams(window.location.search);
+      const fromParams = Object.fromEntries(params.entries());
+      let saved = {};
+      try {
+        saved = JSON.parse(localStorage.getItem("be_last_career") || "{}");
+      } catch (error) {
+        saved = {};
+      }
+
+      const roleMap = {
+        "guest-experience-lead": "Guest Experience Lead",
+        "botanical-bar-specialist": "Botanical Bar Specialist",
+        "experience-systems-technician": "Experience Systems Technician",
+        "hybrid": "Hybrid"
+      };
+      const availabilityMap = {
+        "weekdays": "Weekdays",
+        "weekends": "Weekends",
+        "evenings": "Evenings",
+        "flexible": "Flexible"
+      };
+      const data = Object.assign({}, saved, fromParams);
+      data.roleLabel = data.roleLabel || roleMap[data.role] || data.role || "";
+      data.availabilityLabel = availabilityMap[data.availability] || data.availability || "";
+
+      function setText(id, value){
+        const el = document.getElementById(id);
+        if (el) el.textContent = value && String(value).trim() ? value : "—";
+      }
+
+      const ref = data.id || "BE-CAR-" + Date.now().toString(36).toUpperCase();
+      setText("refId", ref);
+      setText("v-fullName", data.fullName);
+      setText("v-email", data.email);
+      setText("v-phone", data.phone);
+      setText("v-role", data.roleLabel);
+      setText("v-availability", data.availabilityLabel);
+      setText("v-startDate", data.startDate);
+      setText("v-why", data.why);
+      setText("v-experience", data.experience);
+      setText("v-links", data.links);
+
+      const savedAt = data.createdAt ? new Date(data.createdAt) : new Date();
+      setText("savedAt", "Saved: " + savedAt.toLocaleString([], {
+        year: "numeric",
+        month: "short",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit"
+      }));
+
+      const lines = [
+        "Botanic Elixir careers application",
+        "Reference: " + ref,
+        "Name: " + (data.fullName || ""),
+        "Email: " + (data.email || ""),
+        "Phone: " + (data.phone || ""),
+        "Role: " + (data.roleLabel || ""),
+        "Availability: " + (data.availabilityLabel || ""),
+        "Earliest start: " + (data.startDate || ""),
+        "",
+        "Why this role:",
+        data.why || "",
+        "",
+        "Relevant experience:",
+        data.experience || "",
+        "",
+        "Links:",
+        data.links || ""
+      ];
+      const subjectName = data.fullName ? " - " + data.fullName : "";
+      const mailto = "mailto:hello@botanicelixir.com?subject=" +
+        encodeURIComponent("CAREERS" + subjectName) +
+        "&body=" + encodeURIComponent(lines.join("\n"));
+      const submitLink = document.getElementById("submitLink");
+      if (submitLink) submitLink.href = mailto;
+
+      const missing = ["fullName", "email", "role", "availability", "why", "experience"].filter(k => !data[k]);
+      const missingNote = document.getElementById("missingNote");
+      if (missingNote) missingNote.style.display = missing.length ? "block" : "none";
     })();
   </script>
 </body>

@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Botanic Elixir — Contact</title>
 
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
   <style>
     :root{
       /* ===== MATCH THE COMMUNITY PAGE LOOK ===== */
@@ -341,9 +343,6 @@
     }
     .map{
       min-height: 250px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
       background: rgba(255,255,255,.03);
       border: 1px solid rgba(255,255,255,.10);
       border-radius: 16px;
@@ -351,29 +350,38 @@
       position:relative;
       overflow:hidden;
     }
-    .map .pin{
-      width: 44px; height: 44px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.18);
-      background: rgba(255,255,255,.07);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size: 18px;
-      color: rgba(255,255,255,.85);
+    #gisMap{
+      min-height: 360px;
+      width:100%;
+      background:#050505;
+      filter: saturate(.82) contrast(1.08);
+    }
+    .leaflet-container{
+      background:#050505;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    .leaflet-control-zoom a{
+      background: rgba(0,0,0,.82);
+      color: rgba(255,255,255,.86);
+      border-bottom-color: rgba(255,255,255,.12);
     }
     .map .tag{
       position:absolute;
+      left: 14px;
+      right: 14px;
       bottom: 14px;
       font-size: 11px;
       letter-spacing: .14em;
       text-transform: uppercase;
       color: rgba(255,255,255,.70);
-      background: rgba(0,0,0,.35);
+      background: rgba(0,0,0,.62);
       border: 1px solid rgba(255,255,255,.10);
-      padding: 8px 10px;
-      border-radius: 999px;
+      padding: 10px 12px;
+      border-radius: 12px;
       backdrop-filter: blur(10px);
+      line-height:1.5;
+      z-index: 500;
+      pointer-events:none;
     }
 
     /* ===== Booking form ===== */
@@ -604,9 +612,9 @@
           </div>
         </div>
 
-        <div class="map" aria-label="Interactive map placeholder">
-          <div class="pin">📍</div>
-          <div class="tag">Interactive Map</div>
+        <div class="map" aria-label="GIS map for Botanic Elixir Shoreditch">
+          <div id="gisMap" role="img" aria-label="OpenStreetMap GIS map centered near 42 Kingsland Road, Shoreditch"></div>
+          <div class="tag">GIS map - 42 Kingsland Road, Shoreditch E2 8DA</div>
         </div>
       </div>
     </section>
@@ -770,7 +778,60 @@
   </main>
 
 
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    (function(){
+      const venue = [51.5287, -0.0779];
+      if (window.L && document.getElementById("gisMap")) {
+        const map = L.map("gisMap", {
+          scrollWheelZoom: false,
+          zoomControl: true
+        }).setView(venue, 16);
+
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          maxZoom: 19,
+          attribution: "&copy; OpenStreetMap contributors"
+        }).addTo(map);
+
+        L.marker(venue).addTo(map)
+          .bindPopup("<strong>Botanic Elixir</strong><br>42 Kingsland Road<br>Shoreditch, London E2 8DA");
+
+        L.circle(venue, {
+          radius: 260,
+          color: "#45d8d1",
+          weight: 1,
+          fillColor: "#2a9bd8",
+          fillOpacity: 0.08
+        }).addTo(map);
+      }
+
+      const bookingForm = document.getElementById("bookingRequestForm");
+      if (!bookingForm) return;
+
+      bookingForm.addEventListener("submit", function(event){
+        event.preventDefault();
+        if (!bookingForm.reportValidity()) return;
+
+        const fd = new FormData(bookingForm);
+        const booking = {
+          id: "BE-BOOK-" + Date.now().toString(36).toUpperCase(),
+          status: "Request received",
+          createdAt: new Date().toISOString()
+        };
+        for (const [key, value] of fd.entries()){
+          booking[key] = String(value || "").trim();
+        }
+        booking.fullName = booking.name || "";
+        booking.experience = booking.type || "";
+
+        const saved = JSON.parse(localStorage.getItem("botanic_bookings") || "[]");
+        saved.unshift(booking);
+        localStorage.setItem("botanic_bookings", JSON.stringify(saved.slice(0, 20)));
+        localStorage.setItem("botanic_last_booking", JSON.stringify(booking));
+        localStorage.setItem("botanic_last_booking_id", booking.id);
+        window.location.href = "booked.html?id=" + encodeURIComponent(booking.id);
+      });
+    })();
+</script>
 </body>
 </html>
-
- 
