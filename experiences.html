@@ -1,0 +1,1390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Botanic Elixir — Experiences</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#000;
+      --ink: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.72);
+      --line: rgba(255,255,255,0.18);
+
+      --glass: rgba(255,255,255,0.08);
+      --glass2: rgba(0,0,0,0.26);
+
+      --max: 1200px;
+      --shadow: 0 30px 90px rgba(0,0,0,0.45);
+      --r: 18px;
+
+      /* mood gradients */
+      --g-focus: linear-gradient(90deg,#77cde4,#6b86e6);
+      --g-play: linear-gradient(90deg,#d96b58,#a8a3d7);
+      --g-connect: linear-gradient(90deg,#ea76b8,#b78bff);
+      --g-restore: linear-gradient(90deg,#9bf071,#7ef0d6);
+      --g-pink: linear-gradient(90deg, #ff5cc8, #ff8adf);
+
+      /* buttons */
+      --btn: rgba(255,255,255,.06);
+      --btnHover: rgba(255,255,255,.10);
+      --btnPrimary: rgba(255,255,255,.90);
+      --btnPrimaryInk: rgba(0,0,0,.85);
+    }
+
+    *{ box-sizing:border-box; }
+    html, body{ height:100%; }
+    body{
+      margin:0;
+      font-family:"Inter", Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      overflow-x:hidden;
+    }
+
+    a{ color:inherit; text-decoration:none; }
+
+    /*  video background */
+    .video-bg{
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      overflow: hidden;
+      background:#000;
+    }
+    .video-bg video{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.55;
+      filter: saturate(1.05) contrast(1.05);
+    }
+    .video-bg::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background: radial-gradient(circle at 50% 30%, rgba(0,0,0,0.35), rgba(0,0,0,0.88));
+      z-index: 1;
+      pointer-events:none;
+    }
+
+    /* =========================
+       ✅ NEW UNIVERSAL NAV
+    ========================== */
+    .topline{
+      position: sticky;
+      top:0;
+      z-index: 1000;
+
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      background: rgba(0,0,0,0.45);
+      border-bottom: 1px solid rgba(255,255,255,.12);
+
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 18px;
+      padding:14px 26px;
+    }
+
+    .brand{
+      color:#fff;
+      text-decoration:none;
+      font-size:.78rem;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      line-height:1.1;
+      white-space:nowrap;
+      user-select:none;
+      display:block;
+      opacity:.95;
+    }
+    .brand span{
+      display:block;
+      opacity:.7;
+      margin-top:4px;
+      letter-spacing:.12em;
+      font-size:.70rem;
+      text-transform: none;
+    }
+
+    .top-links{
+      display:flex;
+      gap:26px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+
+    .top-links > a,
+    .top-links .drop-trigger{
+      color: rgba(255,255,255,.78);
+      font-size: .82rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 8px 6px;
+      transition: .18s;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      user-select:none;
+    }
+    .top-links > a:hover,
+    .top-links .drop-trigger:hover{ color:#fff; }
+    .top-links > a.active{ color:#fff; font-weight:700; }
+
+    .right-controls{
+      display:flex;
+      align-items:center;
+      gap:22px;
+    }
+
+    .icon-link{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:4px;
+      color: rgba(255,255,255,.78);
+      font-size: .60rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      transition: .18s;
+      user-select:none;
+      min-width: 72px;
+    }
+    .icon-link svg{
+      width:22px;
+      height:22px;
+      stroke:#fff;
+      fill:none;
+      stroke-width:1.6;
+      opacity:.85;
+      transition:.18s;
+    }
+    .icon-link:hover{ color:#fff; text-shadow: 0 0 14px rgba(255,255,255,.22); }
+    .icon-link:hover svg{
+      opacity:1;
+      transform: translateY(-2px);
+      filter: drop-shadow(0 0 10px rgba(255,255,255,.22));
+    }
+
+    .dropdown{ position:relative; display:inline-flex; align-items:center; }
+    .dropdown-panel{
+      position:absolute;
+      top:120%;
+      left:0;
+      background: rgba(0,0,0,.86);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 14px;
+      padding: 10px 0;
+      min-width: 200px;
+
+      opacity: 0;
+      pointer-events:none;
+      transform: translateY(6px);
+      transition: .18s;
+      z-index: 9999;
+    }
+    .dropdown:hover .dropdown-panel{
+      opacity:1;
+      pointer-events:auto;
+      transform: translateY(0);
+    }
+    .dropdown-panel a{
+      display:block;
+      padding: 10px 16px;
+      color: rgba(255,255,255,.82);
+      font-size: .75rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .dropdown-panel a:hover{ background: rgba(255,255,255,.08); color:#fff; }
+
+    .icon-dropdown .dropdown-panel{ right:0; left:auto; min-width: 200px; }
+
+    .caret{
+      width:10px;
+      height:10px;
+      display:inline-block;
+      border-right: 2px solid rgba(255,255,255,.70);
+      border-bottom: 2px solid rgba(255,255,255,.70);
+      transform: rotate(45deg);
+      margin-top:-2px;
+      transition:.18s;
+      opacity:.85;
+    }
+    .dropdown:hover .caret{ opacity:1; border-color:#fff; }
+
+    @media (max-width: 760px){
+      .top-links{ display:none; }
+      .topline{ padding: 12px 16px; }
+      .right-controls{ gap:14px; }
+      .icon-link{ min-width: 62px; }
+    }
+
+    /* ===== PAGE WRAP ===== */
+    .wrap{
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 60px 18px 90px;
+    }
+
+    /* ===== HERO ===== */
+    .hero{
+      text-align:center;
+      padding: 18px 0 22px;
+    }
+    .hero h1{
+      margin: 0 0 10px;
+      font-size: 44px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: #fff;
+    }
+    .hero p{
+      margin: 0 auto;
+      max-width: 860px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.75;
+      opacity: 0.85;
+    }
+    .rule{
+      height:1px;
+      background: rgba(255,255,255,0.12);
+      margin: 18px 0 22px;
+    }
+
+    /* ===== TABS ===== */
+    .tabs{
+      margin-top: 14px;
+      display:flex;
+      justify-content:center;
+      gap: 10px;
+      flex-wrap:wrap;
+    }
+    .tab{
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.90);
+      font-size: 11px;
+      letter-spacing:.10em;
+      text-transform: uppercase;
+      cursor:pointer;
+      user-select:none;
+    }
+    .tab.is-active{
+      border-color:#fff;
+      box-shadow: 0 0 0 2px rgba(255,255,255,0.22);
+      background: rgba(255,255,255,0.12);
+    }
+
+    /* ===== SECTION PANEL ===== */
+    .panel{
+      margin-top: 24px;
+      background: var(--glass);
+      border: 1px solid var(--line);
+      border-radius: var(--r);
+      padding: 22px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: var(--shadow);
+    }
+
+    /* ===== GRID ===== */
+    .grid{
+      max-width: 980px;
+      margin: 0 auto;
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    /* ===== CARD ===== */
+    .card{
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(0,0,0,0.26);
+      border-radius: 18px;
+      overflow:hidden;
+      min-height: 290px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      transition: transform .12s ease, border-color .15s ease, background .15s ease;
+    }
+    .card:hover{
+      transform: translateY(-2px);
+      border-color: rgba(255,255,255,0.30);
+      background: rgba(255,255,255,0.06);
+    }
+
+    /* mood stripe */
+    .bar{ height: 10px; }
+    .bar.focus{ background: var(--g-focus); }
+    .bar.play{ background: var(--g-play); }
+    .bar.connect{ background: var(--g-connect); }
+    .bar.restore{ background: var(--g-restore); }
+
+    .card-body{
+      padding: 14px 14px 12px;
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+      flex: 1;
+    }
+    .card h3{
+      margin: 0;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color:#fff;
+      opacity: .92;
+    }
+    .card p{
+      margin: 0;
+      font-size: 13px;
+      line-height: 1.65;
+      color: rgba(255,255,255,0.72);
+    }
+    .meta{
+      margin-top: 2px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.70);
+      line-height: 1.7;
+    }
+
+    .card-footer{
+      padding: 0 14px 14px;
+      display:flex;
+      justify-content:center;
+    }
+
+    /* Converted from link->button-like element (still <a>) */
+    .reserve-link{
+      width: 100%;
+      text-align:center;
+      height: 40px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.25);
+      background: rgba(255,255,255,.08);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing:.14em;
+      text-transform: uppercase;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#fff;
+      text-decoration:none;
+      gap: 10px;
+      user-select:none;
+    }
+    .reserve-link:hover{
+      background: rgba(255,255,255,.14);
+      border-color: rgba(255,255,255,.38);
+      transform: translateY(-1px);
+    }
+
+    /* ===== BOTTOM CTA ===== */
+    .bottom-cta{
+      margin-top: 26px;
+      text-align:center;
+    }
+    .bottom-cta h2{
+      margin: 0 0 10px;
+      font-size: 22px;
+      font-weight: 600;
+      color:#fff;
+      letter-spacing:.02em;
+    }
+    .bottom-cta p{
+      margin: 0 auto 10px;
+      max-width: 860px;
+      color: rgba(255,255,255,0.72);
+      font-size: 14px;
+      line-height: 1.75;
+    }
+    .bottom-cta a{
+      display:inline-block;
+      margin-top: 10px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.25);
+      background: rgba(255,255,255,.08);
+      color:#fff;
+      text-decoration:none;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing:.14em;
+      text-transform: uppercase;
+    }
+    .bottom-cta a:hover{ background: rgba(255,255,255,.14); }
+
+    /* ===== FOOTER ===== */
+    .footer{
+      margin-top: 42px;
+      border-top: 1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.45);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .footer-inner{
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 28px 18px 18px;
+    }
+    .footer-grid{
+      display:grid;
+      grid-template-columns: 1.2fr 1fr 1fr 1.2fr;
+      gap: 20px;
+    }
+    .f-title{
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing:.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.90);
+      margin: 0 0 10px;
+    }
+    .f-text{
+      font-size: 13px;
+      color: rgba(255,255,255,0.70);
+      line-height: 1.75;
+      margin: 0;
+    }
+    .f-links a{
+      display:block;
+      font-size: 13px;
+      color: rgba(255,255,255,0.70);
+      text-decoration:none;
+      margin: 0 0 8px;
+    }
+    .f-links a:hover{ color:#fff; }
+    .subscribe{
+      display:flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .subscribe input{
+      flex:1;
+      height: 40px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(0,0,0,0.30);
+      padding: 0 12px;
+      font-size: 13px;
+      outline:none;
+      color: rgba(255,255,255,0.92);
+    }
+    .subscribe input::placeholder{ color: rgba(255,255,255,0.55); }
+    .subscribe button{
+      height: 40px;
+      padding: 0 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.08);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing:.14em;
+      text-transform: uppercase;
+      cursor:pointer;
+      color:#fff;
+    }
+    .subscribe button:hover{ background: rgba(255,255,255,0.14); }
+
+    .footer-bottom{
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255,255,255,0.12);
+      display:flex;
+      justify-content:space-between;
+      gap: 14px;
+      flex-wrap:wrap;
+      font-size: 12px;
+      color: rgba(255,255,255,0.62);
+    }
+    .footer-bottom a{
+      color: rgba(255,255,255,0.62);
+      text-decoration:none;
+      margin-left: 14px;
+    }
+    .footer-bottom a:hover{ color:#fff; }
+
+    /* =========================
+       MODAL (booking popup)
+    ========================== */
+    .modal-backdrop{
+      position: fixed;
+      inset:0;
+      background: rgba(0,0,0,.65);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 18px;
+      z-index: 200;
+    }
+    .modal-backdrop.is-on{ display:flex; }
+
+    .modal{
+      width: min(980px, 100%);
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(10,12,15,.96);
+      box-shadow: 0 30px 90px rgba(0,0,0,.60);
+      overflow:hidden;
+    }
+    .modal-cap{
+      height: 8px;
+      background: var(--g-focus);
+    }
+    .modal-inner{
+      padding: 18px 18px 20px;
+    }
+    .modal-top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+    .modal-title{
+      margin: 0;
+      font-size: 16px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .modal-sub{
+      margin: 6px 0 0;
+      color: rgba(255,255,255,.62);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    .close{
+      width: 44px; height: 42px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      color: rgba(255,255,255,.85);
+      cursor:pointer;
+      font-size: 18px;
+    }
+    .close:hover{ background: rgba(255,255,255,.08); }
+
+    .modal-grid{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 16px;
+      align-items:start;
+      margin-top: 12px;
+    }
+    .form{
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      border-radius: 16px;
+      padding: 14px;
+    }
+    .form .row{
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .fg{
+      display:flex;
+      flex-direction:column;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .lbl{
+      font-size: 11px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.65);
+    }
+    .field{
+      height: 42px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      color: rgba(255,255,255,.92);
+      padding: 0 14px;
+      outline:none;
+    }
+    .field:disabled{
+      opacity: .7;
+      cursor: not-allowed;
+    }
+    select.field{ cursor:pointer; }
+
+    .btn{
+      border: 1px solid rgba(255,255,255,.14);
+      background: var(--btn);
+      color: rgba(255,255,255,.90);
+      padding: 11px 16px;
+      border-radius: 999px;
+      cursor:pointer;
+      font-size: 12px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      user-select:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap: 8px;
+      text-decoration:none;
+    }
+    .btn:hover{ background: var(--btnHover); }
+    .btn.primary{
+      background: var(--btnPrimary);
+      color: var(--btnPrimaryInk);
+      border-color: rgba(255,255,255,.0);
+      font-weight: 700;
+    }
+    .btn.primary:hover{ filter: brightness(.96); }
+
+    .summary{
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      border-radius: 16px;
+      overflow:hidden;
+    }
+    .sum-cap{ height: 6px; background: var(--g-focus); }
+    .sum-body{ padding: 14px; }
+    .sum-h{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .sum-h h4{
+      margin:0;
+      font-size: 12px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.88);
+    }
+    .sum-h .saved{
+      color: rgba(255,255,255,.55);
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .kv{
+      display:grid;
+      grid-template-columns: 130px 1fr;
+      gap: 10px 12px;
+      font-size: 12px;
+      line-height: 1.6;
+      color: rgba(255,255,255,.78);
+    }
+    .kv .k{
+      color: rgba(255,255,255,.55);
+      letter-spacing: .10em;
+      text-transform: uppercase;
+      font-size: 10px;
+      padding-top: 2px;
+    }
+    .modal-actions{
+      display:flex;
+      gap: 10px;
+      justify-content:flex-end;
+      margin-top: 12px;
+      flex-wrap:wrap;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1100px){
+      .grid{ grid-template-columns: repeat(2, 1fr); max-width: 760px; }
+      .footer-grid{ grid-template-columns: 1fr 1fr; }
+      .modal-grid{ grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px){
+      .grid{ grid-template-columns: 1fr; max-width: 520px; }
+      .hero h1{ font-size: 32px; }
+      .footer-grid{ grid-template-columns: 1fr; }
+      .form .row{ grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- video background -->
+  <div class="video-bg" aria-hidden="true">
+    <video autoplay muted loop playsinline>
+      <source src="assets/bg.mp4" type="video/mp4" />
+    </video>
+  </div>
+
+  <!--  NAV -->
+  <header class="topline">
+    <a class="brand" href="index.html">
+      BOTANIC ELIXIR<br><span>adaptive café</span>
+    </a>
+
+    <nav class="top-links" aria-label="Main">
+      <a class="active" href="experiences.html">Experiences</a>
+      <a href="how-it-works.html">How It Works</a>
+      <a href="menu.html">Menu</a>
+      <a href="About-Connect.html">Connect</a>
+      <a href="contact.html">Contact</a>
+
+      <div class="dropdown">
+        <a class="drop-trigger" href="#" aria-label="Open about submenu" onclick="return false;">
+          About <span class="caret" aria-hidden="true"></span>
+        </a>
+        <div class="dropdown-panel" role="menu" aria-label="About submenu">
+          <a href="about.html">About Us</a>
+          <a href="community.html">Community</a>
+          <a href="learn-more.html">Learn More</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="right-controls">
+      <a class="icon-link" href="bag.html" aria-label="Go to bag">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6 7h12l-1 13H7L6 7z"></path>
+          <path d="M9 7a3 3 0 0 1 6 0"></path>
+        </svg>
+        BAG
+      </a>
+
+      <a class="icon-link" href="booked.html" aria-label="Go to bookings">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 4h16v16H4z"></path>
+          <path d="M8 2v4M16 2v4M4 10h16"></path>
+        </svg>
+        BOOKINGS
+      </a>
+
+      <div class="dropdown icon-dropdown" aria-label="Inquiries menu">
+        <a class="icon-link" href="#" aria-label="Open inquiries submenu" onclick="return false;">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="7" r="4"></circle>
+            <path d="M4 21c1.5-4 14.5-4 16 0"></path>
+          </svg>
+          INQUIRIES
+        </a>
+        <div class="dropdown-panel" role="menu" aria-label="Inquiries submenu">
+          <a href="book-consultation.html">Consultation</a>
+          <a href="hiring.html">Hiring</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <h1>EXPERIENCES</h1>
+      <p>
+        <br>Choose the atmosphere that aligns with your intention. Each experience is crafted to support your desired state of being.
+      </p>
+
+      <div class="rule"></div>
+
+      <!-- TABS -->
+      <div class="tabs" role="tablist" aria-label="Experience categories">
+        <button class="tab is-active" type="button" data-filter="all">All Experiences</button>
+        <button class="tab" type="button" data-filter="focus">Focus &amp; Create</button>
+        <button class="tab" type="button" data-filter="play">Play &amp; Engage</button>
+        <button class="tab" type="button" data-filter="connect">Connect &amp; Share</button>
+        <button class="tab" type="button" data-filter="restore">Reflect &amp; Restore</button>
+      </div>
+    </section>
+
+    <!-- GRID PANEL -->
+    <section class="panel">
+      <div class="grid" id="experienceGrid">
+
+        <!-- Focus -->
+        <article class="card" data-type="focus">
+          <div class="bar focus"></div>
+          <div class="card-body">
+            <h3>Deep Work Sessions</h3>
+            <p>Individual focus pods with adaptive lighting and soundscapes designed for maximum concentration.</p>
+            <div class="meta">
+              • 2–4 hours<br>
+              • 1 person<br>
+              • Clarity Tonic · Focus Elixir
+            </div>
+          </div>
+          <div class="card-footer">
+            <a class="reserve-link js-reserve"
+               href="#"
+               data-title="Deep Work Sessions"
+               data-mood="focus"
+               data-duration="2–4 hours"
+               data-guests="1"
+               data-space="Individual Pod"
+               data-time="09:00"
+               data-date="2026-02-28"
+               aria-label="Reserve Deep Work Sessions">Reserve Experience →</a>
+          </div>
+        </article>
+
+        <article class="card" data-type="focus">
+          <div class="bar focus"></div>
+          <div class="card-body">
+            <h3>Writing Circle</h3>
+            <p>Guided writing sessions in a communal space with prompts, ambient atmosphere, and creative energy.</p>
+            <div class="meta">
+              • 2 hours<br>
+              • 8–12 people<br>
+              • Muse Blend · Clarity Tonic
+            </div>
+          </div>
+          <div class="card-footer">
+            <a class="reserve-link js-reserve"
+               href="#"
+               data-title="Writing Circle"
+               data-mood="focus"
+               data-duration="2 hours"
+               data-guests="12"
+               data-space="Communal Table"
+               data-time="10:00"
+               data-date="2026-02-28"
+               aria-label="Reserve Writing Circle">Reserve Experience →</a>
+          </div>
+        </article>
+
+        <!-- Play -->
+        <article class="card" data-type="play">
+          <div class="bar play"></div>
+          <div class="card-body">
+            <h3>Game Night Arena</h3>
+            <p>Multiplayer gaming zone with retro and modern games, competitive atmosphere, and vibrant energy.</p>
+            <div class="meta">
+              • 3–5 hours<br>
+              • 4–16 people<br>
+              • Energy Burst · Social Spark
+            </div>
+          </div>
+          <div class="card-footer">
+            <a class="reserve-link js-reserve"
+               href="#"
+               data-title="Game Night Arena"
+               data-mood="play"
+               data-duration="3–5 hours"
+               data-guests="16"
+               data-space="Communal Table"
+               data-time="19:00"
+               data-date="2026-02-28"
+               aria-label="Reserve Game Night Arena">Reserve Experience →</a>
+          </div>
+        </article>
+
+        <article class="card" data-type="play">
+          <div class="bar play"></div>
+          <div class="card-body">
+            <h3>Playful Gathering</h3>
+            <p>Board games, card games, and interactive activities in a relaxed, social setting.</p>
+            <div class="meta">
+              • 2–3 hours<br>
+              • 4–8 people<br>
+              • Joy Infusion · Social Spark
+            </div>
+          </div>
+          <div class="card-footer">
+            <a class="reserve-link js-reserve"
+               href="#"
+               data-title="Playful Gathering"
+               data-mood="play"
+               data-duration="2–3 hours"
+               data-guests="8"
+               data-space="Communal Table"
+               data-time="18:00"
+               data-date="2026-02-28"
+               aria-label="Reserve Playful Gathering">Reserve Experience →</a>
+          </div>
+        </article>
+
+        <!-- Connect -->
+        <article class="card" data-type="connect">
+          <div class="bar connect"></div>
+          <div class="card-body">
+            <h3>Conversation Salon</h3>
+            <p>Guided discussions on meaningful topics in an intimate group setting with facilitated dialogue.</p>
+            <div class="meta">
+              • 2 hours<br>
+              • 6–10 people<br>
+              • Empathy Elixir · Connection Blend
+            </div>
+          </div>
+          <div class="card-footer">
+            <a class="reserve-link js-reserve"
+               href="#"
+               data-title="Conversation Salon"
+               data-mood="connect"
+               data-duration="2 hours"
+               data-guests="10"
+               data-space="Communal Table"
+               data-time="16:00"
+               data-date="2026-02-28"
+               aria-label="Reserve Conversation Salon">Reserve Experience →</a>
+          </div>
+        </article>
+
+        <article class="card" data-type="connect">
+          <div class="bar connect"></div>
+          <div class="card-body">
+            <h3>Intimate Date Night</h3>
+            <p>Private booth with customized ambiance, curated music, and conversation-enhancing atmosphere.</p>
+            <div class="meta">
+              • 2–3 hours<br>
+              • 2 people<br>
+              • Connection Blend · Heart Opener
+            </div>
+          </div>
+          <div class="card-footer">
+            <a class="reserve-link js-reserve"
+               href="#"
+               data-title="Intimate Date Night"
+               data-mood="connect"
+               data-duration="2–3 hours"
+               data-guests="2"
+               data-space="Private Booth"
+               data-time="19:30"
+               data-date="2026-02-28"
+               aria-label="Reserve Intimate Date Night">Reserve Experience →</a>
+          </div>
+        </article>
+
+        <!-- Restore -->
+        <article class="card" data-type="restore">
+          <div class="bar restore"></div>
+          <div class="card-body">
+            <h3>Wellness &amp; Meditation</h3>
+            <p>Guided meditation and mindfulness sessions in a serene environment with calming elements.</p>
+            <div class="meta">
+              • 1–2 hours<br>
+              • 8–15 people<br>
+              • Calm Essence · Balance Tonic
+            </div>
+          </div>
+          <div class="card-footer">
+            <a class="reserve-link js-reserve"
+               href="#"
+               data-title="Wellness & Meditation"
+               data-mood="restore"
+               data-duration="1–2 hours"
+               data-guests="15"
+               data-space="Communal Table"
+               data-time="18:30"
+               data-date="2026-02-28"
+               aria-label="Reserve Wellness and Meditation">Reserve Experience →</a>
+          </div>
+        </article>
+
+        <article class="card" data-type="restore">
+          <div class="bar restore"></div>
+          <div class="card-body">
+            <h3>Restorative Retreat</h3>
+            <p>Solo reflection space with nature sounds, soft lighting, and contemplative atmosphere.</p>
+            <div class="meta">
+              • 1–3 hours<br>
+              • 1 person<br>
+              • Peace Potion · Calm Essence
+            </div>
+          </div>
+          <div class="card-footer">
+            <a class="reserve-link js-reserve"
+               href="#"
+               data-title="Restorative Retreat"
+               data-mood="restore"
+               data-duration="1–3 hours"
+               data-guests="1"
+               data-space="Individual Pod"
+               data-time="14:00"
+               data-date="2026-02-28"
+               aria-label="Reserve Restorative Retreat">Reserve Experience →</a>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- Bottom CTA -->
+    <section class="panel bottom-cta" id="consult">
+      <h2>Not Sure Which Experience to Choose?<br></h2>
+      <p><br>Our team can help you select the perfect experience based on your intention.</p>
+      <p>Book a consultation or explore how our adaptive system works.</p>
+      <a href="book-consultation.html">Book Consultation →</a>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div>
+          <div class="f-title">Botanic Elixir</div>
+          <p class="f-text">Shift your mind. Shape your experience.</p>
+          <p class="f-text" style="margin-top:12px;">
+            42 Kingsland Road<br>
+            Shoreditch, London E2 8DA
+          </p>
+        </div>
+
+        <div class="f-links">
+          <div class="f-title">Explore</div>
+          <a href="index.html">Home</a>
+          <a href="experiences.html">Experiences</a>
+          <a href="how-it-works.html">How it Works</a>
+          <a href="menu.html">Menu</a>
+        </div>
+
+        <div class="f-links">
+          <div class="f-title">Connect</div>
+          <a href="community.html">Community &amp; Events</a>
+          <a href="contact.html">Contact Us</a>
+          <a href="about.html">About Us</a>
+          <a href="careers.html">Careers</a>
+          <a href="bookings.html">Book Experience</a>
+        </div>
+
+        <div>
+          <div class="f-title">Subscribe</div>
+          <p class="f-text">Join our community for updates on events and experiences.</p>
+          <div class="subscribe">
+            <input type="email" placeholder="Your email" aria-label="Email address" />
+            <button type="button">Join</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>© 2024 Botanic Elixir. All rights reserved.</div>
+        <div>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- =========================
+       BOOKING MODAL (Popup)
+  ========================== -->
+  <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Reserve Experience">
+      <div class="modal-cap" id="modalCap"></div>
+
+      <div class="modal-inner">
+        <div class="modal-top">
+          <div>
+            <h3 class="modal-title" id="modalTitle">Reserve</h3>
+            <p class="modal-sub" id="modalSubtitle">Fill out the form — your booking will be saved.</p>
+          </div>
+          <button class="close" type="button" id="closeModal" aria-label="Close">✕</button>
+        </div>
+
+        <div class="modal-grid">
+          <!-- Form -->
+          <div class="form">
+            <div class="fg">
+              <div class="lbl">Experience</div>
+              <input class="field" id="fExperience" disabled />
+            </div>
+
+            <div class="row">
+              <div class="fg">
+                <div class="lbl">Date</div>
+                <input class="field" id="fDate" type="date" />
+              </div>
+              <div class="fg">
+                <div class="lbl">Time</div>
+                <input class="field" id="fTime" type="time" />
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="fg">
+                <div class="lbl">Guests</div>
+                <select class="field" id="fGuests">
+                  <option value="—">—</option>
+                  <option>1</option><option>2</option><option>3</option><option>4</option>
+                  <option>5</option><option>6</option><option>7</option><option>8</option>
+                  <option>9+</option>
+                </select>
+              </div>
+              <div class="fg">
+                <div class="lbl">Space</div>
+                <select class="field" id="fSpace">
+                  <option value="—">—</option>
+                  <option>Individual Pod</option>
+                  <option>Private Booth</option>
+                  <option>Communal Table</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="fg">
+                <div class="lbl">Name</div>
+                <input class="field" id="fName" placeholder="Full name" value="Kaitlyn Marie Head" />
+              </div>
+              <div class="fg">
+                <div class="lbl">Email</div>
+                <input class="field" id="fEmail" placeholder="you@email.com" value="khead4@asu.edu" />
+              </div>
+            </div>
+
+            <div class="modal-actions">
+              <button class="btn" type="button" id="cancelBtn">Cancel</button>
+              <button class="btn primary" type="button" id="saveBtn">Confirm & Add</button>
+            </div>
+          </div>
+
+          <!-- Summary -->
+          <div class="summary">
+            <div class="sum-cap" id="sumCap"></div>
+            <div class="sum-body">
+              <div class="sum-h">
+                <h4>Booking Summary</h4>
+                <div class="saved" id="sumSaved">SAVED: —</div>
+              </div>
+
+              <div class="kv">
+                <div class="k">Reference</div> <div id="sumRef">—</div>
+
+                <div class="k">Experience</div> <div id="sumExp">—</div>
+                <div class="k">Date</div> <div id="sumDate">—</div>
+                <div class="k">Time</div> <div id="sumTime">—</div>
+                <div class="k">Guests</div> <div id="sumGuests">—</div>
+                <div class="k">Space</div> <div id="sumSpace">—</div>
+                <div class="k">Name</div> <div id="sumName">—</div>
+                <div class="k">Email</div> <div id="sumEmail">—</div>
+              </div>
+
+              <div style="margin-top:14px; color:rgba(255,255,255,.55); font-size:12px; line-height:1.6;">
+                Demo: booking saved to localStorage arrays:
+                <span style="color:rgba(255,255,255,.78);">Checked Out</span> and
+                <span style="color:rgba(255,255,255,.78);">Booked</span>.
+              </div>
+            </div>
+          </div>
+        </div><!-- /grid -->
+      </div><!-- /inner -->
+    </div>
+  </div>
+
+  <script>
+    /* =========================
+       Tabs filter (unchanged)
+    ========================== */
+    const tabs = document.querySelectorAll(".tab");
+    const cards = document.querySelectorAll(".card");
+
+    tabs.forEach(tab => {
+      tab.addEventListener("click", () => {
+        tabs.forEach(t => t.classList.remove("is-active"));
+        tab.classList.add("is-active");
+
+        const filter = tab.dataset.filter; // all / focus / play / connect / restore
+        cards.forEach(card => {
+          const type = card.dataset.type;
+          const show = (filter === "all" || type === filter);
+          card.style.display = show ? "flex" : "none";
+        });
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    });
+
+    /* =========================
+       Booking popup + storage
+    ========================== */
+    const BOOKED_KEY = "botanic_bookings";          // booked list
+    const CHECKED_OUT_KEY = "botanic_checked_out";  // checked out list
+    const LAST_ID_KEY = "botanic_last_booking_id";
+
+    function safeJsonGet(key){
+      try { return JSON.parse(localStorage.getItem(key)) || []; }
+      catch(e){ return []; }
+    }
+    function safeJsonSet(key, val){
+      localStorage.setItem(key, JSON.stringify(val));
+    }
+    function makeId(){
+      return "BKG-" + Date.now() + "-" + Math.floor(Math.random()*1000);
+    }
+
+    function capForMood(mood){
+      const m = String(mood || "").toLowerCase();
+      const styles = getComputedStyle(document.documentElement);
+      if(m === "focus") return styles.getPropertyValue("--g-focus").trim();
+      if(m === "play") return styles.getPropertyValue("--g-play").trim();
+      if(m === "connect") return styles.getPropertyValue("--g-connect").trim();
+      if(m === "restore") return styles.getPropertyValue("--g-restore").trim();
+      if(m === "pink") return styles.getPropertyValue("--g-pink").trim();
+      return styles.getPropertyValue("--g-focus").trim();
+    }
+
+    const modalBackdrop = document.getElementById("modalBackdrop");
+    const modalCap = document.getElementById("modalCap");
+    const sumCap = document.getElementById("sumCap");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalSubtitle = document.getElementById("modalSubtitle");
+
+    const fExperience = document.getElementById("fExperience");
+    const fDate = document.getElementById("fDate");
+    const fTime = document.getElementById("fTime");
+    const fGuests = document.getElementById("fGuests");
+    const fSpace = document.getElementById("fSpace");
+    const fName = document.getElementById("fName");
+    const fEmail = document.getElementById("fEmail");
+
+    const sumSaved = document.getElementById("sumSaved");
+    const sumRef = document.getElementById("sumRef");
+    const sumExp = document.getElementById("sumExp");
+    const sumDate = document.getElementById("sumDate");
+    const sumTime = document.getElementById("sumTime");
+    const sumGuests = document.getElementById("sumGuests");
+    const sumSpace = document.getElementById("sumSpace");
+    const sumName = document.getElementById("sumName");
+    const sumEmail = document.getElementById("sumEmail");
+
+    let modalContext = null;
+
+    function openModal(ctx){
+      modalContext = ctx;
+
+      const cap = capForMood(ctx.mood);
+      modalCap.style.background = cap;
+      sumCap.style.background = cap;
+
+      modalTitle.textContent = "Reserve Experience";
+      modalSubtitle.textContent = "Fill out the form — your booking will be saved (and you'll stay on this page).";
+
+      fExperience.value = ctx.title || "—";
+      fDate.value = ctx.date || "2026-02-28";
+      fTime.value = ctx.time || "";
+
+      const g = String(ctx.guests ?? "—");
+      fGuests.value = Array.from(fGuests.options).some(o => o.value === g || o.textContent === g) ? g : "—";
+
+      const s = String(ctx.space ?? "—");
+      fSpace.value = Array.from(fSpace.options).some(o => o.value === s || o.textContent === s) ? s : "—";
+
+      sumSaved.textContent = "SAVED: —";
+      sumRef.textContent = "—";
+      sumExp.textContent = fExperience.value || "—";
+      sumDate.textContent = fDate.value || "—";
+      sumTime.textContent = fTime.value || "—";
+      sumGuests.textContent = fGuests.value || "—";
+      sumSpace.textContent = fSpace.value || "—";
+      sumName.textContent = fName.value || "—";
+      sumEmail.textContent = fEmail.value || "—";
+
+      fDate.oninput = () => sumDate.textContent = fDate.value || "—";
+      fTime.oninput = () => sumTime.textContent = fTime.value || "—";
+      fGuests.onchange = () => sumGuests.textContent = fGuests.value || "—";
+      fSpace.onchange = () => sumSpace.textContent = fSpace.value || "—";
+      fName.oninput = () => sumName.textContent = fName.value || "—";
+      fEmail.oninput = () => sumEmail.textContent = fEmail.value || "—";
+
+      modalBackdrop.classList.add("is-on");
+      modalBackdrop.setAttribute("aria-hidden", "false");
+    }
+
+    function closeModal(){
+      modalBackdrop.classList.remove("is-on");
+      modalBackdrop.setAttribute("aria-hidden", "true");
+      modalContext = null;
+    }
+
+    document.getElementById("closeModal").addEventListener("click", closeModal);
+    document.getElementById("cancelBtn").addEventListener("click", closeModal);
+    modalBackdrop.addEventListener("click", (e) => {
+      if(e.target === modalBackdrop) closeModal();
+    });
+    document.addEventListener("keydown", (e) => {
+      if(e.key === "Escape" && modalBackdrop.classList.contains("is-on")) closeModal();
+    });
+
+    document.querySelectorAll(".js-reserve").forEach(link => {
+      link.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        const ctx = {
+          title: link.dataset.title || "—",
+          mood: link.dataset.mood || "focus",
+          date: link.dataset.date || "2026-02-28",
+          time: link.dataset.time || "",
+          guests: link.dataset.guests || "—",
+          space: link.dataset.space || "—",
+          duration: link.dataset.duration || ""
+        };
+
+        openModal(ctx);
+      });
+    });
+
+    document.getElementById("saveBtn").addEventListener("click", () => {
+      const booking = {
+        id: makeId(),
+        createdAt: new Date().toISOString(),
+        reference: null,
+
+        experience: fExperience.value || "—",
+        date: fDate.value || "2026-02-28",
+        time: fTime.value || "—",
+        guests: fGuests.value || "—",
+        space: fSpace.value || "—",
+
+        name: fName.value || "—",
+        email: fEmail.value || "—",
+
+        mood: modalContext?.mood || "focus",
+        kind: "experience"
+      };
+      booking.reference = booking.id;
+
+      const bookedList = safeJsonGet(BOOKED_KEY);
+      bookedList.push(booking);
+      safeJsonSet(BOOKED_KEY, bookedList);
+
+      const cartList = safeJsonGet(CHECKED_OUT_KEY);
+      cartList.push({
+        id: booking.id,
+        createdAt: booking.createdAt,
+        experience: booking.experience,
+        date: booking.date,
+        time: booking.time,
+        guests: booking.guests,
+        space: booking.space,
+        name: booking.name,
+        email: booking.email,
+        mood: booking.mood,
+        kind: booking.kind
+      });
+      safeJsonSet(CHECKED_OUT_KEY, cartList);
+
+      localStorage.setItem(LAST_ID_KEY, booking.id);
+
+      sumSaved.textContent = "SAVED: YES";
+      sumRef.textContent = booking.id;
+      sumExp.textContent = booking.experience;
+      sumDate.textContent = booking.date;
+      sumTime.textContent = booking.time;
+      sumGuests.textContent = booking.guests;
+      sumSpace.textContent = booking.space;
+      sumName.textContent = booking.name;
+      sumEmail.textContent = booking.email;
+    });
+  </script>
+</body>
+</html>
