@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Botanic Elixir</title>
+
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    /* ===== SLIM GLASS NAV ===== */
+    .topline{
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 20;
+padding: .5px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 2rem;
+
+  padding: 0.65rem 2.2rem;   /* ← THIN */
+
+  background: rgba(0,0,0,0.10);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+
+    .brand{
+      text-decoration: none;
+      color: rgba(255,255,255,0.92);
+      font-size: 0.85rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      line-height: 1.2;
+    }
+    .brand span{ opacity: .8; }
+
+    .top-links{
+      display: flex;
+      justify-content: center;
+      gap: 1.35rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .top-links a{
+      text-decoration: none;
+      color: rgba(255,255,255,.82);
+      font-size: .75rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      transition: opacity .18s ease;
+      opacity: .82;
+    }
+
+    .top-links a:hover{
+      opacity: 1;
+      color: #fff;
+    }
+
+    /* ===== ICON NAV (RIGHT) ===== */
+    .nav-icons{
+      display:flex;
+      align-items:center;
+      gap: 20px;
+    }
+
+    .icon-block{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      text-decoration:none;
+      color: rgba(255,255,255,.78);
+      font-size: 10px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      gap: 4px;
+      opacity:.9;
+      transition: transform .18s ease, color .18s ease, opacity .18s ease;
+      cursor:pointer;
+    }
+
+    .icon-block svg{
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+    }
+
+    .icon-block:hover{
+      color:#fff;
+      opacity: 1;
+      transform: translateY(-1px);
+    }
+
+    /* ===== DROPDOWN (INQUIRIES) ===== */
+    .dropdown{ position: relative; }
+
+    .dropdown-menu{
+      position: absolute;
+      top: 40px;
+      right: 0;
+      background: rgba(12,12,15,.96);
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 12px;
+      padding: 6px 0;
+      min-width: 170px;
+      display: none;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 20px 50px rgba(0,0,0,.45);
+    }
+
+    .dropdown:hover .dropdown-menu,
+    .dropdown:focus-within .dropdown-menu{
+      display:block;
+    }
+
+    .dropdown-menu a{
+      display:block;
+      padding: 10px 16px;
+      color: rgba(255,255,255,.86);
+      text-decoration:none;
+      font-size: 12px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .dropdown-menu a:hover{
+      background: rgba(255,255,255,.08);
+      color:#fff;
+    }
+
+    /* Push content below fixed nav */
+    .page-content{ padding-top: 90px; }
+
+    @media (max-width: 760px){
+      .top-links{ display:none; }
+      .page-content{ padding-top: 80px; }
+    }
+  </style>
+</head>
+
+<body class="page-home">
+
+  <!-- Background Video -->
+  <div class="video-bg">
+    <video autoplay muted loop playsinline>
+      <source src="Background.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <div class="page-content">
+
+    <!-- ===== NAV ===== -->
+    <header class="topline">
+
+      <a class="brand" href="index.html">
+        BOTANIC<br>
+        <span>ELIXIR</span>
+      </a>
+
+      <nav class="top-links">
+        <a href="experiences.html">Experiences</a>
+        <a href="how-it-works.html">How It Works</a>
+        <a href="menu.html">Menu</a>
+        <a href="community.html">Community</a>
+        <a href="contact.html">Contact</a>
+        <a href="about.html">ABOUT</a>
+      </nav>
+
+      <div class="nav-icons">
+
+        <!-- BAG -->
+        <a href="bag.html" class="icon-block">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6">
+            <path d="M6 7h12l-1 13H7L6 7Z"/>
+            <path d="M9 7a3 3 0 0 1 6 0"/>
+          </svg>
+          <span>BAG</span>
+        </a>
+
+        <!-- BOOKINGS -->
+        <a href="booked.html" class="icon-block">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6">
+            <rect x="3" y="5" width="18" height="16" rx="2"/>
+            <path d="M16 3v4M8 3v4M3 11h18"/>
+          </svg>
+          <span>BOOKINGS</span>
+        </a>
+
+        <!-- INQUIRIES -->
+        <div class="icon-block dropdown">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6">
+            <circle cx="12" cy="8" r="4"/>
+            <path d="M4 20c1.5-4 5-6 8-6s6.5 2 8 6"/>
+          </svg>
+          <span>INQUIRIES</span>
+
+          <div class="dropdown-menu">
+            <a href="book-consultation.html">Consultation</a>
+            <a href="hiring.html">Hiring</a>
+          </div>
+        </div>
+
+      </div>
+    </header>
+
+    <!-- ===== HERO ===== -->
+    <main class="hero">
+      <p class="kicker">SYSTEM OVERRIDE / BOTANIC ELIXIR ONE</p>
+
+      <h1 class="hero-title">
+        SHIFT YOUR<br>
+        REALITY
+      </h1>
+
+      <p class="hero-sub">
+        Shift your mind. Shape your experience.
+      </p>
+
+      <br>
+
+      <p class="hero-desc">
+        An immersive space that moves with your intention,
+        adapting to curiosity, focus, and emotional flow.
+      </p>
+
+      <div class="hero-actions">
+        <a class="hero-link" href="experiences.html">ENTER EXPERIENCE &gt;</a>
+        <a class="hero-link" href="learn-more.html">LEARN MORE</a>
+      </div>
+    </main>
+
+  </div>
+</body>
+</html>

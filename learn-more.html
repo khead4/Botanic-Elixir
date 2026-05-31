@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- Responsive -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Botanic Elixir — Learn More</title>
+
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Your existing CSS -->
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    /* =========================================
+       Make anchor jumps land BELOW fixed navs
+    ========================================= */
+    html{ scroll-behavior:smooth; }
+    section{ scroll-margin-top: 132px; } /* primary + secondary nav total */
+
+    /* =========================
+       PRIMARY NAV — ALWAYS VISIBLE
+      
+    ========================= */
+    .topline{
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      background: rgba(0,0,0,0.45);
+      border-bottom: 1px solid rgba(255,255,255,.12);
+
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 18px;
+      padding:14px 26px;
+    }
+
+    .brand{
+      color:#fff;
+      text-decoration:none;
+      font-size:.78rem;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      line-height:1.1;
+      white-space:nowrap;
+      user-select:none;
+      display:block;
+    }
+    .brand span{
+      display:block;
+      opacity:.7;
+      margin-top:4px;
+      letter-spacing:.12em;
+      font-size:.70rem;
+      text-transform:none !important;
+    }
+
+    .top-links{
+      display:flex;
+      gap:26px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+
+    .top-links > a,
+    .top-links .drop-trigger{
+      color: rgba(255,255,255,.78);
+      font-size: .82rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 8px 6px;
+      transition: .18s;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      user-select:none;
+      text-decoration:none; /* avoid underline */
+    }
+    .top-links > a:hover,
+    .top-links .drop-trigger:hover{ color:#fff; }
+    .top-links > a.active{ color:#fff; font-weight:700; }
+
+    .right-controls{
+      display:flex;
+      align-items:center;
+      gap:22px;
+    }
+
+    /* IMPORTANT: kill underline for icon labels */
+    .icon-link{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:4px;
+      color: rgba(255,255,255,.78);
+      font-size: .60rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      transition: .18s;
+      user-select:none;
+      min-width: 72px;
+      text-decoration:none; /* <-- removes underline */
+    }
+    .icon-link:link,
+    .icon-link:visited,
+    .icon-link:hover,
+    .icon-link:active{
+      text-decoration:none; /* <-- ensures none in all states */
+    }
+
+    .icon-link svg{
+      width:22px;
+      height:22px;
+      stroke:#fff;
+      fill:none;
+      stroke-width:1.6;
+      opacity:.85;
+      transition:.18s;
+    }
+    .icon-link:hover{ color:#fff; text-shadow: 0 0 14px rgba(255,255,255,.22); }
+    .icon-link:hover svg{
+      opacity:1;
+      transform: translateY(-2px);
+      filter: drop-shadow(0 0 10px rgba(255,255,255,.22));
+    }
+
+    .dropdown{ position:relative; display:inline-flex; align-items:center; }
+    .dropdown-panel{
+      position:absolute;
+      top:120%;
+      left:0;
+      background: rgba(0,0,0,.86);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 14px;
+      padding: 10px 0;
+      min-width: 200px;
+
+      opacity: 0;
+      pointer-events:none;
+      transform: translateY(6px);
+      transition: .18s;
+      z-index: 9999;
+    }
+    .dropdown:hover .dropdown-panel{
+      opacity:1;
+      pointer-events:auto;
+      transform: translateY(0);
+    }
+    .dropdown-panel a{
+      display:block;
+      padding: 10px 16px;
+      color: rgba(255,255,255,.82);
+      font-size: .75rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      text-decoration:none;
+    }
+    .dropdown-panel a:hover{ background: rgba(255,255,255,.08); color:#fff; }
+
+    .icon-dropdown .dropdown-panel{ right:0; left:auto; min-width: 200px; }
+
+    .caret{
+      width:10px;
+      height:10px;
+      display:inline-block;
+      border-right: 2px solid rgba(255,255,255,.70);
+      border-bottom: 2px solid rgba(255,255,255,.70);
+      transform: rotate(45deg);
+      margin-top:-2px;
+      transition:.18s;
+      opacity:.85;
+    }
+    .dropdown:hover .caret{ opacity:1; border-color:#fff; }
+
+    /* =========================
+       SECONDARY (ON-PAGE) NAV — ALWAYS VISIBLE
+    ========================= */
+    .subline{
+      position: fixed;
+      top: 68px; /* sits under primary nav */
+      left: 0;
+      width: 100%;
+      z-index: 999;
+
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      background: rgba(0,0,0,0.32);
+      border-bottom: 1px solid rgba(255,255,255,.10);
+
+      padding: 8px 26px;
+    }
+    .sublinks{
+      display:flex;
+      justify-content:center;
+      gap: 18px;
+      flex-wrap:wrap;
+      font-size: 11px;
+      letter-spacing:.14em;
+      text-transform: uppercase;
+    }
+    .sublinks a{
+      color: rgba(255,255,255,.65);
+      text-decoration:none;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      transition: .18s;
+    }
+    .sublinks a:hover{
+      color:#fff;
+      border-color: rgba(255,255,255,.24);
+      background: rgba(255,255,255,.08);
+    }
+
+    /* =========================
+       Push page content down
+       so it doesn't hide under fixed bars
+    ========================= */
+    .page-content{
+      padding-top: 124px; /* primary (≈68px) + secondary (≈56px) */
+    }
+
+    /* Responsive */
+    @media (max-width: 760px){
+      .top-links{ display:none; }
+      .topline{ padding: 12px 16px; }
+      .right-controls{ gap:14px; }
+      .icon-link{ min-width: 62px; }
+      .subline{ top: 60px; padding: 8px 14px; }
+      .page-content{ padding-top: 112px; }
+      section{ scroll-margin-top: 120px; }
+    }
+  </style>
+</head>
+
+<body class="page-learn">
+
+  <!-- Background Video Layer -->
+  <div class="video-bg">
+    <video autoplay muted loop playsinline>
+      <source src="Background.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <!-- ===== PRIMARY NAV (site nav) ===== -->
+  <header class="topline">
+    <a class="brand" href="index.html">
+      BOTANIC ELIXIR<br><span>adaptive café</span>
+    </a>
+
+    <nav class="top-links" aria-label="Main">
+      <a href="experiences.html">Experiences</a>
+      <a href="how-it-works.html">How It Works</a>
+      <a href="menu.html">Menu</a>
+      <a href="About-Connect.html">Connect</a>
+      <a href="contact.html">Contact</a>
+
+      <div class="dropdown">
+        <a class="drop-trigger" href="#" aria-label="Open about submenu" onclick="return false;">
+          About <span class="caret" aria-hidden="true"></span>
+        </a>
+        <div class="dropdown-panel" role="menu" aria-label="About submenu">
+          <a href="about.html">About Us</a>
+          <a href="community.html">Community</a>
+          <a href="learn-more.html">Learn More</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="right-controls">
+      <a class="icon-link" href="bag.html" aria-label="Go to bag">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6 7h12l-1 13H7L6 7z"></path>
+          <path d="M9 7a3 3 0 0 1 6 0"></path>
+        </svg>
+        BAG
+      </a>
+
+      <a class="icon-link" href="booked.html" aria-label="Go to bookings">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 4h16v16H4z"></path>
+          <path d="M8 2v4M16 2v4M4 10h16"></path>
+        </svg>
+        BOOKINGS
+      </a>
+
+      <div class="dropdown icon-dropdown" aria-label="Inquiries menu">
+        <a class="icon-link" href="#" aria-label="Open inquiries submenu" onclick="return false;">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="7" r="4"></circle>
+            <path d="M4 21c1.5-4 14.5-4 16 0"></path>
+          </svg>
+          INQUIRIES
+        </a>
+        <div class="dropdown-panel" role="menu" aria-label="Inquiries submenu">
+          <a href="book-consultation.html">Consultation</a>
+          <a href="hiring.html">Hiring</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== SECONDARY NAV (this page sections) ===== -->
+  <div class="subline" aria-label="Learn More page navigation">
+    <nav class="sublinks">
+      <a href="#mood">Mood</a>
+      <a href="#network">Explore</a>
+      <a href="#learn">Research</a>
+      <a href="#contact">Contact Us</a>
+    </nav>
+  </div>
+
+  <!-- Content Layer -->
+  <div class="page-content">
+
+    <!-- =========================
+         SECTION 1: CHOOSE YOUR MOOD
+         ========================= -->
+    <section class="panel panel-soft" id="mood">
+      <div class="panel-inner">
+
+        <h2 class="panel-title">CHOOSE YOUR MOOD</h2>
+        <p class="panel-sub">
+          <strong>Select the experience that matches your intention.</strong>
+        </p>
+
+        <div class="mood-grid">
+
+          <a class="mood-card mood-blue" href="#">
+            <div class="mood-frame">
+              <div class="mood-title">FOCUS &amp; CREATE</div>
+              <div class="mood-media">
+                <video autoplay muted loop playsinline>
+                  <source src="Creative.mp4" type="video/mp4">
+                </video>
+              </div>
+              <div class="mood-desc">
+                Deep work, writing sessions,<br>
+                creative flow
+              </div>
+            </div>
+          </a>
+
+          <a class="mood-card mood-purple" href="#">
+            <div class="mood-frame">
+              <div class="mood-title">PLAY &amp; ENGAGE</div>
+              <div class="mood-media">
+                <video autoplay muted loop playsinline>
+                  <source src="Boil.mp4" type="video/mp4">
+                </video>
+              </div>
+              <div class="mood-desc">
+                Game night, social connection,<br>
+                playful energy
+              </div>
+            </div>
+          </a>
+
+          <a class="mood-card mood-peach" href="#">
+            <div class="mood-frame">
+              <div class="mood-title">CONNECT &amp; SHARE</div>
+              <div class="mood-media">
+                <video autoplay muted loop playsinline>
+                  <source src="Underwater.mp4" type="video/mp4">
+                </video>
+              </div>
+              <div class="mood-desc">
+                Date night, conversations,<br>
+                meaningful connection
+              </div>
+            </div>
+          </a>
+
+          <a class="mood-card mood-mint" href="#">
+            <div class="mood-frame">
+              <div class="mood-title">REFLECT &amp; RESTORE</div>
+              <div class="mood-media">
+                <video autoplay muted loop playsinline>
+                  <source src="Lava.mp4" type="video/mp4">
+                </video>
+              </div>
+              <div class="mood-desc">
+                Wellness, meditation,<br>
+                inner peace
+              </div>
+            </div>
+          </a>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================
+         SECTION 2: EXPLORE THE NETWORK
+         ========================= -->
+    <section class="panel panel-light" id="network">
+      <div class="panel-inner">
+
+        <h2 class="panel-title">EXPLORE THE NETWORK</h2>
+        <p class="panel-sub">Navigate your journey through Botanic Elixir</p>
+
+        <div class="network-grid">
+
+          <div class="net-card">
+            <div class="net-frame">
+              <div class="net-title">PURPOSE</div>
+              <div class="net-media">
+                <video autoplay muted loop playsinline>
+                  <source src="Purpose.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+
+          <div class="net-card">
+            <div class="net-frame">
+              <div class="net-title">EXPERIENCES</div>
+              <div class="net-media">
+                <video autoplay muted loop playsinline>
+                  <source src="GameVision.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+
+          <div class="net-card">
+            <div class="net-frame">
+              <div class="net-title">MENU</div>
+              <div class="net-media">
+                <video autoplay muted loop playsinline>
+                  <source src="Menu.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+
+          <div class="net-card">
+            <div class="net-frame">
+              <div class="net-title">TECHNOLOGY</div>
+              <div class="net-media">
+                <video autoplay muted loop playsinline>
+                  <source src="Tech.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+
+          <div class="net-card">
+            <div class="net-frame">
+              <div class="net-title">COMMUNITY</div>
+              <div class="net-media">
+                <video autoplay muted loop playsinline>
+                  <source src="Community.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+
+          <div class="net-card">
+            <div class="net-frame">
+              <div class="net-title">DATA POINTS</div>
+              <div class="net-media">
+                <video autoplay muted loop playsinline>
+                  <source src="Interactive.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =========================
+         SECTION 3: LEARN MORE / RESEARCH
+         ========================= -->
+    <section class="panel panel-soft" id="learn">
+      <div class="panel-inner">
+        <h2 class="panel-title">NOT YOUR TYPICAL BAR, CAFE, OR ARCADE.</h2><br>
+        <p class="panel-sub">
+          <br>Botanic Elixir is an adaptive environment designed for intentional experiences.<br><br>
+          Our mood-based serums guide your state of mind while our space transforms to match your purpose —<br><br>
+          whether that’s deep focus, playful engagement, meaningful connection, or restorative reflection.
+        </p><br>
+
+        <a class="cta" href="research.html">VIEW RESEARCH</a>
+      </div>
+    </section>
+
+    <!-- =========================
+         SECTION 4: CONTACT
+         ========================= -->
+    <section class="panel panel-light" id="contact">
+      <div class="panel-inner">
+        <h2 class="panel-title">Questions? Get in Touch</h2><br>
+        <p class="panel-sub">
+          Our team is here to help you plan your visit and answer any questions.<br><br>
+        </p>
+
+        <a class="cta" href="contact.html#contact">CONTACT US</a>
+      </div>
+    </section>
+
+  </div>
+</body>
+</html>
+

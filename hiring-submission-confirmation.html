@@ -1,0 +1,688 @@
+<!-- hiring-submission-confirmation.html -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Botanic Elixir — Hiring Submission Saved</title>
+
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#000;
+      --ink: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.62);
+
+      --panel: rgba(255,255,255,.04);
+      --panel2: rgba(255,255,255,.06);
+      --border: rgba(255,255,255,.10);
+
+      --shadow: 0 18px 60px rgba(0,0,0,.45);
+      --radius: 18px;
+      --max: 1100px;
+
+      /* accents  */
+      --accent-blue: linear-gradient(90deg, #2a9bd8, #3a64ff);
+      --accent-purple: linear-gradient(90deg, #8b2be2, #ff5cc8);
+    }
+
+    *{ box-sizing:border-box; }
+    html, body{ height:100%; }
+    body.page-confirm{
+      margin:0;
+      color: var(--ink);
+      background: var(--bg);
+      overflow-x:hidden;
+      font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      letter-spacing: 0.01em;
+    }
+    a{ color:inherit; text-decoration:none; }
+
+    /* ===== Background video + soft overlays ===== */
+    .video-bg{
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      overflow: hidden;
+      pointer-events:none;
+    }
+    .video-bg video{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      opacity:.18;
+      filter: saturate(1.05) contrast(1.05);
+    }
+    body.page-confirm::before{
+      content:"";
+      position: fixed;
+      inset:0;
+      z-index:-1;
+      background:
+        radial-gradient(1100px 520px at 50% 18%, rgba(255,255,255,.06), transparent 60%),
+        radial-gradient(900px 520px at 18% 80%, rgba(42,155,216,.07), transparent 60%),
+        radial-gradient(900px 520px at 82% 80%, rgba(255,92,200,.06), transparent 60%),
+        linear-gradient(to bottom, rgba(0,0,0,.50), rgba(0,0,0,.86));
+    }
+
+    /* =========================
+       UNIVERSAL NAV (NEW NAV)
+       - fixed so it stays visible
+       - underline removed everywhere
+    ========================= */
+    .topline{
+      position: fixed;
+      top:0; left:0;
+      width:100%;
+      z-index: 1000;
+
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      background: rgba(0,0,0,0.45);
+      border-bottom: 1px solid rgba(255,255,255,.12);
+
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 18px;
+      padding:14px 26px;
+    }
+
+    .brand{
+      color:#fff;
+      text-decoration:none;
+      font-size:.78rem;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      line-height:1.1;
+      white-space:nowrap;
+      user-select:none;
+      display:block;
+    }
+    .brand span{
+      display:block;
+      opacity:.7;
+      margin-top:4px;
+      letter-spacing:.12em;
+      font-size:.70rem;
+      text-transform:none !important;
+    }
+
+    .top-links{
+      display:flex;
+      gap:26px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+
+    .top-links > a,
+    .top-links .drop-trigger{
+      color: rgba(255,255,255,.78);
+      font-size: .82rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 8px 6px;
+      transition: .18s;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      user-select:none;
+      text-decoration:none;
+    }
+    .top-links > a:hover,
+    .top-links .drop-trigger:hover{ color:#fff; }
+    .top-links > a.active{ color:#fff; font-weight:700; }
+
+    .right-controls{
+      display:flex;
+      align-items:center;
+      gap:22px;
+    }
+
+    .icon-link{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:4px;
+      color: rgba(255,255,255,.78);
+      font-size: .60rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      transition: .18s;
+      user-select:none;
+      min-width: 72px;
+      text-decoration:none;
+    }
+    .icon-link:link,
+    .icon-link:visited,
+    .icon-link:hover,
+    .icon-link:active{ text-decoration:none; }
+
+    .icon-link svg{
+      width:22px;
+      height:22px;
+      stroke:#fff;
+      fill:none;
+      stroke-width:1.6;
+      opacity:.85;
+      transition:.18s;
+    }
+    .icon-link:hover{ color:#fff; text-shadow: 0 0 14px rgba(255,255,255,.22); }
+    .icon-link:hover svg{
+      opacity:1;
+      transform: translateY(-2px);
+      filter: drop-shadow(0 0 10px rgba(255,255,255,.22));
+    }
+
+    .dropdown{ position:relative; display:inline-flex; align-items:center; }
+    .dropdown-panel{
+      position:absolute;
+      top:120%;
+      left:0;
+      background: rgba(0,0,0,.86);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 14px;
+      padding: 10px 0;
+      min-width: 200px;
+
+      opacity: 0;
+      pointer-events:none;
+      transform: translateY(6px);
+      transition: .18s;
+      z-index: 9999;
+    }
+    .dropdown:hover .dropdown-panel{
+      opacity:1;
+      pointer-events:auto;
+      transform: translateY(0);
+    }
+    .dropdown-panel a{
+      display:block;
+      padding: 10px 16px;
+      color: rgba(255,255,255,.82);
+      font-size: .75rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      text-decoration:none;
+    }
+    .dropdown-panel a:hover{ background: rgba(255,255,255,.08); color:#fff; }
+
+    .icon-dropdown .dropdown-panel{ right:0; left:auto; min-width: 200px; }
+
+    .caret{
+      width:10px;
+      height:10px;
+      display:inline-block;
+      border-right: 2px solid rgba(255,255,255,.70);
+      border-bottom: 2px solid rgba(255,255,255,.70);
+      transform: rotate(45deg);
+      margin-top:-2px;
+      transition:.18s;
+      opacity:.85;
+    }
+    .dropdown:hover .caret{ opacity:1; border-color:#fff; }
+
+    @media (max-width: 760px){
+      .top-links{ display:none; }
+      .topline{ padding: 12px 16px; }
+      .right-controls{ gap:14px; }
+      .icon-link{ min-width: 62px; }
+    }
+
+    /* ===== Page layout ===== */
+    .page-content{
+      padding-top: 130px; /* room for fixed nav */
+      padding-bottom: 90px;
+    }
+    .wrap{
+      width: min(var(--max), 92vw);
+      margin: 0 auto;
+    }
+
+    .hero{
+      text-align:center;
+      margin: 44px auto 24px;
+    }
+    .hero h1{
+      margin: 0 0 12px;
+      font-size: 42px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .hero p{
+      margin: 0 auto;
+      max-width: 900px;
+      font-size: 16px;
+      line-height: 1.75;
+      color: var(--muted);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap: 26px;
+      align-items:start;
+      margin-top: 22px;
+    }
+
+    /* =========================
+       CARD LOOK 
+       - subtle glass
+       - colored top strip only
+       - soft glow
+    ========================= */
+    .glass{
+      position: relative;
+      border-radius: var(--radius);
+      padding: 22px;
+
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.08);
+
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+
+      box-shadow:
+        0 18px 60px rgba(0,0,0,.45),
+        inset 0 1px 0 rgba(255,255,255,.06);
+      overflow: hidden;
+    }
+    .glass::before{
+      content:"";
+      position:absolute;
+      left:0; right:0; top:0;
+      height: 6px;
+      background: var(--accent, var(--accent-blue));
+      opacity: .95;
+    }
+    .glass::after{
+      content:"";
+      position:absolute;
+      left:-10%;
+      right:-10%;
+      top:-40px;
+      height: 120px;
+      background: var(--accent, var(--accent-blue));
+      filter: blur(24px);
+      opacity: .12;
+      pointer-events:none;
+    }
+
+    .glass--blue{ --accent: var(--accent-blue); }
+    .glass--purple{ --accent: var(--accent-purple); }
+
+    .label{
+      margin: 0 0 14px;
+      font-size: 13px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      opacity: 0.88;
+    }
+    .muted{
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.65;
+      margin: 0;
+    }
+    .divider{
+      margin: 18px 0;
+      border: 0;
+      border-top: 1px solid rgba(255,255,255,0.12);
+    }
+
+    /* summary rows */
+    .rows{
+      display:grid;
+      gap: 12px;
+      margin-top: 10px;
+    }
+    .row{
+      display:grid;
+      grid-template-columns: 170px 1fr;
+      gap: 12px;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(0,0,0,0.22);
+    }
+    .row .k{
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.55);
+      align-self: start;
+      padding-top: 2px;
+    }
+    .row .v{
+      font-size: 14px;
+      line-height: 1.65;
+      color: rgba(255,255,255,.88);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.05);
+      letter-spacing: .10em;
+      text-transform: uppercase;
+      font-size: 11px;
+      color: rgba(255,255,255,.86);
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    /* buttons  */
+    .exp-cta{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+
+      padding: 11px 16px;
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.90);
+      text-decoration:none;
+      border:1px solid rgba(255,255,255,.14);
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      font-size:12px;
+      border-radius: 999px;
+
+      transition: transform .12s ease, background .15s ease, border-color .15s ease;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .exp-cta:hover{
+      background: rgba(255,255,255,0.10);
+      border-color: rgba(255,255,255,0.28);
+      transform: translateY(-1px);
+    }
+    .exp-cta:active{ transform: translateY(0); }
+
+    .exp-cta.primary{
+      background: rgba(255,255,255,0.90);
+      color: rgba(0,0,0,.85);
+      border-color: rgba(255,255,255,0.0);
+      font-weight: 700;
+    }
+    .exp-cta.primary:hover{ filter: brightness(.96); }
+
+    .actions{
+      display:flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+      align-items:center;
+    }
+
+    .tiny{
+      font-size: 12px;
+      color: rgba(255,255,255,.70);
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    @media (max-width: 980px){
+      .grid{ grid-template-columns: 1fr; }
+      .hero h1{ font-size: 36px; }
+      .row{ grid-template-columns: 1fr; }
+      .row .k{ padding-top: 0; }
+    }
+  </style>
+</head>
+
+<body class="page-confirm">
+  <div class="video-bg" aria-hidden="true">
+    <video autoplay muted loop playsinline>
+      <source src="assets/bg.mp4" type="video/mp4" />
+    </video>
+  </div>
+
+  <!--UNIVERSAL NAV -->
+  <header class="topline">
+    <a class="brand" href="index.html">
+      BOTANIC ELIXIR<br><span>adaptive café</span>
+    </a>
+
+    <nav class="top-links" aria-label="Main">
+      <a href="experiences.html">Experiences</a>
+      <a href="how-it-works.html">How It Works</a>
+      <a href="menu.html">Menu</a>
+      <a href="About-Connect.html">Connect</a>
+      <a href="contact.html">Contact</a>
+
+      <div class="dropdown">
+        <a class="drop-trigger" href="#" aria-label="Open about submenu" onclick="return false;">
+          About <span class="caret" aria-hidden="true"></span>
+        </a>
+        <div class="dropdown-panel" role="menu" aria-label="About submenu">
+          <a href="about.html">About Us</a>
+          <a href="community.html">Community</a>
+          <a href="learn-more.html">Learn More</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="right-controls">
+      <a class="icon-link" href="bag.html" aria-label="Go to bag">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6 7h12l-1 13H7L6 7z"></path>
+          <path d="M9 7a3 3 0 0 1 6 0"></path>
+        </svg>
+        BAG
+      </a>
+
+      <a class="icon-link" href="booked.html" aria-label="Go to bookings">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 4h16v16H4z"></path>
+          <path d="M8 2v4M16 2v4M4 10h16"></path>
+        </svg>
+        BOOKINGS
+      </a>
+
+      <div class="dropdown icon-dropdown" aria-label="Inquiries menu">
+        <a class="icon-link" href="#" aria-label="Open inquiries submenu" onclick="return false;">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="7" r="4"></circle>
+            <path d="M4 21c1.5-4 14.5-4 16 0"></path>
+          </svg>
+          INQUIRIES
+        </a>
+        <div class="dropdown-panel" role="menu" aria-label="Inquiries submenu">
+          <a href="book-consultation.html">Consultation</a>
+          <a href="hiring.html">Hiring</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-content">
+    <div class="wrap">
+      <section class="hero">
+        <h1>Application Delivered</h1>
+        <p>
+          Your hiring application details were exported successfully.
+          You can copy/share this link, or go back to edit before submitting.
+        </p>
+      </section>
+
+      <section class="grid">
+        <!-- LEFT: SUMMARY (blue top accent) -->
+        <section class="glass glass--blue" aria-label="Submission summary">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap;">
+            <div>
+              <h2 class="label" style="margin-bottom:6px;">Submission summary</h2>
+              <p class="muted" style="margin:0;">Reference: <span class="pill" id="refId">—</span></p>
+            </div>
+            <div class="pill" id="savedAt">Saved: —</div>
+          </div>
+
+          <hr class="divider" />
+
+          <div class="rows">
+            <div class="row">
+              <div class="k">Name</div>
+              <div class="v" id="v-fullName">—</div>
+            </div>
+
+            <div class="row">
+              <div class="k">Email</div>
+              <div class="v" id="v-email">—</div>
+            </div>
+
+            <div class="row">
+              <div class="k">Role</div>
+              <div class="v" id="v-role">—</div>
+            </div>
+
+            <div class="row">
+              <div class="k">Availability</div>
+              <div class="v" id="v-availability">—</div>
+            </div>
+
+            <div class="row">
+              <div class="k">Why this role?</div>
+              <div class="v" id="v-why">—</div>
+            </div>
+
+            <div class="row">
+              <div class="k">Links</div>
+              <div class="v" id="v-links">—</div>
+            </div>
+          </div>
+
+          <div class="actions">
+            <a class="exp-cta" id="editLink" href="hiring.html">Edit Draft &gt;</a>
+            <a class="exp-cta primary" id="submitLink" href="hiring-confirmation.html">Proceed to Submit &gt;</a>
+            <button class="exp-cta" type="button" id="copyLinkBtn">Copy Share Link &gt;</button>
+          </div>
+
+          <p class="tiny" id="missingNote" style="display:none; margin-top:12px;">
+            Note: Some fields were missing from the URL export. Go back and fill them in, then Save Draft again.
+          </p>
+        </section>
+
+        <!-- RIGHT: NEXT STEPS (purple top accent ) -->
+        <aside class="glass glass--purple" aria-label="Next steps">
+          <h2 class="label">What happens next</h2>
+          <p class="muted">
+            This page reads your saved values from the URL. If you want true saving,
+            we can store drafts in <strong>localStorage</strong> next.
+          </p>
+
+          <hr class="divider" />
+
+          <h3 class="label" style="margin-bottom:10px;">Tips</h3>
+          <ul class="muted" style="margin:0; padding-left:18px; line-height:1.9;">
+            <li>Use “Copy Share Link” to send your draft to yourself.</li>
+            <li>Edit anytime — your changes will export into a new link.</li>
+            <li>When ready, “Proceed to Submit” keeps the same fields.</li>
+          </ul>
+
+          <hr class="divider" />
+
+          <div class="actions">
+            <a class="exp-cta" href="index.html">Return Home &gt;</a>
+            <a class="exp-cta" href="experiences.html">Explore Experiences &gt;</a>
+          </div>
+        </aside>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    (function(){
+      const params = new URLSearchParams(window.location.search);
+
+      const first = (k) => (params.get(k) || "").trim();
+      const setText = (id, val) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.textContent = val && val.length ? val : "—";
+      };
+
+      const roleMap = {
+        "experience-coordinator": "Experience Coordinator",
+        "alchemist": "Alchemist",
+        "wizard": "Wizard",
+        "hybrid": "Hybrid"
+      };
+      const availMap = {
+        "weekdays": "Weekdays",
+        "weekends": "Weekends",
+        "evenings": "Evenings",
+        "flexible": "Flexible"
+      };
+
+      const data = {
+        fullName: first("fullName"),
+        email: first("email"),
+        role: roleMap[first("role")] || first("role"),
+        availability: availMap[first("availability")] || first("availability"),
+        why: first("why"),
+        links: first("links")
+      };
+
+      setText("v-fullName", data.fullName);
+      setText("v-email", data.email);
+      setText("v-role", data.role);
+      setText("v-availability", data.availability);
+      setText("v-why", data.why);
+      setText("v-links", data.links);
+
+      const now = new Date();
+      const savedAt = now.toLocaleString([], {
+        year:"numeric", month:"short", day:"2-digit", hour:"2-digit", minute:"2-digit"
+      });
+      document.getElementById("savedAt").textContent = "Saved: " + savedAt;
+
+      const seed = (data.fullName + "|" + data.email + "|" + now.getTime()).slice(0, 120);
+      let hash = 0;
+      for (let i=0;i<seed.length;i++){
+        hash = ((hash << 5) - hash) + seed.charCodeAt(i);
+        hash |= 0;
+      }
+      const ref = "BE-" + Math.abs(hash).toString(16).toUpperCase().slice(0, 8);
+      document.getElementById("refId").textContent = ref;
+
+      const qs = params.toString();
+      const editLink = document.getElementById("editLink");
+      const submitLink = document.getElementById("submitLink");
+
+      if (qs) {
+        editLink.href = "hiring.html#apply";
+        submitLink.href = "hiring-confirmation.html?" + qs;
+      }
+
+      const requiredKeys = ["fullName","email","role","availability","why"];
+      const missing = requiredKeys.filter(k => !first(k));
+      if (missing.length){
+        document.getElementById("missingNote").style.display = "block";
+      }
+
+      const copyBtn = document.getElementById("copyLinkBtn");
+      copyBtn.addEventListener("click", async () => {
+        try{
+          await navigator.clipboard.writeText(window.location.href);
+          copyBtn.textContent = "Copied ✓";
+          setTimeout(() => copyBtn.textContent = "Copy Share Link >", 1200);
+        }catch(e){
+          window.prompt("Copy this link:", window.location.href);
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

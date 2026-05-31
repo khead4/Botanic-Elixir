@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Botanic Elixir — How It Works</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#000;
+      --ink: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.62);
+      --line: rgba(255,255,255,.12);
+
+      --card: rgba(255,255,255,.035);
+      --cardBorder: rgba(255,255,255,.10);
+
+      /* accents */
+      --accent-blue: linear-gradient(90deg, #2a9bd8, #3a64ff);
+      --accent-purple: linear-gradient(90deg, #8b2be2, #ff5cc8);
+
+      --max: 1180px;
+
+      --h1: clamp(52px, 5vw, 70px);
+      --h2: clamp(34px, 3vw, 44px);
+      --body: 17px;
+
+      --sectionGap: 120px;
+      --navH: 78px;
+    }
+
+    *{ box-sizing:border-box; }
+    html, body{ height:100%; }
+
+    body{
+      margin:0;
+      font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      overflow-x:hidden;
+    }
+
+    /* subtle cinematic glow */
+    body::before{
+      content:"";
+      position: fixed;
+      inset:0;
+      z-index:-1;
+      background:
+        radial-gradient(1100px 520px at 50% 14%, rgba(255,255,255,.06), transparent 60%),
+        radial-gradient(900px 520px at 18% 84%, rgba(42,155,216,.07), transparent 62%),
+        radial-gradient(900px 520px at 82% 84%, rgba(255,92,200,.06), transparent 62%),
+        linear-gradient(to bottom, rgba(0,0,0,.48), rgba(0,0,0,.92));
+      pointer-events:none;
+    }
+
+    a{ color:inherit; text-decoration:none; }
+
+    /* =========================
+       NAV
+       (brand left, links middle, icons right)
+    ========================== */
+    .topnav{
+      position: fixed;
+      top:0; left:0;
+      width:100%;
+      height: var(--navH);
+      z-index: 1000;
+
+      display:flex;
+      align-items:center;
+
+      padding: 0 28px;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      background: rgba(0,0,0,0.45);
+      border-bottom: 1px solid rgba(255,255,255,.12);
+    }
+
+    .nav-inner{
+      width: min(1400px, 100%);
+      margin: 0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 18px;
+    }
+
+    .brand{
+      color:#fff;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      font-size:.78rem;
+      line-height:1.1;
+      white-space:nowrap;
+      user-select:none;
+      opacity:.95;
+    }
+    .brand small{
+      display:block;
+      margin-top:4px;
+      font-size:.70rem;
+      letter-spacing:.12em;
+      opacity:.70;
+      text-transform:none;
+    }
+    .brand:hover{ opacity:1; }
+
+    .nav-links{
+      display:flex;
+      align-items:center;
+      gap: 28px;
+      flex-wrap:wrap;
+      justify-content:center;
+    }
+    .nav-links a{
+      color: rgba(255,255,255,.72);
+      font-size: .78rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      padding: 10px 4px;
+      transition: .18s ease;
+      position:relative;
+    }
+    .nav-links a:hover{ color:#fff; }
+
+    .nav-links a[aria-current="page"]{
+      color:#fff;
+      font-weight:700;
+    }
+    .nav-links a[aria-current="page"]::after{
+      content:"";
+      position:absolute;
+      left: 0;
+      right: 0;
+      bottom: 4px;
+      height: 1px;
+      background: rgba(255,255,255,.45);
+    }
+
+    /* ABOUT dropdown (optional) */
+    .dropdown{
+      position:relative;
+      display:flex;
+      align-items:center;
+    }
+    .dropbtn{
+      background: transparent;
+      border: 0;
+      color: rgba(255,255,255,.72);
+      font-size: .78rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      padding: 10px 4px;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      gap: 8px;
+    }
+    .dropbtn:hover{ color:#fff; }
+    .caret{
+      width: 10px;
+      height: 10px;
+      display:inline-block;
+      border-right: 1.5px solid rgba(255,255,255,.70);
+      border-bottom: 1.5px solid rgba(255,255,255,.70);
+      transform: rotate(45deg);
+      margin-top:-2px;
+      opacity:.9;
+    }
+    .menu{
+      position:absolute;
+      top: calc(100% + 10px);
+      left: 0;
+      min-width: 180px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(10,12,15,.92);
+      box-shadow: 0 18px 70px rgba(0,0,0,.55);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      padding: 8px;
+      display:none;
+    }
+    .menu a{
+      display:block;
+      padding: 10px 10px;
+      border-radius: 10px;
+      font-size: .75rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.78);
+    }
+    .menu a:hover{
+      background: rgba(255,255,255,.08);
+      color:#fff;
+    }
+    .dropdown:focus-within .menu,
+    .dropdown:hover .menu{
+      display:block;
+    }
+
+    /* Right icon cluster */
+    .nav-actions{
+      display:flex;
+      align-items:center;
+      gap: 18px;
+      white-space:nowrap;
+    }
+
+    .iconlink{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap: 6px;
+      color: rgba(255,255,255,.76);
+      font-size: .62rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      user-select:none;
+      padding: 10px 6px;
+      border-radius: 12px;
+      transition: .18s ease;
+    }
+    .iconlink:hover{
+      color:#fff;
+      background: rgba(255,255,255,.06);
+    }
+
+    .icon{
+      width: 18px;
+      height: 18px;
+      display:block;
+      opacity:.9;
+    }
+    .icon svg{
+      width:100%;
+      height:100%;
+      stroke: rgba(255,255,255,.86);
+      stroke-width: 1.7;
+      fill: none;
+    }
+
+    /* Mobile behavior */
+    @media (max-width: 980px){
+      .nav-links{ display:none; }
+      .topnav{ padding: 0 16px; }
+    }
+
+    /* ===== Page spacing (account for fixed nav) ===== */
+    main{
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: calc(var(--navH) + 76px) 18px 92px;
+    }
+
+    .hero{
+      text-align:center;
+      padding-bottom: 14px;
+    }
+    .hero h1{
+      margin: 0;
+      font-size: var(--h1);
+      font-weight: 900;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .hero p{
+      margin: 18px auto 0;
+      max-width: 860px;
+      font-size: 19px;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .section{ margin-top: var(--sectionGap); }
+
+    .section-title{
+      text-align:center;
+      font-size: var(--h2);
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin: 0;
+    }
+    .section-sub{
+      text-align:center;
+      margin: 18px auto 0;
+      max-width: 900px;
+      font-size: 18px;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    /* ===== Adaptive process ===== */
+    .process-kicker{
+      text-align:center;
+      margin-top: 36px;
+      font-size: 14px;
+      letter-spacing: .20em;
+      font-weight: 900;
+      color: rgba(255,255,255,.68);
+      text-transform: uppercase;
+    }
+
+    .process-grid{
+      margin-top: 44px;
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 48px;
+      align-items:start;
+    }
+
+    .step{ display:flex; flex-direction:column; align-items:flex-start; }
+
+    .step-icon{
+      width: 64px;
+      height: 64px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.06);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      margin-bottom: 18px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+    }
+    .step-icon svg{
+      width: 30px;
+      height: 30px;
+      stroke: rgba(255,255,255,.74);
+      stroke-width: 1.8;
+      fill: none;
+    }
+
+    .step .step-tag{
+      font-size: 13px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      font-weight: 900;
+      color: rgba(255,255,255,.70);
+      margin-bottom: 8px;
+    }
+    .step .step-title{
+      font-size: 18px;
+      font-weight: 900;
+      margin-bottom: 12px;
+      line-height: 1.25;
+      color: rgba(255,255,255,.92);
+    }
+    .step .step-desc{
+      font-size: var(--body);
+      line-height: 1.85;
+      color: var(--muted);
+      max-width: 300px;
+    }
+
+    /* ===== Cards w/ colored top strip ===== */
+    .grid-3{
+      margin-top: 52px;
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 34px;
+    }
+    .grid-4{
+      margin-top: 52px;
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 28px;
+    }
+
+    .card{
+      position:relative;
+      background: rgba(255,255,255,.035);
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 18px;
+      padding: 28px 26px 26px;
+      min-height: 210px;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 18px 60px rgba(0,0,0,.40), inset 0 1px 0 rgba(255,255,255,.06);
+      overflow:hidden;
+    }
+
+    .card::before{
+      content:"";
+      position:absolute;
+      left:0; right:0; top:0;
+      height: 6px;
+      background: var(--accent, var(--accent-blue));
+      opacity:.98;
+    }
+    .card::after{
+      content:"";
+      position:absolute;
+      left:-10%;
+      right:-10%;
+      top:-40px;
+      height: 120px;
+      background: var(--accent, var(--accent-blue));
+      filter: blur(24px);
+      opacity: .14;
+      pointer-events:none;
+    }
+
+    .card.blue{ --accent: var(--accent-blue); }
+    .card.purple{ --accent: var(--accent-purple); }
+
+    .card .small-top{
+      font-size: 13px;
+      color: rgba(255,255,255,.68);
+      font-weight: 900;
+      margin-bottom: 12px;
+      letter-spacing: .02em;
+      text-transform: uppercase;
+    }
+    .card h3{
+      margin: 0 0 14px;
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: .01em;
+      color: rgba(255,255,255,.92);
+    }
+    .card p{
+      margin: 0 0 16px;
+      font-size: var(--body);
+      color: var(--muted);
+      line-height: 1.9;
+    }
+    .card ul{
+      margin: 0;
+      padding-left: 18px;
+      font-size: var(--body);
+      color: var(--muted);
+      line-height: 2.0;
+    }
+
+    .mini-h{
+      margin-top: 12px;
+      margin-bottom: 8px;
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.70);
+    }
+    .example{
+      font-size: var(--body);
+      color: var(--muted);
+      line-height: 1.9;
+    }
+
+    /* ===== Banner ===== */
+    .banner{
+      position:relative;
+      margin: 56px auto 0;
+      max-width: 980px;
+      background: rgba(255,255,255,.035);
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 18px;
+      padding: 34px 30px;
+      text-align:center;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 18px 60px rgba(0,0,0,.40), inset 0 1px 0 rgba(255,255,255,.06);
+      overflow:hidden;
+    }
+    .banner::before{
+      content:"";
+      position:absolute;
+      left:0; right:0; top:0;
+      height:6px;
+      background: var(--accent-purple);
+      opacity:.98;
+    }
+    .banner::after{
+      content:"";
+      position:absolute;
+      left:-10%;
+      right:-10%;
+      top:-40px;
+      height:120px;
+      background: var(--accent-purple);
+      filter: blur(24px);
+      opacity:.14;
+      pointer-events:none;
+    }
+    .banner h3{
+      margin: 0 0 14px;
+      font-size: 20px;
+      font-weight: 900;
+      color: rgba(255,255,255,.92);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+    .banner p{
+      margin: 0 auto 14px;
+      max-width: 900px;
+      font-size: var(--body);
+      color: var(--muted);
+      line-height: 1.95;
+    }
+    .banner .badges{
+      font-size: 13px;
+      color: rgba(255,255,255,.70);
+      font-weight: 900;
+      letter-spacing: .02em;
+    }
+
+    /* CTA row */
+    .cta-row{
+      margin-top: 56px;
+      display:flex;
+      justify-content:center;
+      gap: 16px;
+      flex-wrap:wrap;
+    }
+    .cta-pill{
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.90);
+      font-size: 12px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      padding: 12px 18px;
+      border: 1px solid rgba(255,255,255,.14);
+      font-weight: 800;
+      border-radius: 999px;
+      transition: transform .12s ease, background .15s ease, border-color .15s ease;
+      user-select:none;
+    }
+    .cta-pill:hover{
+      background: rgba(255,255,255,.10);
+      border-color: rgba(255,255,255,.28);
+      transform: translateY(-1px);
+    }
+    .cta-pill:active{ transform: translateY(0); }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 1100px){
+      .process-grid{ grid-template-columns: repeat(2, 1fr); }
+      .grid-3{ grid-template-columns: 1fr; }
+      .grid-4{ grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 560px){
+      main{ padding: calc(var(--navH) + 64px) 16px 70px; }
+      .process-grid{ grid-template-columns: 1fr; }
+      .grid-4{ grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  <!--  navigation -->
+  <header class="topnav" role="banner">
+    <div class="nav-inner">
+      <a class="brand" href="index.html" aria-label="Botanic Elixir Home">
+        BOTANIC ELIXIR
+        <small>adaptive café</small>
+      </a>
+
+      <nav class="nav-links" aria-label="Primary">
+        <a href="experiences.html">Experiences</a>
+        <a href="how-it-works.html" aria-current="page">How It Works</a>
+        <a href="menu.html">Menu</a>
+        <a href="About-Connect.html">Connect</a>
+        <a href="contact.html">Contact</a>
+
+        <div class="dropdown">
+          <button class="dropbtn" type="button" aria-haspopup="true" aria-expanded="false">
+            About <span class="caret" aria-hidden="true"></span>
+          </button>
+          <div class="menu" role="menu" aria-label="About menu">
+            <a href="about.html">About</a>
+            <a href="hiring.html">Hiring</a>
+            <a href="community.html#community">Community</a>
+          </div>
+        </div>
+      </nav>
+
+      <div class="nav-actions" aria-label="Quick links">
+        <a class="iconlink" href="bag.html" aria-label="Bag">
+          <span class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M6 7h12l-1 14H7L6 7z"/>
+              <path d="M9 7a3 3 0 0 1 6 0"/>
+            </svg>
+          </span>
+          BAG
+        </a>
+
+        <a class="iconlink" href="bookings.html" aria-label="Bookings">
+          <span class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M7 3v3"/>
+              <path d="M17 3v3"/>
+              <path d="M4 8h16"/>
+              <rect x="4" y="5" width="16" height="16" rx="2"/>
+              <path d="M8 12h4"/>
+              <path d="M8 16h6"/>
+            </svg>
+          </span>
+          BOOKINGS
+        </a>
+
+        <a class="iconlink" href="inquiries.html" aria-label="Inquiries">
+          <span class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/>
+              <path d="M8 9h8"/>
+              <path d="M8 13h6"/>
+            </svg>
+          </span>
+          INQUIRIES
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>HOW IT WORKS</h1>
+      <p>Understanding the science and design behind our adaptive environment</p>
+
+      <div class="process-kicker">THE ADAPTIVE PROCESS</div>
+      <p class="section-sub" style="margin-top:12px;">Four steps to create your intentional experience</p>
+
+      <div class="process-grid">
+        <!-- STEP 1 -->
+        <div class="step">
+          <div class="step-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M9 18h6" />
+              <path d="M10 22h4" />
+              <path d="M8.5 14.5c-1.6-1.3-2.5-3-2.5-5a6 6 0 1 1 12 0c0 2-0.9 3.7-2.5 5" />
+              <path d="M10 18v-2.2c0-0.7-.3-1.3-.8-1.8" />
+              <path d="M14 18v-2.2c0-0.7.3-1.3.8-1.8" />
+            </svg>
+          </div>
+          <div class="step-tag">STEP 1</div>
+          <div class="step-title">Set Your Intention</div>
+          <div class="step-desc">
+            Choose your desired state: focus, play, connection, or reflection.
+            Your intention guides every aspect of your experience.
+          </div>
+        </div>
+
+        <!-- STEP 2 -->
+        <div class="step">
+          <div class="step-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M8.5 3s-3.5 4-3.5 7a3.5 3.5 0 0 0 7 0c0-3-3.5-7-3.5-7z"/>
+              <path d="M16.5 6s-2.5 3-2.5 5a2.5 2.5 0 0 0 5 0c0-2-2.5-5-2.5-5z"/>
+              <path d="M14.5 14.5s-3.5 4-3.5 6a3.5 3.5 0 0 0 7 0c0-2-3.5-6-3.5-6z"/>
+            </svg>
+          </div>
+          <div class="step-tag">STEP 2</div>
+          <div class="step-title">Select Your Serum</div>
+          <div class="step-desc">
+            Our botanical, non-alcoholic serums are designed to support your chosen mood.
+            Each blend uses natural adaptogens and nootropics.
+          </div>
+        </div>
+
+        <!-- STEP 3 -->
+        <div class="step">
+          <div class="step-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <rect x="4" y="5" width="16" height="14" rx="2" />
+              <path d="M4 9h16" />
+              <path d="M7 7h.01" />
+              <path d="M9 7h.01" />
+              <path d="M11 7h.01" />
+              <path d="M7 12h6" />
+              <path d="M7 15h10" />
+            </svg>
+          </div>
+          <div class="step-tag">STEP 3</div>
+          <div class="step-title">Choose Your Space</div>
+          <div class="step-desc">
+            Select from individual pods, communal tables, or private booths.
+            Each space adapts to your intention and preferences.
+          </div>
+        </div>
+
+        <!-- STEP 4 -->
+        <div class="step">
+          <div class="step-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M5 16a7 7 0 0 1 14 0" />
+              <path d="M12 16l3-5" />
+              <path d="M6.5 16h11" />
+              <path d="M12 3v2" />
+              <path d="M4.5 9l1.7 1" />
+              <path d="M19.5 9l-1.7 1" />
+            </svg>
+          </div>
+          <div class="step-tag">STEP 4</div>
+          <div class="step-title">Environment Adapts</div>
+          <div class="step-desc">
+            Lighting, soundscapes, temperature, and visual elements automatically shift
+            to match your selected experience and enhance your state.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SPACE CONFIGURATIONS -->
+    <section class="section" id="spaces">
+      <h2 class="section-title">SPACE CONFIGURATIONS</h2>
+      <p class="section-sub">Choose the environment that fits your experience</p>
+
+      <div class="grid-3">
+        <div class="card blue">
+          <div class="small-top">1 person</div>
+          <h3>Individual Pods</h3>
+          <p>Private, focused workspaces designed for deep concentration and self-reflection.</p>
+          <ul>
+            <li>Adjustable lighting</li>
+            <li>Noise cancellation</li>
+            <li>Ergonomic seating</li>
+            <li>Personal climate control</li>
+          </ul>
+        </div>
+
+        <div class="card purple">
+          <div class="small-top">6–12 people</div>
+          <h3>Communal Tables</h3>
+          <p>Shared spaces that foster creativity, collaboration, and gentle social energy.</p>
+          <ul>
+            <li>Ambient soundscapes</li>
+            <li>Flexible seating</li>
+            <li>Shared atmosphere</li>
+            <li>Creative energy</li>
+          </ul>
+        </div>
+
+        <div class="card blue">
+          <div class="small-top">2–4 people</div>
+          <h3>Private Booths</h3>
+          <p>Intimate spaces for conversations, dates, or small group gatherings.</p>
+          <ul>
+            <li>Customizable ambience</li>
+            <li>Curated playlists</li>
+            <li>Privacy screens</li>
+            <li>Cozy atmosphere</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCIENCE OF SERUMS -->
+    <section class="section" id="serums">
+      <h2 class="section-title">THE SCIENCE OF SERUMS</h2>
+      <p class="section-sub">
+        Our non-alcoholic elixirs combine botanical ingredients with functional compounds
+        to support your desired state of mind
+      </p>
+
+      <div class="grid-4">
+        <div class="card blue">
+          <h3>Adaptogens</h3>
+          <p>Natural compounds that help the body adapt to stress and restore balance.</p>
+          <div class="mini-h">Examples</div>
+          <div class="example">Ashwagandha, Rhodiola, Holy Basil</div>
+        </div>
+
+        <div class="card purple">
+          <h3>Nootropics</h3>
+          <p>Cognitive enhancers that support mental clarity, focus, and creativity.</p>
+          <div class="mini-h">Examples</div>
+          <div class="example">Lion’s Mane, L-Theanine, Bacopa</div>
+        </div>
+
+        <div class="card blue">
+          <h3>Botanicals</h3>
+          <p>Plant-based ingredients that provide flavor, aroma, and functional benefits.</p>
+          <div class="mini-h">Examples</div>
+          <div class="example">Lavender, Chamomile, Hibiscus</div>
+        </div>
+
+        <div class="card purple">
+          <h3>Functional Blends</h3>
+          <p>Carefully crafted combinations designed to support specific mood states.</p>
+          <div class="mini-h">Examples</div>
+          <div class="example">Energy, Calm, Focus, Connection</div>
+        </div>
+      </div>
+
+      <div class="banner">
+        <h3>Our Commitment to Quality</h3>
+        <p>
+          Every serum is crafted with organic, sustainably-sourced ingredients. We work with herbalists,
+          nutritionists, and neuroscientists to ensure each blend is both effective and delicious.
+          All ingredients are third-party tested for purity and potency.
+        </p>
+        <div class="badges">100% Non-Alcoholic · Vegan · Gluten-Free · No Artificial Additives</div>
+      </div>
+    </section>
+
+    <!-- ADAPTIVE ENVIRONMENT TECHNOLOGY -->
+    <section class="section" id="technology">
+      <h2 class="section-title">ADAPTIVE ENVIRONMENT TECHNOLOGY</h2>
+      <p class="section-sub">How we create atmosphere that responds to intention</p>
+
+      <div class="grid-3">
+        <div class="card blue">
+          <h3>Lighting Systems</h3>
+          <p>
+            Dynamic LED systems adjust color temperature and intensity to support your chosen experience.
+            Focus uses cooler light; play uses higher energy contrast; restore uses warmer, softer tones.
+          </p>
+        </div>
+
+        <div class="card purple">
+          <h3>Audio Landscapes</h3>
+          <p>
+            Curated soundscapes range from minimal noise textures for focus to ambient music for restoration.
+            Volume and complexity adjust to your selection and time of day.
+          </p>
+        </div>
+
+        <div class="card blue">
+          <h3>Climate Control</h3>
+          <p>
+            Temperature and airflow are tuned per space type and experience. Individual pods allow personal control,
+            while communal areas maintain stable group comfort.
+          </p>
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <a class="cta-pill" href="menu.html">GO TO MENU</a>
+        <a class="cta-pill" href="experiences.html">GO TO EXPERIENCES</a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
