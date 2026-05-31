@@ -1,0 +1,918 @@
+<!-- research.html -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Botanic Elixir — Research</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      /* Core */
+      --bg:#000;
+      --ink: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.62);
+      --soft: rgba(255,255,255,.12);
+      --border: rgba(255,255,255,.10);
+      --border2: rgba(255,255,255,.14);
+      --shadow: 0 18px 60px rgba(0,0,0,.45);
+
+      /* Gradients  */
+      --g-focus: linear-gradient(90deg, #2a9bd8, #3a64ff);
+      --g-play: linear-gradient(90deg, #f0b35a, #a8a3ff);
+      --g-connect: linear-gradient(90deg, #ff5cc8, #9b63ff);
+      --g-restore: linear-gradient(90deg, #6bf08b, #45d8d1);
+      --g-pink: linear-gradient(90deg, #ff5cc8, #ff8adf);
+
+      /* Layout */
+      --max: 1100px;
+      --radius: 18px;
+    }
+
+    *{ box-sizing:border-box; }
+    html, body{ height:100%; }
+    body.page-research{
+      margin:0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Inter", Arial, Helvetica, sans-serif;
+      letter-spacing: 0.01em;
+      overflow-x:hidden;
+    }
+
+    /* Kill underlines everywhere */
+    a, a:hover, a:focus, a:active, a:visited{ color: inherit; text-decoration:none; }
+
+    /* ===== Background video + overlay ===== */
+    .video-bg{
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .video-bg video{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: .22;
+      filter: saturate(1.05) contrast(1.05);
+    }
+    body.page-research::before{
+      content:"";
+      position: fixed;
+      inset:0;
+      z-index:-1;
+      background:
+        radial-gradient(1200px 600px at 50% 18%, rgba(255,255,255,.06), transparent 60%),
+        radial-gradient(900px 520px at 18% 78%, rgba(155,99,255,.07), transparent 60%),
+        radial-gradient(900px 520px at 82% 78%, rgba(69,216,209,.06), transparent 60%),
+        linear-gradient(to bottom, rgba(0,0,0,.55), rgba(0,0,0,.84));
+    }
+
+    /* =========================
+       NEW NAV (matches your latest “community.html” style)
+    ========================= */
+    .topline{
+      position: sticky;
+      top:0;
+      z-index: 1000;
+
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      background: rgba(0,0,0,0.45);
+      border-bottom: 1px solid rgba(255,255,255,.12);
+
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 18px;
+      padding:14px 26px;
+    }
+
+    .brand{
+      color:#fff;
+      font-size:.78rem;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      line-height:1.1;
+      white-space:nowrap;
+      user-select:none;
+      display:block;
+    }
+    .brand span{
+      display:block;
+      opacity:.7;
+      margin-top:4px;
+      letter-spacing:.12em;
+      font-size:.70rem;
+      text-transform:none;
+    }
+
+    .top-links{
+      display:flex;
+      gap:26px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+
+    .top-links > a,
+    .top-links .drop-trigger{
+      color: rgba(255,255,255,.78);
+      font-size: .82rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 8px 6px;
+      transition: .18s;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      user-select:none;
+    }
+    .top-links > a:hover,
+    .top-links .drop-trigger:hover{ color:#fff; }
+    .top-links > a.active{ color:#fff; font-weight:700; }
+
+    .right-controls{
+      display:flex;
+      align-items:center;
+      gap:22px;
+    }
+
+    .icon-link{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:4px;
+      color: rgba(255,255,255,.78);
+      font-size: .60rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      transition: .18s;
+      user-select:none;
+      min-width: 72px;
+    }
+    .icon-link svg{
+      width:22px;
+      height:22px;
+      stroke:#fff;
+      fill:none;
+      stroke-width:1.6;
+      opacity:.85;
+      transition:.18s;
+    }
+    .icon-link:hover{ color:#fff; text-shadow: 0 0 14px rgba(255,255,255,.22); }
+    .icon-link:hover svg{
+      opacity:1;
+      transform: translateY(-2px);
+      filter: drop-shadow(0 0 10px rgba(255,255,255,.22));
+    }
+
+    .dropdown{ position:relative; display:inline-flex; align-items:center; }
+    .dropdown-panel{
+      position:absolute;
+      top:120%;
+      left:0;
+      background: rgba(0,0,0,.86);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 14px;
+      padding: 10px 0;
+      min-width: 200px;
+
+      opacity: 0;
+      pointer-events:none;
+      transform: translateY(6px);
+      transition: .18s;
+      z-index: 9999;
+    }
+    .dropdown:hover .dropdown-panel{
+      opacity:1;
+      pointer-events:auto;
+      transform: translateY(0);
+    }
+    .dropdown-panel a{
+      display:block;
+      padding: 10px 16px;
+      color: rgba(255,255,255,.82);
+      font-size: .75rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .dropdown-panel a:hover{ background: rgba(255,255,255,.08); color:#fff; }
+    .icon-dropdown .dropdown-panel{ right:0; left:auto; min-width: 200px; }
+
+    .caret{
+      width:10px;
+      height:10px;
+      display:inline-block;
+      border-right: 2px solid rgba(255,255,255,.70);
+      border-bottom: 2px solid rgba(255,255,255,.70);
+      transform: rotate(45deg);
+      margin-top:-2px;
+      transition:.18s;
+      opacity:.85;
+    }
+    .dropdown:hover .caret{ opacity:1; border-color:#fff; }
+
+    @media (max-width: 760px){
+      .top-links{ display:none; }
+      .topline{ padding: 12px 16px; }
+      .right-controls{ gap:14px; }
+      .icon-link{ min-width: 62px; }
+    }
+
+    /* ===== Page layout ===== */
+    .page-content{ padding: 42px 0 96px; }
+    .wrap{ width: min(var(--max), 92vw); margin: 0 auto; }
+
+    .hero{
+      text-align:center;
+      margin: 28px auto 28px;
+    }
+    .hero h1{
+      margin: 0 0 12px;
+      font-size: 44px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .hero p{
+      margin: 0 auto;
+      max-width: 900px;
+      font-size: 15px;
+      line-height: 1.8;
+      color: var(--muted);
+    }
+
+    .section{
+      margin-top: 26px;
+    }
+    .section-title{
+      display:flex;
+      align-items:baseline;
+      justify-content:space-between;
+      gap: 16px;
+      margin: 10px 0 14px;
+    }
+    .section-title h2{
+      margin:0;
+      font-size: 14px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      opacity: .92;
+    }
+    .section-title .hint{
+      color: rgba(255,255,255,.56);
+      font-size: 12px;
+      letter-spacing: .10em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    /* ===== Colored outline cards  ===== */
+    .glass{
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius);
+      padding: 22px;
+
+      border: 1px solid transparent;
+      background:
+        linear-gradient(rgba(10,10,10,.60), rgba(10,10,10,.60)) padding-box,
+        var(--g-connect) border-box;
+
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: var(--shadow);
+    }
+    .glass.is-blue{
+      background:
+        linear-gradient(rgba(10,10,10,.60), rgba(10,10,10,.60)) padding-box,
+        var(--g-focus) border-box;
+    }
+    .glass.is-green{
+      background:
+        linear-gradient(rgba(10,10,10,.60), rgba(10,10,10,.60)) padding-box,
+        var(--g-restore) border-box;
+    }
+    .glass.is-play{
+      background:
+        linear-gradient(rgba(10,10,10,.60), rgba(10,10,10,.60)) padding-box,
+        var(--g-play) border-box;
+    }
+
+    .cap{
+      position:absolute;
+      left:0; right:0; top:0;
+      height: 7px;
+      background: var(--g-connect);
+    }
+    .glass.is-blue .cap{ background: var(--g-focus); }
+    .glass.is-green .cap{ background: var(--g-restore); }
+    .glass.is-play .cap{ background: var(--g-play); }
+
+    .muted{ color: var(--muted); }
+    .body{
+      font-size: 14px;
+      line-height: 1.85;
+      color: rgba(255,255,255,.86);
+      margin: 0;
+    }
+
+    .grid-2{
+      display:grid;
+      grid-template-columns: 1.25fr .85fr;
+      gap: 26px;
+      align-items:start;
+    }
+    @media (max-width: 980px){
+      .grid-2{ grid-template-columns: 1fr; }
+      .hero h1{ font-size: 36px; }
+    }
+
+    /* ===== Info cards ===== */
+    .cards{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 14px;
+    }
+    @media (max-width: 900px){
+      .cards{ grid-template-columns: 1fr; }
+    }
+
+    .card{
+      position: relative;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.22);
+      padding: 16px 16px 14px;
+      overflow:hidden;
+    }
+    .card::before{
+      content:"";
+      position:absolute;
+      left:0; right:0; top:0;
+      height: 5px;
+      background: var(--bar, var(--g-connect));
+      opacity: .92;
+    }
+    .card h3{
+      margin: 6px 0 8px;
+      font-size: 13px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.90);
+    }
+    .card p{
+      margin:0;
+      font-size: 13px;
+      line-height: 1.8;
+      color: rgba(255,255,255,.72);
+    }
+
+    .pill-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      padding: 9px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.05);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      font-size: 11px;
+      color: rgba(255,255,255,.82);
+      user-select:none;
+    }
+
+    /* ===== How-it-works style steps ===== */
+    .steps{
+      display:grid;
+      gap: 14px;
+      margin-top: 14px;
+    }
+    .step{
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.22);
+      padding: 14px 14px 12px;
+    }
+    .step-top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 14px;
+      margin-bottom: 6px;
+    }
+    .num{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width: 34px; height: 34px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.05);
+      font-size: 12px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.88);
+      flex: 0 0 auto;
+    }
+    .step h3{
+      margin:0;
+      font-size: 13px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.90);
+      flex: 1 1 auto;
+    }
+    .tag{
+      font-size: 11px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.70);
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      border-radius: 999px;
+      padding: 7px 10px;
+      white-space: nowrap;
+    }
+    .step p{
+      margin:0;
+      font-size: 13px;
+      line-height: 1.8;
+      color: rgba(255,255,255,.72);
+    }
+
+    .divider{
+      margin: 18px 0;
+      border:0;
+      border-top: 1px solid rgba(255,255,255,.12);
+    }
+
+    /* Buttons */
+    .actions{
+      display:flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+      align-items:center;
+    }
+    .exp-cta{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+
+      padding: 11px 16px;
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.90);
+      border:1px solid rgba(255,255,255,.14);
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      font-size:12px;
+      border-radius: 999px;
+
+      transition: transform .12s ease, background .15s ease, border-color .15s ease;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .exp-cta:hover{
+      background: rgba(255,255,255,0.10);
+      border-color: rgba(255,255,255,0.28);
+      transform: translateY(-1px);
+    }
+    .exp-cta.primary{
+      background: rgba(255,255,255,0.90);
+      color: rgba(0,0,0,.85);
+      border-color: rgba(255,255,255,0.0);
+      font-weight: 700;
+    }
+    .exp-cta.primary:hover{ filter: brightness(.96); }
+
+    /* Small note */
+    .note{
+      margin-top: 10px;
+      font-size: 12px;
+      line-height: 1.8;
+      color: rgba(255,255,255,.62);
+    }
+  </style>
+</head>
+
+<body class="page-research">
+
+  <div class="video-bg" aria-hidden="true">
+    <video autoplay muted loop playsinline>
+      <source src="assets/bg.mp4" type="video/mp4" />
+    </video>
+  </div>
+
+  <!--  New navigation -->
+  <header class="topline">
+    <a class="brand" href="index.html">
+      BOTANIC ELIXIR<br><span>adaptive café</span>
+    </a>
+
+    <nav class="top-links" aria-label="Main">
+      <a href="experiences.html">Experiences</a>
+      <a href="how-it-works.html">How It Works</a>
+      <a href="menu.html">Menu</a>
+      <a href="About-Connect.html">Connect</a>
+      <a href="contact.html">Contact</a>
+
+      <div class="dropdown">
+        <a class="drop-trigger" href="#" aria-label="Open about submenu" onclick="return false;">
+          About <span class="caret" aria-hidden="true"></span>
+        </a>
+        <div class="dropdown-panel" role="menu" aria-label="About submenu">
+          <a href="about.html">About Us</a>
+          <a href="community.html">Community</a>
+          <a href="learn-more.html">Learn More</a>
+          <a href="research.html" aria-current="page">Research</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="right-controls">
+      <a class="icon-link" href="bag.html" aria-label="Go to bag">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6 7h12l-1 13H7L6 7z"></path>
+          <path d="M9 7a3 3 0 0 1 6 0"></path>
+        </svg>
+        BAG
+      </a>
+
+      <a class="icon-link" href="booked.html" aria-label="Go to bookings">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 4h16v16H4z"></path>
+          <path d="M8 2v4M16 2v4M4 10h16"></path>
+        </svg>
+        BOOKINGS
+      </a>
+
+      <div class="dropdown icon-dropdown" aria-label="Inquiries menu">
+        <a class="icon-link" href="#" aria-label="Open inquiries submenu" onclick="return false;">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="7" r="4"></circle>
+            <path d="M4 21c1.5-4 14.5-4 16 0"></path>
+          </svg>
+          INQUIRIES
+        </a>
+        <div class="dropdown-panel" role="menu" aria-label="Inquiries submenu">
+          <a href="book-consultation.html">Consultation</a>
+          <a href="hiring.html">Hiring</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-content">
+    <div class="wrap">
+
+      <!-- HERO -->
+      <section class="hero">
+        <h1>Research</h1><br>
+        <p>
+         <em> This page explains the “why” behind Botanic Elixir — why serums can feel different, why space changes behavior,
+          and why intention (paired with a designed environment) makes experiences stick.</em><br>
+        </p>
+      </section>
+
+      <!-- SECTION 1: BENEFITS OF SERUMS -->
+      <section class="section">
+        <div class="section-title">
+          <h2><strong>Benefits of Serums</strong></h2><br><br>
+          <div class="hint">adaptogens • nootropics • botanicals • functional blends<br></div><br><br>
+        </div>
+
+        <section class="glass is-blue" aria-label="Benefits of serums">
+          <div class="cap" aria-hidden="true"></div>
+
+          <p class="body muted" style="margin-top:6px;">
+           <br> <em>Serums are designed as “intent supports.” They’re not meant to replace sleep, nutrition, or therapy — they’re meant to
+            help the body and mind shift states more smoothly (focus, calm, sociability, recovery).</em><br><br>
+          </p>
+
+          <div class="cards">
+            <article class="card" style="--bar: var(--g-restore);">
+              <h3><strong>Adaptogens<br></strong></h3>
+              <p>
+                <br>Plants traditionally used to <em>support stress resilience</em>. The goal is <strong>not</strong> <em>“stimulation,</em> but smoother <em>regulation</em>:
+                <em>fewer spikes</em>, <em>more steadiness</em>. People often use adaptogens to <em>support calm focus, recovery, and a more stable mood tone</em>.
+             <br> </p>
+              <div class="pill-row" aria-label="Adaptogen outcomes">
+                <span class="pill">stress buffering</span>
+                <span class="pill">steady energy</span>
+                <span class="pill">recovery support</span>
+                <span class="pill">mood balance</span>
+              </div>
+            </article>
+
+            <article class="card" style="--bar: var(--g-focus);">
+              <h3><strong>Nootropics</strong></h3><br>
+              <p>
+                Compounds people use to <strong>>support cognition</strong>: <em>attention control, working memory, mental endurance, and clarity</em>.
+                The best use-case is <strong>“task alignment”</strong> — pairing the right support with the right activity window.
+              <br></p><br><br>
+              <div class="pill-row" aria-label="Nootropic outcomes">
+                <span class="pill">attention</span>
+                <span class="pill">clarity</span>
+                <span class="pill">mental stamina</span>
+                <span class="pill">flow support</span>
+              </div>
+            </article>
+
+            <article class="card" style="--bar: var(--g-connect);">
+              <h3>Botanicals</h3><br>
+              <p>
+                Flavor-forward plants with <strong>functional properties</strong>: <em>sensory comfort, digestion support, mood cues, and ritual</em>.
+                Botanicals matter because the <em>body learns through association</em> — taste + scent + context becomes a <em></em>“state trigger.”
+              </p>
+              <div class="pill-row" aria-label="Botanical outcomes">
+                <span class="pill">ritual cueing</span>
+                <span class="pill">sensory calm</span>
+                <span class="pill">comfort</span>
+                <span class="pill">association</span>
+              </div>
+            </article>
+
+            <article class="card" style="--bar: var(--g-play);">
+              <h3>Functional blends</h3><br>
+              <p>
+                Synergy matters: a blend can be <strong>designed</strong> to <strong>feel</strong> <em>smooth</em> (not jagged), <em>balanced</em> (not one-note),
+                and <em>aligned</em> to <em>a moment</em> (work sprint, creative session, social openness, restoration).
+              </p>
+              <div class="pill-row" aria-label="Blend design goals">
+                <span class="pill">smoother shifts</span>
+                <span class="pill">reduced “crash”</span>
+                <span class="pill">state alignment</span>
+                <span class="pill">ritual + function</span>
+              </div>
+            </article>
+          </div>
+
+          <hr class="divider" />
+
+          <p class="note">
+            <em>Note: This is a conceptual research summary for experience design. If you want a medical/clinical framing, that requires
+            ingredient-level sourcing, dosages, and contraindications (and should be reviewed by a qualified professional).</em>
+          </p>
+        </section>
+      </section>
+
+      <!-- SECTION 2: SPACE PSYCHOLOGY -->
+      <section class="section">
+        <div class="section-title">
+         <br> <br><h2> <br>Psychology Behind Space</h2>
+          <div class="hint"><br>productivity • mindset • wellbeing • creativity • social</div>
+        </div>
+
+        <section class="glass is-green" aria-label="Psychology behind space">
+          <div class="cap" aria-hidden="true"></div>
+
+          <div class="grid-2" style="margin-top:10px;">
+            <div>
+              <p class="body">
+                <br><em>Space is a behavioral script. Lighting, sound, privacy, density, and layout quietly tell the nervous system what to do:
+                focus, scan for threats, relax, speak softly, collaborate, or leave.</em><br><br>
+              </p>
+
+              <div class="cards">
+                <article class="card" style="--bar: var(--g-focus);">
+                  <h3>Productivity</h3><br>
+                  <p>
+                    Focus improves when the environment reduces “attention taxes”: fewer interruptions, clearer task zones,
+                    predictable pathways, and sensory consistency. People concentrate better when the space makes the next action obvious.
+                  </p>
+                </article>
+
+                <article class="card" style="--bar: var(--g-restore);">
+                  <h3>Mental well-being</h3><br>
+                  <p>
+                    A calming space supports regulation: softer contrast, gentle acoustics, comfortable personal distance, and permission to pause.
+                    The body relaxes when it doesn’t have to defend territory or fight noise.
+                  </p>
+                </article>
+
+                <article class="card" style="--bar: var(--g-play);">
+                  <h3>Creativity</h3><br>
+                  <p>
+                    Creativity increases when the space allows play: visual novelty, modular seating, flexible tools, and low-stakes zones.
+                    “Permission” is a design feature — if the space feels safe to experiment, people experiment.
+                  </p>
+                </article>
+
+                <article class="card" style="--bar: var(--g-connect);">
+                  <h3>Social interaction</h3><br>
+                  <p>
+                    Conversation is shaped by distance, seating angle, noise, and micro-privacy. If people can talk without being overheard,
+                    they speak more openly. If they have no refuge, they self-censor or leave.
+                  </p>
+                </article>
+              </div>
+            </div>
+
+            <aside>
+              <div class="card" style="--bar: var(--g-connect);">
+                <h3>Mindset</h3><br>
+                <p>
+                  People “become the room.” A room that signals seriousness creates seriousness; a room that signals warmth creates warmth.
+                  The easiest way to shift mindset is to change context — not willpower.
+                </p>
+              </div>
+
+              <div class="card" style="--bar: var(--g-pink); margin-top:14px;">
+                <h3>Design levers</h3><br>
+                <p>
+                  Lighting, sound, scent, temperature, density, and layout are levers that change behavior. When these align with intention,
+                  results feel “effortless” because the space is doing part of the work.
+                </p>
+              </div>
+
+              <div class="pill-row" aria-label="Space levers"><br>
+                <span class="pill">lighting</span>
+                <span class="pill">acoustics</span>
+                <span class="pill">privacy</span>
+                <span class="pill">flow</span>
+                <span class="pill">ritual cues</span>
+              </div>
+            </aside>
+          </div>
+        </section>
+      </section>
+
+      <!-- SECTION 3: ARCHITECTURE + IMMERSION -->
+      <section class="section">
+        <div class="section-title">
+          <h2><br>Architecture & Immersive Environments</h2>
+          <div class="hint"><br>attention • emotion • identity • memory</div>
+        </div>
+
+        <section class="glass is-play" aria-label="Psychology of architecture and immersion">
+          <div class="cap" aria-hidden="true"></div>
+
+          <p class="body" style="margin-top:6px;">
+           <em><br> Immersion isn’t “more stimuli.” Immersion is coherence: when the story, space, tools, and social rules agree with each other.
+            When everything points in the same direction, the brain stops negotiating and starts participating.<br><br></em>
+          </p>
+
+          <div class="cards">
+            <article class="card" style="--bar: var(--g-focus);">
+              <h3>Attention shaping</h3><br>
+              <p>
+               <em> Architecture guides attention through sightlines, thresholds, and focal points. When attention is guided gently (not forced),
+                people feel “held” rather than controlled — and they stay longer.</em>
+              </p>
+            </article>
+
+            <article class="card" style="--bar: var(--g-connect);">
+              <h3>Emotion + atmosphere</h3><br>
+              <p>
+                Emotion is affected by contrast, enclosure, warmth, and rhythm. A space can feel intimate, expansive, protective, or energizing
+                without a single word being spoken.
+              </p>
+            </article>
+
+            <article class="card" style="--bar: var(--g-restore);">
+              <h3>Memory encoding</h3><br>
+              <p>
+                People remember environments that have a signature: a repeated cue, a distinct scent, a tactile detail, a ritual moment.
+                These cues become anchors that help the body return to the same state later.
+              </p>
+            </article>
+
+            <article class="card" style="--bar: var(--g-play);">
+              <h3>Identity + belonging</h3><br>
+              <p>
+                A space can signal “you belong here” through inclusivity cues: choice, autonomy, readable rules, and non-judgmental zones.
+                People relax when they know how to participate without performing.
+              </p>
+            </article>
+          </div>
+        </section>
+      </section>
+
+      <!-- SECTION 4: INTENTION + PURPOSEFUL EVENTS  -->
+      <section class="section">
+        <div class="section-title">
+          <h2><br>Intention & Purposeful Events</h2><br>
+          <div class="hint"><br>designed like how-it-works</div>
+        </div>
+
+        <section class="glass" aria-label="Psychology of intention and purposeful spaces">
+          <div class="cap" aria-hidden="true"></div>
+
+          <p class="body muted" style="margin-top:6px;">
+           <em><br> Intention works because it narrows the brain’s “search space.” When I decide what I’m here for, my attention, choices, and energy
+            stop competing with everything else. A purposeful event adds structure so I don’t have to self-manage the entire time.<br><br></em>
+          </p>
+
+          <div class="steps">
+            <div class="step">
+              <div class="step-top">
+                <span class="num">01</span>
+                <h3>Name the state</h3>
+                <span class="tag">clarity</span>
+              </div>
+              <p>
+                I pick the state I want (focus, calm, connection, restoration). This immediately changes perception: the brain starts filtering
+                for what supports the goal and ignoring what doesn’t.
+              </p>
+            </div>
+
+            <div class="step">
+              <div class="step-top">
+                <span class="num">02</span>
+                <h3>Reduce decisions</h3>
+                <span class="tag">relief</span>
+              </div>
+              <p>
+                A pre-developed space reduces cognitive load: clear steps, clear zones, clear norms. Less decision-making means more energy
+                stays available for work, reflection, conversation, or creation.
+              </p>
+            </div>
+
+            <div class="step">
+              <div class="step-top">
+                <span class="num">03</span>
+                <h3>Create a ritual anchor</h3>
+                <span class="tag">memory</span>
+              </div>
+              <p>
+                A repeated action (serum + seat + cue) becomes a shortcut. Over time, the body learns: “when I do this here, I enter this state.”
+                That’s why designed rituals feel powerful.
+              </p>
+            </div>
+
+            <div class="step">
+              <div class="step-top">
+                <span class="num">04</span>
+                <h3>Let the environment carry you</h3>
+                <span class="tag">flow</span>
+              </div>
+              <p>
+                The point is not to “try harder.” The point is to build conditions where the desired behavior is the easiest behavior.
+                Pre-designed environments make the path frictionless.
+              </p>
+            </div>
+          </div>
+
+          <hr class="divider" />
+
+          <div class="actions">
+            <a class="exp-cta" href="how-it-works.html">See How It Works &gt;</a>
+            <a class="exp-cta" href="book-consultation.html">Book a Consultation &gt;</a>
+            <a class="exp-cta primary" href="experiences.html">Explore Experiences &gt;</a>
+          </div>
+
+      
+        </section>
+      </section>
+
+      <!--  FINAL SECTION -->
+      <section class="section">
+        <div class="section-title">
+          <h2><br>Next</h2>
+          <div class="hint"><br>make it actionable</div>
+        </div>
+
+        <section class="glass is-blue" aria-label="Next steps">
+          <div class="cap" aria-hidden="true"></div>
+
+          <p class="body">
+           <em> <br>If I’m building a better routine, I don’t rely on motivation — I choose an intention, enter the right space, and use a small
+            ritual cue. That’s the whole system: <span class="muted">intention → environment → ritual → repetition.</em><br><br></span>
+          </p>
+
+          <div class="pill-row" style="margin-top:16px;">
+            <span class="pill">focus sprints</span>
+            <span class="pill">creative sessions</span>
+            <span class="pill">social openness</span>
+            <span class="pill">restoration</span>
+          </div>
+
+          <div class="actions" style="margin-top:18px;">
+            <a class="exp-cta" href="menu.html">Browse Menu &gt;</a>
+            <a class="exp-cta" href="About-Connect.html">Find Community Nights &gt;</a>
+            <a class="exp-cta primary" href="index.html">Return Home &gt;</a>
+          </div>
+        </section>
+      </section>
+
+    </div>
+  </main>
+</body>
+</html>

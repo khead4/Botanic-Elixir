@@ -1,0 +1,353 @@
+<!-- sent.html -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Botanic Elixir — Application Sent</title>
+
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#000;
+      --ink: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.72);
+      --line: rgba(255,255,255,0.18);
+
+      --glass: rgba(255,255,255,0.08);
+      --glass2: rgba(0,0,0,0.26);
+
+      --max: 1200px;
+      --shadow: 0 30px 90px rgba(0,0,0,0.45);
+      --r: 18px;
+
+      /* mood gradients (same family as menu page) */
+      --g-focus: linear-gradient(90deg,#77cde4,#6b86e6);
+      --g-play: linear-gradient(90deg,#d96b58,#a8a3d7);
+      --g-connect: linear-gradient(90deg,#ea76b8,#b78bff);
+      --g-restore: linear-gradient(90deg,#9bf071,#7ef0d6);
+
+      /* a “brand spectrum” border you can reuse */
+      --g-spectrum: linear-gradient(90deg,#77cde4,#6b86e6,#ea76b8,#b78bff,#9bf071,#7ef0d6);
+    }
+
+    body.page-sent{
+      color: var(--ink);
+      background: var(--bg);
+      overflow-x:hidden;
+      font-family: "Inter", sans-serif;
+      margin:0;
+    }
+
+    /* ===== VIDEO BACKGROUND ===== */
+    .video-bg{
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      overflow: hidden;
+      background:#000;
+    }
+    .video-bg video{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.55;
+      filter: saturate(1.05) contrast(1.05);
+    }
+    .video-bg::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background: radial-gradient(circle at 50% 30%, rgba(0,0,0,0.35), rgba(0,0,0,0.88));
+      z-index: 1;
+      pointer-events:none;
+    }
+
+    /* ===== TOPLINE NAV  ===== */
+    .topline{
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      background: rgba(0,0,0,0.42);
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+    }
+    .topline-inner{
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 14px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .brand{
+      text-decoration:none;
+      color:#fff;
+      font-size:.78rem;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      opacity:.9;
+      line-height:1.1;
+      white-space:nowrap;
+    }
+    .brand span{
+      display:block;
+      opacity:.72;
+      letter-spacing:.12em;
+      margin-top:4px;
+      font-size:.70rem;
+    }
+    .top-links{
+      display:flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      align-items:center;
+    }
+    .top-links a{
+      color: rgba(255,255,255,.74);
+      text-decoration:none;
+      font-size:.78rem;
+      letter-spacing:.02em;
+    }
+    .top-links a.active{
+      color:#fff;
+      font-weight:700;
+    }
+
+    /* CTA with gradient border */
+    .cta{
+      position: relative;
+      padding:10px 14px;
+      border-radius: 12px;
+      color:#fff;
+      text-decoration:none;
+      font-size:.75rem;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      white-space:nowrap;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.25);
+      overflow: hidden;
+    }
+    .cta::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      padding: 1px;              /* border thickness */
+      border-radius: 12px;
+      background: var(--g-spectrum);
+      -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+              mask-composite: exclude;
+      pointer-events:none;
+      opacity:.75;
+    }
+    .cta:hover{ background: rgba(255,255,255,.14); }
+    .cta:hover::before{ opacity: 1; }
+
+    /* ===== PAGE LAYOUT ===== */
+    body.page-sent .page-content{
+      padding-top: 90px;
+      padding-bottom: 120px;
+    }
+    .wrap{
+      width: min(900px, 92vw);
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    /* GLASS CARD with gradient border ring */
+    .glass{
+      position: relative;
+      background: rgba(255,255,255,0.08);
+      border-radius: 22px;
+      padding: 42px 32px;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 40px 120px rgba(0,0,0,0.6);
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.18); /* fallback if mask isn't supported */
+    }
+    .glass::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      padding: 1px;               /* border thickness */
+      border-radius: 22px;
+      background: var(--g-spectrum);
+      -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+              mask-composite: exclude;
+      pointer-events:none;
+      opacity:.85;
+    }
+
+    /*  a top accent stripe, like the cards */
+    .glass::after{
+      content:"";
+      position:absolute;
+      top:0;
+      left:0;
+      right:0;
+      height: 10px;
+      background: var(--g-spectrum);
+      opacity:.55;
+      pointer-events:none;
+    }
+
+    .success-icon{
+      font-size: 56px;
+      margin-bottom: 18px;
+    }
+
+    h1{
+      margin: 0 0 14px;
+      font-size: 38px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 600;
+      color:#fff;
+    }
+    p{
+      margin: 0 auto 22px;
+      max-width: 640px;
+      font-size: 16px;
+      line-height: 1.75;
+      opacity: 0.78;
+    }
+
+    /* Button styles (now with gradient border too) */
+    .btn-row{
+      display:flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .exp-cta{
+      position: relative;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+
+      padding:14px 22px;
+      background:#111;
+      color:#fff;
+      text-decoration:none;
+
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-size:12px;
+      border-radius: 14px;
+
+      border: 1px solid rgba(255,255,255,.28); /* fallback */
+      overflow:hidden;
+
+      transition: transform .12s ease, background .15s ease, border-color .15s ease;
+    }
+
+    .exp-cta::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      padding: 1px;               /* border thickness */
+      border-radius: 14px;
+      background: var(--g-spectrum);
+      -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+              mask-composite: exclude;
+      pointer-events:none;
+      opacity:.75;
+    }
+
+    .exp-cta:hover{
+      background: rgba(255,255,255,0.14);
+      transform: translateY(-1px);
+    }
+    .exp-cta:hover::before{ opacity: 1; }
+
+    .exp-cta.primary{
+      background: rgba(255,255,255,0.16);
+      border-color: rgba(255,255,255,0.45);
+    }
+
+    .section-label{
+      margin-top: 28px;
+      font-size: 13px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      opacity: 0.7;
+    }
+
+    @media (max-width: 700px){
+      h1{ font-size: 30px; }
+      .glass{ padding: 34px 22px; }
+    }
+  </style>
+</head>
+
+<body class="page-sent">
+  <div class="video-bg" aria-hidden="true">
+    <video autoplay muted loop playsinline>
+      <source src="assets/bg.mp4" type="video/mp4" />
+    </video>
+  </div>
+
+  <header class="topline">
+    <div class="topline-inner">
+      <a class="brand" href="index.html">BOTANIC ELIXIR<br><span>adaptive café</span></a>
+
+      <nav class="top-links" aria-label="Main">
+        <a href="index.html">Experiences</a>
+        <a href="how-it-works.html">How It Works</a>
+        <a href="menu.html">Menu</a>
+        <a href="community.html">Community</a>
+        <a href="contact.html">Contact</a>
+        <a href="about.html">About</a>
+      </nav>
+
+      <a class="cta" href="bookings.html">Book Now</a>
+    </div>
+  </header>
+
+  <main class="page-content">
+    <div class="wrap">
+      <div class="glass">
+        <div class="success-icon">✓</div>
+
+        <h1>Application Sent</h1>
+
+        <p>
+          Thank you for applying to join Botanic Elixir.
+          Our team will review your application and contact you if there is a strong match.
+        </p>
+
+        <div class="btn-row">
+          <a class="exp-cta" href="index.html">Return to Homepage &gt;</a>
+        </div>
+
+        <div class="section-label">Learn more about us</div>
+
+        <div class="btn-row">
+          <a class="exp-cta primary" href="learn-more.html">Learn More &gt;</a>
+          <a class="exp-cta primary" href="how-it-works.html">How It Works &gt;</a>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
