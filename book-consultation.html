@@ -1,0 +1,863 @@
+<!-- book-consultation.html -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Botanic Elixir — Book Consultation</title>
+
+
+  <link rel="stylesheet" href="styles.css" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      /* ===== Core theme  ===== */
+      --bg:#000000;
+      --panel: rgba(255,255,255,.04);
+      --panel2: rgba(255,255,255,.06);
+      --border: rgba(255,255,255,.10);
+      --border2: rgba(255,255,255,.14);
+      --ink: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.62);
+      --shadow: 0 18px 60px rgba(0,0,0,.45);
+
+      /* Mood gradients) */
+      --g-focus: linear-gradient(90deg, #2a9bd8, #3a64ff);
+      --g-play: linear-gradient(90deg, #f0b35a, #a8a3ff);
+      --g-connect: linear-gradient(90deg, #ff5cc8, #9b63ff);
+      --g-restore: linear-gradient(90deg, #6bf08b, #45d8d1);
+      --g-pink: linear-gradient(90deg, #ff5cc8, #ff8adf);
+
+      /* Layout */
+      --max: 1320px;
+      --content: 1100px;
+      --radius: 18px;
+    }
+
+    *{ box-sizing:border-box; }
+    html, body{ height:100%; }
+
+    body.page-consult{
+      color: var(--ink);
+      background: var(--bg);
+      overflow-x:hidden;
+      font-family: "Inter", sans-serif;
+      margin:0;
+    }
+
+    a{ color:inherit; text-decoration:none; }
+
+   
+    .video-bg{
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      overflow:hidden;
+      background: #000;
+    }
+    .video-bg video{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.38;
+      filter: saturate(1.05) contrast(1.05);
+    }
+    .video-bg::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(70% 60% at 50% 20%, rgba(0,0,0,.25), rgba(0,0,0,.75)),
+        linear-gradient(to bottom, rgba(0,0,0,.55), rgba(0,0,0,.75));
+      pointer-events:none;
+    }
+
+    /* =========================
+       UNIVERSAL NAV 
+    ========================= */
+    .topline{
+      position: sticky;
+      top:0;
+      z-index: 1000;
+
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      background: rgba(0,0,0,0.45);
+      border-bottom: 1px solid rgba(255,255,255,.12);
+
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 18px;
+      padding:14px 26px;
+    }
+
+    .brand{
+      color:#fff;
+      text-decoration:none;
+      font-size:.78rem;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      line-height:1.1;
+      white-space:nowrap;
+      user-select:none;
+    }
+    .brand span{
+      display:block;
+      opacity:.7;
+      margin-top:4px;
+      letter-spacing:.12em;
+      font-size:.70rem;
+    }
+
+    .top-links{
+      display:flex;
+      gap:26px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+
+    .top-links > a,
+    .top-links .drop-trigger{
+      color: rgba(255,255,255,.78);
+      font-size: .82rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 8px 6px;
+      transition: .18s;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      user-select:none;
+    }
+    .top-links > a:hover,
+    .top-links .drop-trigger:hover{ color:#fff; }
+    .top-links > a.active{ color:#fff; font-weight:700; }
+
+    .right-controls{
+      display:flex;
+      align-items:center;
+      gap:22px;
+    }
+
+    .icon-link{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:4px;
+      color: rgba(255,255,255,.78);
+      font-size: .60rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      transition: .18s;
+      user-select:none;
+      min-width: 72px; /* slightly wider for INQUIRIES label */
+    }
+    .icon-link svg{
+      width:22px;
+      height:22px;
+      stroke:#fff;
+      fill:none;
+      stroke-width:1.6;
+      opacity:.85;
+      transition:.18s;
+    }
+    .icon-link:hover{ color:#fff; text-shadow: 0 0 14px rgba(255,255,255,.22); }
+    .icon-link:hover svg{
+      opacity:1;
+      transform: translateY(-2px);
+      filter: drop-shadow(0 0 10px rgba(255,255,255,.22));
+    }
+
+    .dropdown{ position:relative; display:inline-flex; align-items:center; }
+    .dropdown-panel{
+      position:absolute;
+      top:120%;
+      left:0;
+      background: rgba(0,0,0,.86);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 14px;
+      padding: 10px 0;
+      min-width: 200px;
+
+      opacity: 0;
+      pointer-events:none;
+      transform: translateY(6px);
+      transition: .18s;
+      z-index: 9999;
+    }
+    .dropdown:hover .dropdown-panel{
+      opacity:1;
+      pointer-events:auto;
+      transform: translateY(0);
+    }
+    .dropdown-panel a{
+      display:block;
+      padding: 10px 16px;
+      color: rgba(255,255,255,.82);
+      font-size: .75rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .dropdown-panel a:hover{ background: rgba(255,255,255,.08); color:#fff; }
+
+    .icon-dropdown .dropdown-panel{ right:0; left:auto; min-width: 200px; }
+
+    .caret{
+      width:10px;
+      height:10px;
+      display:inline-block;
+      border-right: 2px solid rgba(255,255,255,.70);
+      border-bottom: 2px solid rgba(255,255,255,.70);
+      transform: rotate(45deg);
+      margin-top:-2px;
+      transition:.18s;
+      opacity:.85;
+    }
+    .dropdown:hover .caret{ opacity:1; border-color:#fff; }
+
+    @media (max-width: 640px){
+      .top-links{ display:none; }
+      .topline{ padding: 12px 16px; }
+    }
+
+    /* =========================
+       PAGE LAYOUT 
+    ========================= */
+    body.page-consult .page-content{
+      padding-top: 64px;     /* more comfortable now that nav is sticky */
+      padding-bottom: 110px; /* more air */
+    }
+
+    .wrap{
+      width: min(var(--content), 92vw);
+      margin: 0 auto;
+    }
+
+    .hero{
+      text-align:center;
+      margin: 12px auto 34px;
+    }
+    .hero h1{
+      margin: 0 0 14px;
+      font-size: 48px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .hero p{
+      margin: 0 auto;
+      max-width: 920px;
+      font-size: 16px;
+      line-height: 1.85;
+      color: var(--muted);
+    }
+
+    .rule{
+      height: 1px;
+      background: rgba(255,255,255,.08);
+      margin: 34px 0;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: 22px;
+      align-items:start;
+      margin-top: 10px;
+    }
+
+    .glass{
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 18px;
+      padding: 22px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+
+  
+    .cap{
+      height: 6px;
+      background: var(--g-focus);
+      margin: -22px -22px 18px;
+    }
+
+    .label{
+      margin: 0 0 12px;
+      font-size: 12px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      opacity: 0.92;
+    }
+
+    .muted{
+      color: rgba(255,255,255,.72);
+      font-size: 13px;
+      line-height: 1.75;
+      margin: 0;
+    }
+
+    form{ margin-top: 16px; }
+
+    .form-grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .field{
+      display:flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .field label{
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      opacity: 0.65;
+    }
+
+    .field input,
+    .field select,
+    .field textarea{
+      background: rgba(0,0,0,0.35);
+      border: 1px solid rgba(255,255,255,0.18);
+      color: rgba(255,255,255,0.92);
+      padding: 12px 12px;
+      font-size: 14px;
+      border-radius: 12px;
+      outline: none;
+    }
+
+    .field textarea{
+      min-height: 130px;
+      resize: vertical;
+      line-height: 1.55;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus{
+      border-color: rgba(255,255,255,0.38);
+      box-shadow: 0 0 0 3px rgba(255,255,255,0.10);
+    }
+
+    .span-2{ grid-column: 1 / -1; }
+
+    .divider{
+      margin: 18px 0;
+      border: 0;
+      border-top: 1px solid rgba(255,255,255,0.12);
+    }
+
+    /* buttons */
+    .exp-cta{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+
+      padding:12px 18px;
+      background: rgba(255,255,255,0.06);
+      color:#fff;
+      text-decoration:none;
+      border:1px solid rgba(255,255,255,.18);
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-size:12px;
+      border-radius: 999px;
+
+      transition: transform .12s ease, background .15s ease, border-color .15s ease, filter .15s ease;
+      cursor: pointer;
+      white-space: nowrap;
+      user-select:none;
+    }
+    .exp-cta:hover{
+      background: rgba(255,255,255,0.10);
+      border-color: rgba(255,255,255,0.35);
+      transform: translateY(-1px);
+    }
+    .exp-cta:active{ transform: translateY(0); }
+
+    .exp-cta.primary{
+      background: rgba(255,255,255,0.86);
+      color: rgba(0,0,0,.86);
+      border-color: rgba(255,255,255,0);
+      font-weight: 700;
+    }
+    .exp-cta.primary:hover{
+      filter: brightness(.96);
+      background: rgba(255,255,255,0.90);
+    }
+
+    .actions{
+      display:flex;
+      justify-content: space-between;
+      align-items:center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .actions-left{
+      display:flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .list{
+      margin: 12px 0 0;
+      padding-left: 18px;
+      color: rgba(255,255,255,.74);
+      line-height: 1.9;
+      font-size: 13px;
+    }
+
+    .pill-row{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.06);
+      letter-spacing: .10em;
+      text-transform: uppercase;
+      font-size: 11px;
+      opacity: .92;
+      white-space: nowrap;
+      user-select: none;
+      transition: .15s;
+    }
+
+    .pill-option{ display:inline-flex; cursor:pointer; position: relative; }
+    .pill-input{ position:absolute; opacity:0; pointer-events:none; }
+
+    .pill-input:checked + .pill{
+      border-color:#fff;
+      box-shadow: 0 0 0 2px rgba(255,255,255,0.35);
+      background: rgba(255,255,255,0.12);
+    }
+
+    .note{
+      margin-top: 14px;
+      font-size: 13px;
+      line-height: 1.8;
+      color: rgba(255,255,255,.70);
+    }
+
+    @media (max-width: 980px){
+      .grid{ grid-template-columns: 1fr; }
+      .hero h1{ font-size: 40px; }
+      .form-grid{ grid-template-columns: 1fr; }
+    }
+
+    /* =========================
+       MODAL POPUP
+    ========================= */
+    .modal{
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: none;
+    }
+    .modal.is-open{ display:block; }
+
+    .modal-backdrop{
+      position:absolute;
+      inset:0;
+      background: rgba(0,0,0,0.72);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+
+    .modal-shell{
+      position: relative;
+      width: min(1100px, 92vw);
+      height: min(78vh, 780px);
+      margin: 9vh auto 0;
+
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 18px;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+
+      overflow: hidden;
+      box-shadow: 0 30px 90px rgba(0,0,0,0.55);
+    }
+
+    .modal-top{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 12px;
+
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.35);
+    }
+
+    .modal-title{
+      margin: 0;
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      opacity: 0.9;
+    }
+
+    .modal-close{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+
+      width: 38px;
+      height: 34px;
+
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.22);
+      background: rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.92);
+      cursor: pointer;
+      user-select:none;
+    }
+    .modal-close:hover{
+      background: rgba(255,255,255,0.12);
+      border-color: rgba(255,255,255,0.35);
+    }
+
+    .modal-frame{
+      width: 100%;
+      height: calc(100% - 52px);
+      border: 0;
+      display:block;
+      background: #000;
+    }
+
+    .modal-bottom{
+      position: absolute;
+      right: 14px;
+      bottom: 14px;
+      display:flex;
+      gap: 10px;
+      pointer-events: none;
+    }
+    .modal-bottom .exp-cta{ pointer-events: auto; }
+  </style>
+</head>
+
+<body class="page-consult">
+  <div class="video-bg" aria-hidden="true">
+    <video autoplay muted loop playsinline>
+      <source src="assets/bg.mp4" type="video/mp4" />
+    </video>
+  </div>
+
+  <!-- UNIVERSAL NAV -->
+  <header class="topline">
+    <a class="brand" href="index.html">
+      BOTANIC ELIXIR<br><span>adaptive café</span>
+    </a>
+
+    <nav class="top-links" aria-label="Main">
+      <a href="experiences.html">Experiences</a>
+      <a href="how-it-works.html">How It Works</a>
+      <a href="menu.html">Menu</a>
+      <a href="About-Connect.html">Connect</div>
+      <a href="contact.html">Contact</a>
+
+      <div class="dropdown">
+        <a class="drop-trigger" href="#" aria-label="Open about submenu">
+          About <span class="caret" aria-hidden="true"></span>
+        </a>
+        <div class="dropdown-panel" role="menu" aria-label="About submenu">
+          <a href="about.html">About Us</a>
+          <a href="community.html">Community</a>
+          <a href="learn-more.html">Learn More</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="right-controls">
+      <a class="icon-link" href="bag.html" aria-label="Go to bag">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6 7h12l-1 13H7L6 7z"></path>
+          <path d="M9 7a3 3 0 0 1 6 0"></path>
+        </svg>
+        BAG
+      </a>
+
+      <a class="icon-link" href="booked.html" aria-label="Go to bookings">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 4h16v16H4z"></path>
+          <path d="M8 2v4M16 2v4M4 10h16"></path>
+        </svg>
+        BOOKINGS
+      </a>
+
+      <div class="dropdown icon-dropdown" aria-label="Inquiries menu">
+        <a class="icon-link" href="#" aria-label="Open inquiries submenu" style="color:#fff;">
+          <svg viewBox="0 0 24 24" aria-hidden="true" style="opacity:1;">
+            <circle cx="12" cy="7" r="4"></circle>
+            <path d="M4 21c1.5-4 14.5-4 16 0"></path>
+          </svg>
+          INQUIRIES
+        </a>
+        <div class="dropdown-panel" role="menu" aria-label="Inquiries submenu">
+          <a href="book-consultation.html">Consultation</a>
+          <a href="hiring.html">Hiring</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-content">
+    <div class="wrap">
+
+      <section class="hero">
+        <h1>Book a Consultation</h1>
+        <p>
+          Not sure which experience or serum matches your intention?
+          Tell us what you’re aiming for, and we’ll guide you to the right path.
+        </p>
+      </section>
+
+      <div class="rule"></div>
+
+      <section class="grid">
+
+        <!-- LEFT: FORM -->
+        <section class="glass" aria-label="Consultation form">
+          <div class="cap" style="background: var(--g-restore);"></div>
+
+          <h2 class="label">Your details</h2><br>
+
+
+          <!-- IMPORTANT: id added + action updated -->
+          <form id="consultForm" action="consultation-confirmation.html" method="get">
+            <div class="form-grid">
+              <div class="field">
+                <label for="name">Name</label>
+                <input id="name" name="name" type="text" placeholder="Your name" required />
+              </div>
+
+              <div class="field">
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" placeholder="you@email.com" required />
+              </div>
+
+              <div class="field">
+                <br><label for="type">Consult type</label>
+                <select id="type" name="type" required>
+                  <option value="" selected disabled>Select one</option>
+                  <option value="experience">Experience selection</option>
+                  <option value="serums">Serum pairing</option>
+                  <option value="both">Both</option>
+                </select>
+              </div>
+
+              <div class="field">
+               <br> <label for="time">Preferred time</label>
+                <select id="time" name="time" required>
+                  <option value="" selected disabled>Select one</option>
+                  <option value="morning">Morning</option>
+                  <option value="afternoon">Afternoon</option>
+                  <option value="evening">Evening</option>
+                </select>
+              </div>
+
+              <div class="field span-2">
+               <br> <label for="intent">Your intention</label>
+                <textarea id="intent" name="intent" placeholder="Example: I want calm focus for writing, less stress, and a gentle mood lift." required></textarea>
+              </div>
+
+              <div class="field span-2">
+               <br> <label for="notes">Anything we should know?</label>
+                <textarea id="notes" name="notes" placeholder="Allergies, sensitivity to caffeine, preferred flavors, etc."></textarea>
+              </div>
+            </div>
+
+            <hr class="divider" />
+
+            <br><h2 class="label">Format</h2>
+            <div class="pill-row" role="radiogroup" aria-label="Consultation format">
+              <label class="pill-option">
+                <input class="pill-input" type="radio" name="format" value="short" required>
+                <span class="pill">5–10 min</span>
+              </label>
+
+              <label class="pill-option">
+                <input class="pill-input" type="radio" name="format" value="in-person">
+                <span class="pill">In-person</span>
+              </label>
+
+              <label class="pill-option">
+                <input class="pill-input" type="radio" name="format" value="chat">
+                <span class="pill">Chat-based</span>
+              </label>
+
+              <label class="pill-option">
+                <input class="pill-input" type="radio" name="format" value="intent-first">
+                <span class="pill">Intent-first</span><br>
+              </label>
+            </div>
+
+            <div class="actions">
+              <div class="actions-left">
+                <!-- POPUP triggers (no navigation) -->
+                <button class="exp-cta" type="button"
+                  data-modal-title="How It Works"
+                  data-modal-src="how-it-works.html">
+                  How It Works &gt;
+                </button>
+
+                <button class="exp-cta" type="button"
+                  data-modal-title="Browse Menu"
+                  data-modal-src="menu.html">
+                  Browse Menu &gt;
+                </button>
+              </div>
+
+              <!-- submit button (sends all inputs) -->
+             <br> <button class="exp-cta primary" type="submit">
+                Confirm Consultation &gt;
+              </button>
+            </div>
+
+            <p class="note">
+            <br>  After submission, you’ll land on a confirmation page. Later, we can swap this to a real booking flow.
+            </p>
+          </form>
+        </section>
+
+        <!-- RIGHT: WHAT TO EXPECT -->
+        <aside class="glass" aria-label="What to expect">
+          <div class="cap" style="background: var(--g-focus);"></div>
+
+          <h1 class="label">What to expect</h1><br>
+          <p class="muted" style="margin-top: 8px;">
+            We’ll ask a few quick questions to clarify your intention, then recommend:
+          </p><br><br>
+
+          <ul class="list">
+            <li>A best-fit experience (or a sequence of experiences)</li><br>
+            <li>1–2 serums that support your state and goal</li><br>
+            <li>Optional pairing suggestions (food + accessories)</li>
+          </ul><br>
+
+          <hr class="divider" />
+
+          <h2 class="label" style="margin-top: 8px;">Suggested starting points</h2><br>
+
+          <!-- These are OUTSIDE the form,
+               so we attach them using form="consultForm" -->
+          <div class="pill-row" role="group" aria-label="Suggested starting points">
+            <label class="pill-option">
+              <input class="pill-input" type="checkbox" name="starting_point" value="focus" form="consultForm">
+              <span class="pill">Focus &amp; Create</span>
+            </label>
+
+            <label class="pill-option">
+              <input class="pill-input" type="checkbox" name="starting_point" value="play" form="consultForm">
+              <span class="pill">Play &amp; Engage</span>
+            </label>
+
+            <label class="pill-option">
+              <input class="pill-input" type="checkbox" name="starting_point" value="connect" form="consultForm">
+              <span class="pill">Connect &amp; Share</span>
+            </label>
+
+            <label class="pill-option">
+              <input class="pill-input" type="checkbox" name="starting_point" value="reflect" form="consultForm">
+              <span class="pill">Reflect &amp; Restore</span>
+            </label>
+          </div>
+
+          <p class="note"><br>
+            Prefer to choose on your own? You can reserve an experience directly from the Experiences page.
+          </p>
+
+          <div class="actions" style="margin-top:18px;">
+            <a class="exp-cta" href="experiences.html">Continue to Experiences &gt;</a>
+            <a class="exp-cta primary" href="bag.html">Go to Your Bag &gt;</a>
+          </div>
+        </aside>
+
+      </section>
+    </div>
+  </main>
+
+  <!-- MODAL -->
+  <section class="modal" id="modal" aria-hidden="true">
+    <div class="modal-backdrop" data-close="1"></div>
+
+    <div class="modal-shell" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-top">
+        <h3 class="modal-title" id="modalTitle">Preview</h3>
+        <button class="modal-close" type="button" aria-label="Close" data-close="1">✕</button>
+      </div>
+
+      <iframe class="modal-frame" id="modalFrame" title="Preview" src=""></iframe>
+
+      <div class="modal-bottom">
+        <button class="exp-cta" type="button" data-close="1">Close</button>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    (function(){
+      const modal = document.getElementById("modal");
+      const frame = document.getElementById("modalFrame");
+      const title = document.getElementById("modalTitle");
+      const triggers = document.querySelectorAll("[data-modal-src]");
+
+      function openModal(src, t){
+        title.textContent = t || "Preview";
+        frame.src = src;
+        modal.classList.add("is-open");
+        modal.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeModal(){
+        modal.classList.remove("is-open");
+        modal.setAttribute("aria-hidden", "true");
+        frame.src = "";
+        document.body.style.overflow = "";
+      }
+
+      triggers.forEach(btn => {
+        btn.addEventListener("click", () => {
+          openModal(btn.getAttribute("data-modal-src"), btn.getAttribute("data-modal-title"));
+        });
+      });
+
+      modal.addEventListener("click", (e) => {
+        if (e.target && e.target.getAttribute("data-close") === "1") closeModal();
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && modal.classList.contains("is-open")) closeModal();
+      });
+    })();
+  </script>
+</body>
+</html>

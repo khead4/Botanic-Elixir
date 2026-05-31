@@ -1,0 +1,729 @@
+<!-- booked.html -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Botanic Elixir — Your Booking</title>
+
+  <link rel="stylesheet" href="styles.css" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      /* ===== Core theme  ===== */
+      --bg:#000000;
+      --panel: rgba(255,255,255,.04);
+      --panel2: rgba(255,255,255,.06);
+      --border: rgba(255,255,255,.10);
+      --border2: rgba(255,255,255,.14);
+      --ink: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.62);
+      --shadow: 0 18px 60px rgba(0,0,0,.45);
+
+      /* Mood gradients */
+      --g-focus: linear-gradient(90deg, #2a9bd8, #3a64ff);
+      --g-play: linear-gradient(90deg, #f0b35a, #a8a3ff);
+      --g-connect: linear-gradient(90deg, #ff5cc8, #9b63ff);
+      --g-restore: linear-gradient(90deg, #6bf08b, #45d8d1);
+      --g-pink: linear-gradient(90deg, #ff5cc8, #ff8adf);
+
+      /* Layout */
+      --max: 1320px;
+      --content: 1100px;
+      --radius: 18px;
+    }
+
+    *{ box-sizing:border-box; }
+    html, body{ height:100%; }
+
+    body.page-booked{
+      margin:0;
+      color: var(--ink);
+      background: var(--bg);
+      overflow-x:hidden;
+      font-family: "Inter", sans-serif;
+    }
+
+    a{ color:inherit; text-decoration:none; }
+
+    /* =========================
+       VIDEO BACKGROUND
+    ========================= */
+    .video-bg{
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      overflow:hidden;
+      background: #000;
+    }
+    .video-bg video{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.38;
+      filter: saturate(1.05) contrast(1.05);
+    }
+    .video-bg::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(70% 60% at 50% 20%, rgba(0,0,0,.25), rgba(0,0,0,.75)),
+        linear-gradient(to bottom, rgba(0,0,0,.55), rgba(0,0,0,.75));
+      pointer-events:none;
+    }
+
+    /* =========================
+       UNIVERSAL NAV 
+    ========================= */
+    .topline{
+      position: sticky;
+      top:0;
+      z-index: 1000;
+
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      background: rgba(0,0,0,0.45);
+      border-bottom: 1px solid rgba(255,255,255,.12);
+
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 18px;
+      padding:14px 26px;
+    }
+
+    .brand{
+      color:#fff;
+      text-decoration:none;
+      font-size:.78rem;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      line-height:1.1;
+      white-space:nowrap;
+      user-select:none;
+    }
+    .brand span{
+      display:block;
+      opacity:.7;
+      margin-top:4px;
+      letter-spacing:.12em;
+      font-size:.70rem;
+      text-transform: none;
+    }
+
+    .top-links{
+      display:flex;
+      gap:26px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+
+    .top-links > a,
+    .top-links .drop-trigger{
+      color: rgba(255,255,255,.78);
+      font-size: .82rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 8px 6px;
+      transition: .18s;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      user-select:none;
+    }
+    .top-links > a:hover,
+    .top-links .drop-trigger:hover{ color:#fff; }
+    .top-links > a.active{ color:#fff; font-weight:700; }
+
+    .right-controls{
+      display:flex;
+      align-items:center;
+      gap:22px;
+    }
+
+    .icon-link{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:4px;
+      color: rgba(255,255,255,.78);
+      font-size: .60rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      transition: .18s;
+      user-select:none;
+      min-width: 72px;
+    }
+    .icon-link svg{
+      width:22px;
+      height:22px;
+      stroke:#fff;
+      fill:none;
+      stroke-width:1.6;
+      opacity:.85;
+      transition:.18s;
+    }
+    .icon-link:hover{ color:#fff; text-shadow: 0 0 14px rgba(255,255,255,.22); }
+    .icon-link:hover svg{
+      opacity:1;
+      transform: translateY(-2px);
+      filter: drop-shadow(0 0 10px rgba(255,255,255,.22));
+    }
+
+    .dropdown{ position:relative; display:inline-flex; align-items:center; }
+    .dropdown-panel{
+      position:absolute;
+      top:120%;
+      left:0;
+      background: rgba(0,0,0,.86);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 14px;
+      padding: 10px 0;
+      min-width: 200px;
+
+      opacity: 0;
+      pointer-events:none;
+      transform: translateY(6px);
+      transition: .18s;
+      z-index: 9999;
+    }
+    .dropdown:hover .dropdown-panel{
+      opacity:1;
+      pointer-events:auto;
+      transform: translateY(0);
+    }
+    .dropdown-panel a{
+      display:block;
+      padding: 10px 16px;
+      color: rgba(255,255,255,.82);
+      font-size: .75rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .dropdown-panel a:hover{ background: rgba(255,255,255,.08); color:#fff; }
+
+    .icon-dropdown .dropdown-panel{ right:0; left:auto; min-width: 200px; }
+
+    .caret{
+      width:10px;
+      height:10px;
+      display:inline-block;
+      border-right: 2px solid rgba(255,255,255,.70);
+      border-bottom: 2px solid rgba(255,255,255,.70);
+      transform: rotate(45deg);
+      margin-top:-2px;
+      transition:.18s;
+      opacity:.85;
+    }
+    .dropdown:hover .caret{ opacity:1; border-color:#fff; }
+
+    @media (max-width: 760px){
+      .top-links{ display:none; }
+      .topline{ padding: 12px 16px; }
+      .right-controls{ gap:14px; }
+      .icon-link{ min-width: 62px; }
+    }
+
+    /* =========================
+       PAGE LAYOUT 
+    ========================= */
+    main.page-content{
+      padding-top: 64px;
+      padding-bottom: 110px;
+    }
+
+    .wrap{
+      width: min(var(--content), 92vw);
+      margin: 0 auto;
+    }
+
+    .hero{
+      text-align:center;
+      margin: 12px auto 34px;
+    }
+    .hero h1{
+      margin: 0 0 14px;
+      font-size: 48px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .hero p{
+      margin: 0 auto;
+      max-width: 920px;
+      font-size: 16px;
+      line-height: 1.85;
+      color: var(--muted);
+    }
+
+    .rule{
+      height: 1px;
+      background: rgba(255,255,255,.08);
+      margin: 34px 0;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 22px;
+      align-items:start;
+      margin-top: 10px;
+    }
+
+    .glass{
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: var(--radius);
+      padding: 22px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+
+
+    .cap{
+      height: 6px;
+      background: var(--g-focus);
+      margin: -22px -22px 18px;
+    }
+
+    .label{
+      margin: 0 0 12px;
+      font-size: 12px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      opacity: 0.92;
+    }
+
+    .muted{
+      color: rgba(255,255,255,.72);
+      font-size: 13px;
+      line-height: 1.75;
+      margin: 0;
+    }
+
+    .divider{
+      margin: 18px 0;
+      border: 0;
+      border-top: 1px solid rgba(255,255,255,0.12);
+    }
+
+    /* Booking rows */
+    .rows{ display:grid; gap: 12px; margin-top: 10px; }
+
+    .row{
+      display:grid;
+      grid-template-columns: 170px 1fr;
+      gap: 12px;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.26);
+    }
+
+    .row .k{
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      opacity: 0.65;
+      align-self: start;
+      padding-top: 2px;
+    }
+
+    .row .v{
+      font-size: 14px;
+      line-height: 1.65;
+      opacity: 0.92;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.06);
+      letter-spacing: .10em;
+      text-transform: uppercase;
+      font-size: 11px;
+      opacity: .9;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    /* Mood accent bar */
+    .accent{
+      height: 6px;
+      background: var(--g-focus);
+      margin: -22px -22px 18px;
+    }
+
+    /* Buttons */
+    .actions{
+      display:flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+      align-items:center;
+    }
+
+    .exp-cta{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+
+      padding:12px 18px;
+      background: rgba(255,255,255,0.06);
+      color:#fff;
+      text-decoration:none;
+      border:1px solid rgba(255,255,255,.18);
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-size:12px;
+      border-radius: 999px;
+
+      transition: transform .12s ease, background .15s ease, border-color .15s ease, filter .15s ease;
+      cursor: pointer;
+      white-space: nowrap;
+      user-select:none;
+    }
+    .exp-cta:hover{
+      background: rgba(255,255,255,0.10);
+      border-color: rgba(255,255,255,0.35);
+      transform: translateY(-1px);
+    }
+    .exp-cta:active{ transform: translateY(0); }
+
+    .exp-cta.primary{
+      background: rgba(255,255,255,0.86);
+      color: rgba(0,0,0,.86);
+      border-color: rgba(255,255,255,0);
+      font-weight: 700;
+    }
+    .exp-cta.primary:hover{
+      filter: brightness(.96);
+      background: rgba(255,255,255,0.90);
+    }
+
+    .footnote{
+      margin-top: 14px;
+      font-size: 12px;
+      color: rgba(255,255,255,.65);
+      line-height: 1.7;
+    }
+
+    /* Right column helper cards */
+    .mini{
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.22);
+      padding: 14px;
+    }
+
+    .mini h3{
+      margin: 0 0 8px;
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      opacity: 0.85;
+    }
+
+    .mini p{
+      margin: 0;
+      font-size: 13px;
+      line-height: 1.7;
+      opacity: 0.72;
+    }
+
+    @media (max-width: 980px){
+      .grid{ grid-template-columns: 1fr; }
+      .hero h1{ font-size: 40px; }
+      .row{ grid-template-columns: 1fr; }
+      .row .k{ padding-top: 0; }
+    }
+  </style>
+</head>
+
+<body class="page-booked">
+ 
+  <div class="video-bg" aria-hidden="true">
+    <video autoplay muted loop playsinline>
+      <source src="assets/bg.mp4" type="video/mp4" />
+    </video>
+  </div>
+
+  <!-- UNIVERSAL NAV -->
+  <header class="topline">
+    <a class="brand" href="index.html">
+      BOTANIC ELIXIR<br><span>adaptive café</span>
+    </a>
+
+    <nav class="top-links" aria-label="Main">
+      <a href="experiences.html">Experiences</a>
+      <a href="how-it-works.html">How It Works</a>
+      <a href="menu.html">Menu</a>
+      <a href="About-Connect.html">Connect</a>
+      <a href="contact.html">Contact</a>
+
+      <div class="dropdown">
+        <a class="drop-trigger" href="#" aria-label="Open about submenu" onclick="return false;">
+          About <span class="caret" aria-hidden="true"></span>
+        </a>
+        <div class="dropdown-panel" role="menu" aria-label="About submenu">
+          <a href="about.html">About Us</a>
+          <a href="community.html">Community</a>
+          <a href="learn-more.html">Learn More</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="right-controls">
+      <a class="icon-link" href="bag.html" aria-label="Go to bag">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6 7h12l-1 13H7L6 7z"></path>
+          <path d="M9 7a3 3 0 0 1 6 0"></path>
+        </svg>
+        BAG
+      </a>
+
+      <a class="icon-link" href="booked.html" aria-label="Go to bookings" style="color:#fff;">
+        <svg viewBox="0 0 24 24" aria-hidden="true" style="opacity:1;">
+          <path d="M4 4h16v16H4z"></path>
+          <path d="M8 2v4M16 2v4M4 10h16"></path>
+        </svg>
+       <strong> BOOKINGS</strong>
+      </a>
+
+      <div class="dropdown icon-dropdown" aria-label="Inquiries menu">
+        <a class="icon-link" href="#" aria-label="Open inquiries submenu" onclick="return false;">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="7" r="4"></circle>
+            <path d="M4 21c1.5-4 14.5-4 16 0"></path>
+          </svg>
+          INQUIRIES
+        </a>
+        <div class="dropdown-panel" role="menu" aria-label="Inquiries submenu">
+          <a href="book-consultation.html">Consultation</a>
+          <a href="hiring.html">Hiring</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-content">
+    <div class="wrap">
+
+      <section class="hero">
+        <h1>Your Experience is Booked</h1>
+        <p>We’ll email a confirmation and a reminder 24 hours before your visit.</p>
+      </section>
+
+      <div class="rule"></div>
+
+      <section class="grid">
+        <!-- LEFT: SUMMARY -->
+        <section class="glass" aria-label="Booking summary">
+          <!-- Dynamic accent (mood-based) -->
+          <div class="accent" id="accentBar"></div>
+
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap;">
+            <div>
+              <h2 class="label" style="margin-bottom:6px;">Booking summary</h2>
+              <p class="muted" style="margin:0;">Reference: <span class="pill" id="refId">—</span></p>
+            </div>
+            <div class="pill" id="createdAt">Saved: —</div>
+          </div>
+
+          <hr class="divider" />
+
+          <!-- Default state -->
+          <div id="emptyState" class="mini">
+            <h3>No booking found</h3>
+            <p>Complete a booking first, then return here. This page reads saved bookings from this browser.</p>
+          </div>
+
+          <!-- Populated state -->
+          <div id="summaryWrap" style="display:none;">
+            <div class="rows">
+              <div class="row">
+                <div class="k">Experience</div>
+                <div class="v" id="v-experience">—</div>
+              </div>
+
+              <div class="row">
+                <div class="k">Date</div>
+                <div class="v" id="v-date">—</div>
+              </div>
+
+              <div class="row">
+                <div class="k">Time</div>
+                <div class="v" id="v-time">—</div>
+              </div>
+
+              <div class="row">
+                <div class="k">Guests</div>
+                <div class="v" id="v-guests">—</div>
+              </div>
+
+              <div class="row">
+                <div class="k">Space</div>
+                <div class="v" id="v-space">—</div>
+              </div>
+
+              <div class="row">
+                <div class="k">Name</div>
+                <div class="v" id="v-name">—</div>
+              </div>
+
+              <div class="row">
+                <div class="k">Email</div>
+                <div class="v" id="v-email">—</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="actions">
+            <a class="exp-cta primary" href="bookings.html">Book Another &gt;</a>
+            <a class="exp-cta" href="index.html">Return Home &gt;</a>
+            <a class="exp-cta" href="how-it-works.html">How It Works &gt;</a>
+          </div>
+
+          <p class="footnote">
+            If this page is blank, it means no booking has been saved in this browser yet.
+          </p>
+        </section>
+
+        <!-- RIGHT: NEXT STEPS -->
+        <aside class="glass" aria-label="Next steps">
+          <div class="cap" style="background: var(--g-connect);"></div>
+
+          <h2 class="label">What happens next</h2>
+          <p class="muted">
+            Your visit is designed around intention. If you want, explore how the space adapts—or book a short consultation to refine your path.
+          </p>
+
+          <hr class="divider" />
+
+          <div class="mini">
+            <h3>Before you arrive</h3>
+            <p>
+              Bring one clear intention (focus, play, connection, restoration).
+              Arrive a few minutes early to settle into the atmosphere.
+            </p>
+          </div>
+
+          <div style="height:12px;"></div>
+
+          <div class="mini">
+            <h3>Want guidance?</h3>
+            <p>
+              A consultation helps us match your mood, sensitivities, and goals to the right sequence of experiences.
+            </p>
+          </div>
+
+          <div class="actions" style="margin-top:16px;">
+            <a class="exp-cta primary" href="book-consultation.html">Book Consultation &gt;</a>
+            <a class="exp-cta" href="experiences.html">Browse Experiences &gt;</a>
+          </div>
+        </aside>
+      </section>
+    </div>
+  </main>
+
+  <!-- ====== Booking display logic  ====== -->
+  <script>
+    (function(){
+      const STORAGE_KEY = "botanic_bookings";
+
+      function getBookings(){
+        try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+        catch(e){ return []; }
+      }
+
+      function getBookingIdFromURL(){
+        const params = new URLSearchParams(window.location.search);
+        return params.get("id");
+      }
+
+      function setText(id, value){
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.textContent = (value !== undefined && value !== null && String(value).trim().length)
+          ? String(value)
+          : "—";
+      }
+
+      function formatSavedLabel(iso){
+        if (!iso) return "Saved: —";
+        const d = new Date(iso);
+        if (isNaN(d.getTime())) return "Saved: —";
+        return "Saved: " + d.toLocaleString([], {
+          year:"numeric", month:"short", day:"2-digit", hour:"2-digit", minute:"2-digit"
+        });
+      }
+
+      function moodToGradient(mood){
+        const m = (mood || "").toLowerCase();
+        if (m === "focus") return getComputedStyle(document.documentElement).getPropertyValue("--g-focus").trim() || "linear-gradient(90deg,#2a9bd8,#3a64ff)";
+        if (m === "play") return getComputedStyle(document.documentElement).getPropertyValue("--g-play").trim() || "linear-gradient(90deg,#f0b35a,#a8a3ff)";
+        if (m === "connect") return getComputedStyle(document.documentElement).getPropertyValue("--g-connect").trim() || "linear-gradient(90deg,#ff5cc8,#9b63ff)";
+        if (m === "restore") return getComputedStyle(document.documentElement).getPropertyValue("--g-restore").trim() || "linear-gradient(90deg,#6bf08b,#45d8d1)";
+        return getComputedStyle(document.documentElement).getPropertyValue("--g-focus").trim() || "linear-gradient(90deg,#2a9bd8,#3a64ff)";
+      }
+
+      function showBooking(){
+        const bookings = getBookings();
+        if (!bookings.length) return;
+
+        let booking;
+        const idFromURL = getBookingIdFromURL();
+
+        if (idFromURL) booking = bookings.find(b => b.id === idFromURL);
+        if (!booking) booking = bookings[bookings.length - 1];
+        if (!booking) return;
+
+        // Show summary, hide empty state
+        const empty = document.getElementById("emptyState");
+        const wrap = document.getElementById("summaryWrap");
+        if (empty) empty.style.display = "none";
+        if (wrap) wrap.style.display = "block";
+
+        // Fill content
+        setText("refId", booking.id || "—");
+        setText("createdAt", formatSavedLabel(booking.createdAt));
+
+        const expLine = booking.experience
+          ? `${booking.experience}${booking.mood ? ` (${booking.mood})` : ""}`
+          : "—";
+        setText("v-experience", expLine);
+        setText("v-date", booking.date || "—");
+
+        const timeLine = `${booking.time || "—"}${booking.duration ? ` · ${booking.duration}` : ""}`;
+        setText("v-time", timeLine);
+
+        setText("v-guests", booking.guests || "—");
+        setText("v-space", booking.space || "—");
+        setText("v-name", booking.fullName || "—");
+        setText("v-email", booking.email || "—");
+
+        // Mood accent
+        const accent = document.getElementById("accentBar");
+        if (accent) accent.style.background = moodToGradient(booking.mood);
+      }
+
+      showBooking();
+    })();
+  </script>
+</body>
+</html>

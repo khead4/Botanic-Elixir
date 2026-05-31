@@ -1,0 +1,1456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Botanic Elixir — Book Your Experience</title>
+
+  <link rel="stylesheet" href="styles.css" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#000;
+      --ink: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.72);
+      --line: rgba(255,255,255,0.18);
+
+      --glass: rgba(255,255,255,0.08);
+      --glass2: rgba(0,0,0,0.26);
+
+      --max: 1300px;
+      --shadow: 0 30px 90px rgba(0,0,0,0.45);
+      --r: 18px;
+
+      /* Mood gradients */
+      --g-focus: linear-gradient(90deg, #2a9bd8, #3a64ff);
+      --g-play: linear-gradient(90deg, #f0b35a, #a8a3ff);
+      --g-connect: linear-gradient(90deg, #ff5cc8, #9b63ff);
+      --g-restore: linear-gradient(90deg, #6bf08b, #45d8d1);
+
+      /* Input gradients */
+      --g-date: linear-gradient(90deg, rgba(42,155,216,.65), rgba(58,100,255,.65));
+      --g-duration: linear-gradient(90deg, rgba(58,100,255,.65), rgba(168,163,255,.65));
+      --g-time: linear-gradient(90deg, rgba(168,163,255,.65), rgba(155,99,255,.65));
+      --g-guests: linear-gradient(90deg, rgba(155,99,255,.65), rgba(255,92,200,.65));
+    }
+
+    *{ box-sizing:border-box; }
+    html, body{ height:100%; }
+
+    body{
+      margin:0;
+      font-family:"Inter", Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      overflow-x:hidden;
+    }
+    a{ color:inherit; text-decoration:none; }
+
+    /* ===== HARD WHITE OUTLINE  ===== */
+.bar-input.is-selected,
+.bar-soft.is-selected,
+.space.is-selected,
+.exp-card.is-selected,
+.pill.is-on {
+  outline: 2px solid #fff !important;
+  outline-offset: 2px !important;
+}
+
+
+.bar-input:focus-within,
+.bar-soft:focus-within {
+  outline: 2px solid #fff !important;
+  outline-offset: 2px !important;
+}
+
+
+.bar-input.is-selected,
+.bar-soft.is-selected {
+  border-color: rgba(255,255,255,0.55) !important;
+}
+
+    /* =========================
+       VIDEO BACKGROUND
+    ========================= */
+    .video-bg{
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      overflow: hidden;
+      background:#000;
+    }
+    .video-bg video{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.38;
+      filter: saturate(1.05) contrast(1.05);
+    }
+    .video-bg::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(70% 60% at 50% 20%, rgba(0,0,0,.25), rgba(0,0,0,.75)),
+        linear-gradient(to bottom, rgba(0,0,0,.55), rgba(0,0,0,.75));
+      z-index: 1;
+      pointer-events:none;
+    }
+
+    /* =========================
+       UNIVERSAL NAV (matches booked.html)
+    ========================= */
+    .topline{
+      position: sticky;
+      top:0;
+      z-index: 1000;
+
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      background: rgba(0,0,0,0.45);
+      border-bottom: 1px solid rgba(255,255,255,.12);
+
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 18px;
+      padding:14px 26px;
+    }
+
+    .brand{
+      color:#fff;
+      text-decoration:none;
+      font-size:.78rem;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      line-height:1.1;
+      white-space:nowrap;
+      user-select:none;
+    }
+    .brand span{
+      display:block;
+      opacity:.7;
+      margin-top:4px;
+      letter-spacing:.12em;
+      font-size:.70rem;
+      text-transform: none;
+    }
+
+    .top-links{
+      display:flex;
+      gap:26px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+
+    .top-links > a,
+    .top-links .drop-trigger{
+      color: rgba(255,255,255,.78);
+      font-size: .82rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 8px 6px;
+      transition: .18s;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      user-select:none;
+    }
+    .top-links > a:hover,
+    .top-links .drop-trigger:hover{ color:#fff; }
+    .top-links > a.active{ color:#fff; font-weight:700; }
+
+    .right-controls{
+      display:flex;
+      align-items:center;
+      gap:22px;
+    }
+
+    .icon-link{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:4px;
+      color: rgba(255,255,255,.78);
+      font-size: .60rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      transition: .18s;
+      user-select:none;
+      min-width: 72px;
+    }
+    .icon-link svg{
+      width:22px;
+      height:22px;
+      stroke:#fff;
+      fill:none;
+      stroke-width:1.6;
+      opacity:.85;
+      transition:.18s;
+    }
+    .icon-link:hover{ color:#fff; text-shadow: 0 0 14px rgba(255,255,255,.22); }
+    .icon-link:hover svg{
+      opacity:1;
+      transform: translateY(-2px);
+      filter: drop-shadow(0 0 10px rgba(255,255,255,.22));
+    }
+
+    .dropdown{ position:relative; display:inline-flex; align-items:center; }
+    .dropdown-panel{
+      position:absolute;
+      top:120%;
+      left:0;
+      background: rgba(0,0,0,.86);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 14px;
+      padding: 10px 0;
+      min-width: 200px;
+
+      opacity: 0;
+      pointer-events:none;
+      transform: translateY(6px);
+      transition: .18s;
+      z-index: 9999;
+    }
+    .dropdown:hover .dropdown-panel{
+      opacity:1;
+      pointer-events:auto;
+      transform: translateY(0);
+    }
+    .dropdown-panel a{
+      display:block;
+      padding: 10px 16px;
+      color: rgba(255,255,255,.82);
+      font-size: .75rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .dropdown-panel a:hover{ background: rgba(255,255,255,.08); color:#fff; }
+
+    .icon-dropdown .dropdown-panel{ right:0; left:auto; min-width: 200px; }
+
+    .caret{
+      width:10px;
+      height:10px;
+      display:inline-block;
+      border-right: 2px solid rgba(255,255,255,.70);
+      border-bottom: 2px solid rgba(255,255,255,.70);
+      transform: rotate(45deg);
+      margin-top:-2px;
+      transition:.18s;
+      opacity:.85;
+    }
+    .dropdown:hover .caret{ opacity:1; border-color:#fff; }
+
+    @media (max-width: 760px){
+      .top-links{ display:none; }
+      .topline{ padding: 12px 16px; }
+      .right-controls{ gap:14px; }
+      .icon-link{ min-width: 62px; }
+    }
+
+    /* =========================
+       PAGE
+    ========================= */
+    .wrap{
+      max-width: var(--max);
+      margin:0 auto;
+      padding: 60px 18px 90px;
+    }
+    .hero{
+      text-align:center;
+      padding: 18px 0 16px;
+    }
+    .title{
+      margin: 0 0 10px;
+      font-size: 44px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      font-weight: 600;
+      color:#fff;
+    }
+    .sub{
+      margin:0 auto 18px;
+      max-width: 860px;
+      color: rgba(255,255,255,0.72);
+      font-size: 16px;
+      line-height: 1.75;
+      opacity: .9;
+    }
+    .rule{
+      height:1px;
+      background: rgba(255,255,255,0.12);
+      margin: 18px 0 22px;
+    }
+
+    .panel{
+      margin-top: 18px;
+      background: var(--glass);
+      border: 1px solid var(--line);
+      border-radius: var(--r);
+      padding: 22px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+
+    /* ===== STEPPER ===== */
+    .stepper{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap: 12px;
+      flex-wrap:wrap;
+      padding: 6px 0 10px;
+    }
+    .step{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(0,0,0,0.20);
+    }
+    .dot{
+      width: 34px; height: 34px;
+      border-radius: 999px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      border: 1px solid rgba(255,255,255,0.18);
+      color: rgba(255,255,255,0.72);
+      background: rgba(255,255,255,0.06);
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing:.04em;
+    }
+    .lbl{
+      font-size: 11px;
+      letter-spacing:.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.70);
+      white-space:nowrap;
+    }
+    .step.is-active{
+      border-color: rgba(255,255,255,0.30);
+      background: rgba(255,255,255,0.06);
+      box-shadow: 0 0 0 2px rgba(255,255,255,0.18);
+    }
+    .step.is-active .dot{
+      border-color:#fff;
+      color:#fff;
+      background: rgba(255,255,255,0.12);
+    }
+    .step.is-active .lbl{ color:#fff; }
+
+    /* ===== HEADINGS ===== */
+    .section{ margin-top: 18px; }
+    .h2{
+      margin: 0 0 12px;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing:.10em;
+      text-transform: uppercase;
+      color:#fff;
+      opacity: .92;
+    }
+    .hint{
+      margin: -4px 0 14px;
+      color: rgba(255,255,255,0.70);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    /* ===== MOOD PILLS ===== */
+    .moods{
+      display:flex;
+      gap: 10px;
+      flex-wrap:wrap;
+      margin: 10px 0 10px;
+    }
+    .pill{
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.90);
+      font-size: 11px;
+      letter-spacing:.10em;
+      text-transform: uppercase;
+      cursor:pointer;
+    }
+    .pill.is-on{
+      border-color:#fff;
+      background: rgba(255,255,255,0.12);
+      box-shadow: 0 0 0 2px rgba(255,255,255,0.18);
+    }
+
+    /* ===== EXPERIENCE GRID ===== */
+    .exp-grid{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    .exp-card{
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(0,0,0,0.26);
+      border-radius: 18px;
+      overflow:hidden;
+      min-height: 220px;
+      cursor:pointer;
+      display:flex;
+      flex-direction:column;
+      transition: transform .12s ease, border-color .15s ease, background .15s ease;
+      position: relative;
+    }
+    .exp-card:hover{
+      transform: translateY(-2px);
+      border-color: rgba(255,255,255,0.30);
+      background: rgba(255,255,255,0.06);
+    }
+    .exp-card.is-selected{
+      border-color: rgba(255,255,255,0.55);
+      box-shadow: 0 0 0 2px rgba(255,255,255,0.18);
+    }
+    .exp-topbar{
+      height: 10px;
+      background: var(--g-focus);
+    }
+    .exp-body{
+      padding: 14px 14px 14px;
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+      flex: 1;
+    }
+    .exp-title{
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing:.06em;
+      text-transform: uppercase;
+      color:#fff;
+      opacity: .92;
+      margin: 0;
+    }
+    .exp-meta{
+      font-size: 12px;
+      color: rgba(255,255,255,0.70);
+      line-height: 1.7;
+      margin-top: 0;
+    }
+    .exp-cta{
+      margin-top: auto;
+      width: 100%;
+      height: 40px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.25);
+      background: rgba(255,255,255,.08);
+      color:#fff;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing:.14em;
+      text-transform: uppercase;
+      cursor:pointer;
+    }
+    .exp-cta:hover{
+      background: rgba(255,255,255,.14);
+      border-color: rgba(255,255,255,.38);
+      transform: translateY(-1px);
+    }
+
+    .exp-overlay{
+      position:absolute;
+      inset:0;
+      background: rgba(0,0,0,0.92);
+      color: rgba(255,255,255,.92);
+      opacity:0;
+      transform: translateY(10px);
+      transition: .18s ease;
+      padding: 14px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      pointer-events:none;
+    }
+    .exp-card:hover .exp-overlay{
+      opacity:1;
+      transform: translateY(0);
+    }
+    .ov-title{
+      font-weight:700;
+      margin: 0 0 8px;
+      font-size: 13px;
+      letter-spacing:.06em;
+      text-transform: uppercase;
+    }
+    .ov-desc{
+      font-size: 13px;
+      line-height: 1.6;
+      color: rgba(255,255,255,.75);
+    }
+    .ov-small{
+      font-size: 12px;
+      color: rgba(255,255,255,.70);
+      line-height: 1.6;
+      margin-top: 10px;
+    }
+
+    /* ===== STEP 2 ===== */
+    .row{
+      display:flex;
+      gap: 16px;
+      flex-wrap:wrap;
+      align-items:flex-start;
+    }
+    .field{
+      min-width: 220px;
+      flex: 1;
+    }
+    .label{
+      display:flex;
+      align-items:center;
+      gap: 8px;
+      font-size: 11px;
+      letter-spacing:.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.70);
+      margin-bottom: 8px;
+    }
+
+    .bar-input{
+      height: 44px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.18);
+      display:flex;
+      align-items:center;
+      padding: 0 12px;
+      background: rgba(0,0,0,0.30);
+      position: relative;
+      overflow:hidden;
+      transition: .18s ease;
+    }
+    .bar-input::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      opacity: .70;
+      pointer-events:none;
+    }
+    .bar-date::before{ background: var(--g-date); }
+    .bar-duration::before{ background: var(--g-duration); }
+    .bar-time::before{ background: var(--g-time); }
+    .bar-guests::before{ background: var(--g-guests); }
+    .bar-input > *{ position: relative; z-index: 1; }
+
+    .bar-input input,
+    .bar-input select{
+      width:100%;
+      height: 42px;
+      border:none;
+      outline:none;
+      background: transparent;
+      font-size: 13px;
+      color: rgba(255,255,255,0.92);
+      appearance: none;
+    }
+    .bar-input input::placeholder{ color: rgba(255,255,255,0.65); }
+    .bar-input select{ cursor:pointer; }
+
+    /* ===== WHITE OUTLINE  ===== */
+    .bar-input.is-selected,
+    .bar-soft.is-selected{
+      border-color:#fff !important;
+      box-shadow: 0 0 0 2px rgba(255,255,255,0.18);
+    }
+
+    /* ===== STEP 2: SPACE OPTIONS ===== */
+    .space-row{
+      display:flex;
+      gap: 16px;
+      flex-wrap:wrap;
+      margin-top: 10px;
+    }
+    .space{
+      width: 240px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(0,0,0,0.26);
+      border-radius: 18px;
+      cursor:pointer;
+      overflow:hidden;
+      transition: transform .12s ease, border-color .15s ease, background .15s ease;
+    }
+    .space:hover{
+      transform: translateY(-2px);
+      border-color: rgba(255,255,255,0.30);
+      background: rgba(255,255,255,0.06);
+    }
+    .space .cap{ height: 10px; background: rgba(255,255,255,0.10); }
+    .space .inside{ padding: 12px 12px 14px; }
+    .space .name{
+      font-weight:700;
+      font-size: 12px;
+      letter-spacing:.06em;
+      text-transform: uppercase;
+      margin: 0 0 6px;
+      color:#fff;
+      opacity: .92;
+    }
+    .space .mini{ font-size: 13px; color: rgba(255,255,255,0.70); }
+    .space.is-selected{
+      border-color: rgba(255,255,255,0.55);
+      box-shadow: 0 0 0 2px rgba(255,255,255,0.18);
+    }
+
+    /* ===== STEP 3 FIELDS ===== */
+    .info-grid{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: 10px;
+    }
+    .bar-soft{
+      height: 44px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(0,0,0,0.30);
+      padding: 0 12px;
+      display:flex;
+      align-items:center;
+      transition: .18s ease;
+    }
+    .bar-soft input{
+      width:100%;
+      border:none;
+      outline:none;
+      background: transparent;
+      font-size: 13px;
+      color: rgba(255,255,255,0.92);
+    }
+    .bar-soft input::placeholder{ color: rgba(255,255,255,0.65); }
+    .bar-soft input:disabled{ opacity: .7; }
+
+    /* ===== STEP 4*/
+    .confirm{
+      margin-top: 10px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(0,0,0,0.26);
+      border-radius: 18px;
+      padding: 18px;
+      overflow:hidden;
+      position: relative;
+    }
+
+    /* Mood accent bar  */
+    .confirm-accent{
+      height: 6px;
+      margin: -18px -18px 14px;
+      border-radius: 10px 10px 0 0;
+      background: var(--g-focus);
+    }
+
+    /* Soft color variant */
+    .confirm-wash{
+      position:absolute;
+      inset:0;
+      background: var(--g-focus);
+      opacity: .10;
+      filter: blur(0px);
+      pointer-events:none;
+    }
+
+   
+    .confirm > *{ position: relative; z-index: 1; }
+
+    .confirm h3{
+      margin:0 0 12px;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing:.10em;
+      text-transform: uppercase;
+      color:#fff;
+      opacity: .92;
+    }
+    .confirm .line{
+      font-size: 13px;
+      color: rgba(255,255,255,0.78);
+      line-height: 1.8;
+      margin: 0 0 6px;
+    }
+
+    /* ===== BUTTONS / NAV ACTIONS ===== */
+    .nav-actions{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap: 12px;
+      margin-top: 16px;
+      flex-wrap:wrap;
+    }
+    .btn{
+      border: 1px solid rgba(255,255,255,.25);
+      background: rgba(255,255,255,.08);
+      padding: 10px 14px;
+      border-radius: 999px;
+      cursor:pointer;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing:.14em;
+      text-transform: uppercase;
+      text-decoration:none;
+      color:#fff;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height: 40px;
+    }
+    .btn:hover{ background: rgba(255,255,255,.14); }
+    .btn.primary{
+      border-color: rgba(255,255,255,.38);
+      background: rgba(255,255,255,.86);
+      color: rgba(0,0,0,.86);
+    }
+    .btn.primary:hover{
+      background: rgba(255,255,255,.90);
+    }
+
+    .note{
+      display:flex;
+      align-items:flex-start;
+      gap: 10px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.70);
+      margin-top: 12px;
+      line-height: 1.6;
+    }
+    .info-dot{
+      width: 18px; height: 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.25);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      font-size: 12px;
+      flex: 0 0 auto;
+      margin-top: 2px;
+    }
+
+    /* ===== STEP PANES ===== */
+    .pane{ display:none; }
+    .pane.is-on{ display:block; }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1100px){
+      .exp-grid{ grid-template-columns: repeat(2, 1fr); }
+      .info-grid{ grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px){
+      .title{ font-size: 32px; }
+      .exp-grid{ grid-template-columns: 1fr; }
+      .info-grid{ grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Background video -->
+  <div class="video-bg" aria-hidden="true">
+    <video autoplay muted loop playsinline>
+      <source src="assets/bg.mp4" type="video/mp4" />
+    </video>
+  </div>
+
+  <!-- UNIVERSAL NAV -->
+  <header class="topline">
+    <a class="brand" href="index.html">
+      BOTANIC ELIXIR<br><span>adaptive café</span>
+    </a>
+
+    <nav class="top-links" aria-label="Main">
+      <a href="experiences.html">Experiences</a>
+      <a href="how-it-works.html">How It Works</a>
+      <a href="menu.html">Menu</a>
+      <a href="About-Connect.html">Connect<a>
+      <a href="contact.html">Contact</a>
+
+      <div class="dropdown">
+        <a class="drop-trigger" href="#" aria-label="Open about submenu" onclick="return false;">
+          About <span class="caret" aria-hidden="true"></span>
+        </a>
+        <div class="dropdown-panel" role="menu" aria-label="About submenu">
+          <a href="about.html">About Us</a>
+          <a href="community.html">Community</a>
+          <a href="learn-more.html">Learn More</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="right-controls">
+      <a class="icon-link" href="bag.html" aria-label="Go to bag">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6 7h12l-1 13H7L6 7z"></path>
+          <path d="M9 7a3 3 0 0 1 6 0"></path>
+        </svg>
+        BAG
+      </a>
+
+      <a class="icon-link" href="bookings.html" aria-label="Go to booking flow" style="color:#fff;">
+        <svg viewBox="0 0 24 24" aria-hidden="true" style="opacity:1;">
+          <path d="M4 4h16v16H4z"></path>
+          <path d="M8 2v4M16 2v4M4 10h16"></path>
+        </svg>
+        <strong>BOOK</strong>
+      </a>
+
+      <div class="dropdown icon-dropdown" aria-label="Inquiries menu">
+        <a class="icon-link" href="#" aria-label="Open inquiries submenu" onclick="return false;">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="7" r="4"></circle>
+            <path d="M4 21c1.5-4 14.5-4 16 0"></path>
+          </svg>
+          INQUIRIES
+        </a>
+        <div class="dropdown-panel" role="menu" aria-label="Inquiries submenu">
+          <a href="book-consultation.html">Consultation</a>
+          <a href="hiring.html">Hiring</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <h1 class="title">BOOK YOUR EXPERIENCE</h1>
+      <p class="sub">Reserve your intentional space in just a few steps.</p>
+      <div class="rule"></div>
+
+      <div class="stepper" aria-label="Booking steps">
+        <div class="step is-active" data-stepdot="1">
+          <div class="dot">1</div><div class="lbl">Experience</div>
+        </div>
+        <div class="step" data-stepdot="2">
+          <div class="dot">2</div><div class="lbl">Details</div>
+        </div>
+        <div class="step" data-stepdot="3">
+          <div class="dot">3</div><div class="lbl">Info</div>
+        </div>
+        <div class="step" data-stepdot="4">
+          <div class="dot">4</div><div class="lbl">Confirm</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== STEP 1 ===== -->
+    <section class="panel pane is-on" data-pane="1">
+      <div class="section">
+        <div class="h2">Choose your mood</div>
+        <div class="hint">Filter experiences by intention, then click an experience to select it.</div>
+
+        <div class="moods" role="tablist" aria-label="Moods">
+          <button class="pill is-on" type="button" data-mood="all">All</button>
+          <button class="pill" type="button" data-mood="focus">Focus &amp; Create</button>
+          <button class="pill" type="button" data-mood="play">Play &amp; Engage</button>
+          <button class="pill" type="button" data-mood="connect">Connect &amp; Share</button>
+          <button class="pill" type="button" data-mood="restore">Reflect &amp; Restore</button>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="h2">Select your experience</div>
+
+        <div class="exp-grid" id="expGrid">
+          <!-- Focus -->
+          <article class="exp-card" data-type="focus" data-exp="Deep Work Sessions" data-color="focus">
+            <div class="exp-topbar"></div>
+            <div class="exp-body">
+              <div class="exp-title">Deep Work Sessions</div>
+              <div class="exp-meta">
+                • 2–4 hours<br>
+                • 1 person<br>
+                • Clarity Tonic · Focus Elixir
+              </div>
+              <button class="exp-cta" type="button">Select experience</button>
+            </div>
+            <div class="exp-overlay" aria-hidden="true">
+              <div>
+                <div class="ov-title">Deep Work Sessions</div>
+                <div class="ov-desc">Individual focus pods with adaptive lighting and soundscapes designed for maximum concentration.</div>
+                <div class="ov-small">Best for: deep focus, writing sprints, single-person clarity.</div>
+              </div>
+              <div class="ov-small">Click to select</div>
+            </div>
+          </article>
+
+          <article class="exp-card" data-type="focus" data-exp="Writing Circle" data-color="focus">
+            <div class="exp-topbar"></div>
+            <div class="exp-body">
+              <div class="exp-title">Writing Circle</div>
+              <div class="exp-meta">
+                • 2 hours<br>
+                • 8–12 people<br>
+                • Muse Blend · Clarity Tonic
+              </div>
+              <button class="exp-cta" type="button">Select experience</button>
+            </div>
+            <div class="exp-overlay" aria-hidden="true">
+              <div>
+                <div class="ov-title">Writing Circle</div>
+                <div class="ov-desc">Guided writing sessions in a communal space with prompts, ambient atmosphere, and creative energy.</div>
+                <div class="ov-small">Best for: creativity, accountability, group inspiration.</div>
+              </div>
+              <div class="ov-small">Click to select</div>
+            </div>
+          </article>
+
+          <!-- Play -->
+          <article class="exp-card" data-type="play" data-exp="Game Night Arena" data-color="play">
+            <div class="exp-topbar"></div>
+            <div class="exp-body">
+              <div class="exp-title">Game Night Arena</div>
+              <div class="exp-meta">
+                • 3–5 hours<br>
+                • 4–16 people<br>
+                • Energy Burst · Social Spark
+              </div>
+              <button class="exp-cta" type="button">Select experience</button>
+            </div>
+            <div class="exp-overlay" aria-hidden="true">
+              <div>
+                <div class="ov-title">Game Night Arena</div>
+                <div class="ov-desc">Multiplayer gaming zone with retro and modern games, competitive atmosphere, and vibrant energy.</div>
+                <div class="ov-small">Best for: competitive fun, group energy, events.</div>
+              </div>
+              <div class="ov-small">Click to select</div>
+            </div>
+          </article>
+
+          <article class="exp-card" data-type="play" data-exp="Playful Gathering" data-color="play">
+            <div class="exp-topbar"></div>
+            <div class="exp-body">
+              <div class="exp-title">Playful Gathering</div>
+              <div class="exp-meta">
+                • 2–3 hours<br>
+                • 4–8 people<br>
+                • Joy Infusion · Social Spark
+              </div>
+              <button class="exp-cta" type="button">Select experience</button>
+            </div>
+            <div class="exp-overlay" aria-hidden="true">
+              <div>
+                <div class="ov-title">Playful Gathering</div>
+                <div class="ov-desc">Board games, card games, and interactive activities in a relaxed, social setting.</div>
+                <div class="ov-small">Best for: casual hangouts, friends, low-pressure fun.</div>
+              </div>
+              <div class="ov-small">Click to select</div>
+            </div>
+          </article>
+
+          <!-- Connect -->
+          <article class="exp-card" data-type="connect" data-exp="Conversation Salon" data-color="connect">
+            <div class="exp-topbar"></div>
+            <div class="exp-body">
+              <div class="exp-title">Conversation Salon</div>
+              <div class="exp-meta">
+                • 2 hours<br>
+                • 6–10 people<br>
+                • Empathy Elixir · Connection Blend
+              </div>
+              <button class="exp-cta" type="button">Select experience</button>
+            </div>
+            <div class="exp-overlay" aria-hidden="true">
+              <div>
+                <div class="ov-title">Conversation Salon</div>
+                <div class="ov-desc">Guided discussions on meaningful topics in an intimate group setting with facilitated dialogue.</div>
+                <div class="ov-small">Best for: connection, depth, guided dialogue.</div>
+              </div>
+              <div class="ov-small">Click to select</div>
+            </div>
+          </article>
+
+          <article class="exp-card" data-type="connect" data-exp="Intimate Date Night" data-color="connect">
+            <div class="exp-topbar"></div>
+            <div class="exp-body">
+              <div class="exp-title">Intimate Date Night</div>
+              <div class="exp-meta">
+                • 2–3 hours<br>
+                • 2 people<br>
+                • Connection Blend · Heart Opener
+              </div>
+              <button class="exp-cta" type="button">Select experience</button>
+            </div>
+            <div class="exp-overlay" aria-hidden="true">
+              <div>
+                <div class="ov-title">Intimate Date Night</div>
+                <div class="ov-desc">Private booth with customized ambiance, curated music, and conversation-enhancing atmosphere.</div>
+                <div class="ov-small">Best for: couples, closeness, intentional mood.</div>
+              </div>
+              <div class="ov-small">Click to select</div>
+            </div>
+          </article>
+
+          <!-- Restore -->
+          <article class="exp-card" data-type="restore" data-exp="Wellness & Meditation" data-color="restore">
+            <div class="exp-topbar"></div>
+            <div class="exp-body">
+              <div class="exp-title">Wellness &amp; Meditation</div>
+              <div class="exp-meta">
+                • 1–2 hours<br>
+                • 8–15 people<br>
+                • Calm Essence · Balance Tonic
+              </div>
+              <button class="exp-cta" type="button">Select experience</button>
+            </div>
+            <div class="exp-overlay" aria-hidden="true">
+              <div>
+                <div class="ov-title">Wellness &amp; Meditation</div>
+                <div class="ov-desc">Guided meditation and mindfulness sessions in a serene environment with calming elements.</div>
+                <div class="ov-small">Best for: grounding, calm, guided reset.</div>
+              </div>
+              <div class="ov-small">Click to select</div>
+            </div>
+          </article>
+
+          <article class="exp-card" data-type="restore" data-exp="Restorative Retreat" data-color="restore">
+            <div class="exp-topbar"></div>
+            <div class="exp-body">
+              <div class="exp-title">Restorative Retreat</div>
+              <div class="exp-meta">
+                • 1–3 hours<br>
+                • 1 person<br>
+                • Peace Potion · Calm Essence
+              </div>
+              <button class="exp-cta" type="button">Select experience</button>
+            </div>
+            <div class="exp-overlay" aria-hidden="true">
+              <div>
+                <div class="ov-title">Restorative Retreat</div>
+                <div class="ov-desc">Solo reflection space with nature sounds, soft lighting, and contemplative atmosphere.</div>
+                <div class="ov-small">Best for: solitude, reflection, gentle restoration.</div>
+              </div>
+              <div class="ov-small">Click to select</div>
+            </div>
+          </article>
+        </div>
+
+        <div class="nav-actions">
+          <span></span>
+          <button class="btn primary" type="button" id="toStep2">Next →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== STEP 2 ===== -->
+    <section class="panel pane" data-pane="2">
+      <div class="section">
+        <div class="h2">When &amp; where</div>
+        <div class="hint">Choose the date/time, then select the space configuration you want.</div>
+
+        <div class="row" id="step2Fields">
+          <div class="field">
+            <div class="label">Date</div>
+            <div class="bar-input bar-date" data-group="step2">
+              <input type="date" id="date" />
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="label">Duration</div>
+            <div class="bar-input bar-duration" data-group="step2">
+              <select id="duration">
+                <option value="1 Hour">1 Hour</option>
+                <option value="2 Hours" selected>2 Hours</option>
+                <option value="3 Hours">3 Hours</option>
+                <option value="4 Hours">4 Hours</option>
+                <option value="5 Hours">5 Hours</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="label">Time</div>
+            <div class="bar-input bar-time" data-group="step2">
+              <input type="time" id="time" />
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="label">Guests</div>
+            <div class="bar-input bar-guests" data-group="step2">
+              <select id="guests">
+                <option>1</option><option>2</option><option>3</option><option>4</option>
+                <option>5</option><option>6</option><option>7</option><option>8</option>
+                <option>9+</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="h2">Choose your space</div>
+
+        <div class="space-row" id="spaces">
+          <div class="space is-selected" data-space="Individual Pod">
+            <div class="cap"></div>
+            <div class="inside">
+              <div class="name">Individual Pod</div>
+              <div class="mini">1 person</div>
+            </div>
+          </div>
+
+          <div class="space" data-space="Private Booth">
+            <div class="cap"></div>
+            <div class="inside">
+              <div class="name">Private Booth</div>
+              <div class="mini">2–4 people</div>
+            </div>
+          </div>
+
+          <div class="space" data-space="Communal Table">
+            <div class="cap"></div>
+            <div class="inside">
+              <div class="name">Communal Table</div>
+              <div class="mini">6–12 people</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="note">
+          <span class="info-dot">i</span>
+          We’ll send you a confirmation email with all details and a reminder 24 hours before your visit.
+        </div>
+
+        <div class="nav-actions">
+          <button class="btn" type="button" id="back1">← Back</button>
+          <button class="btn primary" type="button" id="toStep3">Next →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== STEP 3 ===== -->
+    <section class="panel pane" data-pane="3">
+      <div class="section">
+        <div class="h2">Your information</div>
+        <div class="hint">This is used for confirmation and updates.</div>
+
+        <div class="info-grid" id="step3Fields">
+          <div class="field">
+            <div class="label">Full name</div>
+            <div class="bar-soft" data-group="step3"><input id="name" placeholder="Your name" /></div>
+          </div>
+          <div class="field">
+            <div class="label">Email address</div>
+            <div class="bar-soft" data-group="step3"><input id="email" placeholder="you@email.com" /></div>
+          </div>
+          <div class="field">
+            <div class="label">Phone number</div>
+            <div class="bar-soft" data-group="step3"><input id="phone" placeholder="+1 ..." /></div>
+          </div>
+          <div class="field">
+            <div class="label">Guests</div>
+            <div class="bar-soft" data-group="step3"><input id="guestsConfirm" placeholder="Auto-filled" disabled /></div>
+          </div>
+        </div>
+
+        <div class="note">
+          <span class="info-dot">i</span>
+          We’ll send you a confirmation email with all details and a reminder 24 hours before your visit.
+        </div>
+
+        <div class="nav-actions">
+          <button class="btn" type="button" id="back2">← Back</button>
+          <button class="btn primary" type="button" id="toStep4">Confirm →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== STEP 4 ===== -->
+    <section class="panel pane" data-pane="4">
+      <div class="section">
+        <div class="h2">Your experience is booked</div>
+        <div class="hint">Here’s your booking summary.</div>
+
+        <div class="confirm" id="confirmBox">
+          <div class="confirm-wash" id="confirmWash" aria-hidden="true"></div>
+          <div class="confirm-accent" id="confirmAccent"></div>
+
+          <h3>Booking summary</h3>
+          <div class="line" id="sumExperience"></div>
+          <div class="line" id="sumWhen"></div>
+          <div class="line" id="sumSpace"></div>
+          <div class="line" id="sumName"></div>
+        </div>
+
+        <div class="nav-actions">
+          <a class="btn" href="index.html">Return home</a>
+          <a class="btn primary" id="goToBooked" href="booked.html">Go to bookings</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    /* =========================
+       STORAGE
+    ========================== */
+    const STORAGE_KEY = "botanic_bookings";
+    const LAST_ID_KEY = "botanic_last_booking_id";
+
+    function getBookings(){
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+      catch(e){ return []; }
+    }
+    function saveBookings(list){
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+    }
+    function makeId(){
+      return "BKG-" + Date.now() + "-" + Math.floor(Math.random()*1000);
+    }
+
+    /* =========================
+       Apply gradients per experience
+    ========================== */
+    const colorMap = {
+      focus: getComputedStyle(document.documentElement).getPropertyValue('--g-focus').trim(),
+      play: getComputedStyle(document.documentElement).getPropertyValue('--g-play').trim(),
+      connect: getComputedStyle(document.documentElement).getPropertyValue('--g-connect').trim(),
+      restore: getComputedStyle(document.documentElement).getPropertyValue('--g-restore').trim(),
+    };
+
+    document.querySelectorAll('.exp-card').forEach(card => {
+      const key = card.dataset.color;
+      const bar = card.querySelector('.exp-topbar');
+      if (bar) bar.style.background = colorMap[key] || colorMap.focus;
+    });
+
+    /* =========================
+       State
+    ========================== */
+    let selectedMood = 'all';
+    let selectedExperience = null;   // { name, type }
+    let selectedSpace = 'Individual Pod';
+
+    /* =========================
+       Mood filter
+    ========================== */
+    const moodBtns = document.querySelectorAll('.pill');
+    const expCards = document.querySelectorAll('.exp-card');
+
+    moodBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        moodBtns.forEach(b => b.classList.remove('is-on'));
+        btn.classList.add('is-on');
+        selectedMood = btn.dataset.mood;
+
+        expCards.forEach(card => {
+          const show = (selectedMood === 'all' || card.dataset.type === selectedMood);
+          card.style.display = show ? 'flex' : 'none';
+        });
+      });
+    });
+
+    /* =========================
+       Experience select
+    ========================== */
+    function selectCard(card){
+      expCards.forEach(c => c.classList.remove('is-selected'));
+      card.classList.add('is-selected');
+      selectedExperience = { name: card.dataset.exp, type: card.dataset.type };
+    }
+
+    expCards.forEach(card => {
+      card.addEventListener('click', () => selectCard(card));
+    });
+
+    document.querySelectorAll('.exp-cta').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const card = btn.closest('.exp-card');
+        if(card) selectCard(card);
+      });
+    });
+
+    /* =========================
+       Space select
+    ========================== */
+    const spaces = document.getElementById('spaces');
+    spaces.querySelectorAll('.space').forEach(s => {
+      s.addEventListener('click', () => {
+        spaces.querySelectorAll('.space').forEach(x => x.classList.remove('is-selected'));
+        s.classList.add('is-selected');
+        selectedSpace = s.dataset.space;
+      });
+    });
+
+    /* =========================
+       Step navigation
+    ========================== */
+    const panes = document.querySelectorAll('.pane');
+    const stepDots = document.querySelectorAll('.step');
+
+    function go(step){
+      panes.forEach(p => p.classList.toggle('is-on', p.dataset.pane === String(step)));
+      stepDots.forEach(d => d.classList.toggle('is-active', d.dataset.stepdot === String(step)));
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    document.getElementById('toStep2').addEventListener('click', () => {
+      if(!selectedExperience){
+        alert('Select an experience first.');
+        return;
+      }
+      go(2);
+    });
+
+    document.getElementById('back1').addEventListener('click', () => go(1));
+
+    document.getElementById('toStep3').addEventListener('click', () => {
+      document.getElementById('guestsConfirm').value = document.getElementById('guests').value;
+      go(3);
+    });
+
+    document.getElementById('back2').addEventListener('click', () => go(2));
+
+    /* =========================
+       PERSISTENT WHITE OUTLINE:
+       - when you click one field wrapper in a step, it stays outlined
+       - selecting a different field in that step moves the outline
+       - stored per step in localStorage and restored when returning
+    ========================== */
+    const OUTLINE_KEY_STEP2 = "botanic_selected_field_step2";
+    const OUTLINE_KEY_STEP3 = "botanic_selected_field_step3";
+
+    function clearSelectedInGroup(group){
+      document.querySelectorAll(`[data-group="${group}"]`).forEach(w => w.classList.remove('is-selected'));
+    }
+
+    function setSelectedWrapper(group, wrapper){
+      if (!wrapper) return;
+      clearSelectedInGroup(group);
+      wrapper.classList.add('is-selected');
+
+      const key = (group === "step2") ? OUTLINE_KEY_STEP2 : OUTLINE_KEY_STEP3;
+      localStorage.setItem(key, wrapper.id || wrapper.dataset.field || wrapper.getAttribute('data-wrapper-id') || "");
+    }
+
+    function attachPersistentOutline(group, storageKey){
+      const wrappers = document.querySelectorAll(`[data-group="${group}"]`);
+
+      // Ensure every wrapper has a stable id for storing
+      wrappers.forEach((w, idx) => {
+        if (!w.id){
+          w.setAttribute('data-wrapper-id', `${group}-wrap-${idx}`);
+        }
+        // Click on wrapper selects it
+        w.addEventListener('mousedown', () => setSelectedWrapper(group, w));
+        // Focus inside selects it (keyboard)
+        const input = w.querySelector('input, select, textarea');
+        if (input){
+          input.addEventListener('focus', () => setSelectedWrapper(group, w));
+          input.addEventListener('click', () => setSelectedWrapper(group, w));
+          input.addEventListener('change', () => setSelectedWrapper(group, w));
+        }
+      });
+
+      // Restore last selected wrapper in this group
+      const stored = localStorage.getItem(storageKey) || "";
+      if (stored){
+        const byId = document.getElementById(stored);
+        if (byId && byId.getAttribute('data-group') === group){
+          setSelectedWrapper(group, byId);
+          return;
+        }
+        const byData = Array.from(wrappers).find(w => w.getAttribute('data-wrapper-id') === stored);
+        if (byData){
+          clearSelectedInGroup(group);
+          byData.classList.add('is-selected');
+        }
+      } else {
+        // Default: highlight the first wrapper in the group
+        if (wrappers[0]) {
+          clearSelectedInGroup(group);
+          wrappers[0].classList.add('is-selected');
+          localStorage.setItem(storageKey, wrappers[0].id || wrappers[0].getAttribute('data-wrapper-id') || "");
+        }
+      }
+    }
+
+    // Activate on load
+    attachPersistentOutline("step2", OUTLINE_KEY_STEP2);
+    attachPersistentOutline("step3", OUTLINE_KEY_STEP3);
+
+    /* =========================
+       Step 4 = summary + store booking + confirm page colors
+    ========================== */
+    document.getElementById('toStep4').addEventListener('click', () => {
+      if(!selectedExperience){
+        alert('Select an experience first.');
+        return;
+      }
+
+      // Step 2
+      const date = document.getElementById('date').value || '(date not set)';
+      const time = document.getElementById('time').value || '(time not set)';
+      const duration = document.getElementById('duration').value;
+      const guests = document.getElementById('guests').value;
+
+      // Step 3
+      const fullName = document.getElementById('name').value || '(name not set)';
+      const email = document.getElementById('email').value || '(email not set)';
+      const phone = document.getElementById('phone').value || '';
+
+      // Summary UI
+      document.getElementById('sumExperience').textContent =
+        `Experience: ${selectedExperience.name} (${selectedExperience.type})`;
+      document.getElementById('sumWhen').textContent =
+        `When: ${date} · ${time} · ${duration} · Guests: ${guests}`;
+      document.getElementById('sumSpace').textContent =
+        `Space: ${selectedSpace}`;
+      document.getElementById('sumName').textContent =
+        `Contact: ${fullName} · ${email}`;
+
+      // Step 4 color elements (accent + wash) based on mood
+      const moodGrad = colorMap[selectedExperience.type] || colorMap.focus;
+      const accent = document.getElementById('confirmAccent');
+      const wash = document.getElementById('confirmWash');
+      if (accent) accent.style.background = moodGrad;
+      if (wash) wash.style.background = moodGrad;
+
+      // Create booking record
+      const booking = {
+        id: makeId(),
+        createdAt: new Date().toISOString(),
+        mood: selectedExperience.type,
+        experience: selectedExperience.name,
+        date,
+        time,
+        duration,
+        guests,
+        space: selectedSpace,
+        fullName,
+        email,
+        phone
+      };
+
+      // Save
+      const list = getBookings();
+      list.push(booking);
+      saveBookings(list);
+      localStorage.setItem(LAST_ID_KEY, booking.id);
+
+      // Link to booked.html with id
+      const goLink = document.getElementById('goToBooked');
+      if (goLink) goLink.href = `booked.html?id=${encodeURIComponent(booking.id)}`;
+
+      go(4);
+    });
+  </script>
+</body>
+</html>

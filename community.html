@@ -1,0 +1,1696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Botanic Elixir — Community</title>
+
+  <style>
+    :root{
+      /* ===== Core theme (dark ) ===== */
+      --bg:#000000;
+      --panel: rgba(255,255,255,.04);
+      --panel2: rgba(255,255,255,.06);
+      --border: rgba(255,255,255,.10);
+      --border2: rgba(255,255,255,.14);
+      --ink: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.62);
+      --soft: rgba(255,255,255,.12);
+      --shadow: 0 18px 60px rgba(0,0,0,.45);
+
+      /* ===== Mood gradients  ===== */
+      --g-focus: linear-gradient(90deg, #2a9bd8, #3a64ff);
+      --g-play: linear-gradient(90deg, #f0b35a, #a8a3ff);
+      --g-connect: linear-gradient(90deg, #ff5cc8, #9b63ff);
+      --g-restore: linear-gradient(90deg, #6bf08b, #45d8d1);
+
+      /* ===== Pink variant  ===== */
+      --g-pink: linear-gradient(90deg, #ff5cc8, #ff8adf);
+
+      /* Buttons */
+      --btn: rgba(255,255,255,.06);
+      --btnHover: rgba(255,255,255,.10);
+      --btnPrimary: rgba(255,255,255,.90);
+      --btnPrimaryInk: rgba(0,0,0,.85);
+
+      /* Layout */
+      --max: 1320px;
+      --radius: 18px;
+    }
+
+    *{ box-sizing:border-box; }
+    html, body{ height:100%; }
+    body{
+      margin:0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
+      letter-spacing: 0.01em;
+    }
+
+    a{ color:inherit; text-decoration:none; }
+
+    /* =========================
+       UNIVERSAL NAV 
+    ========================= */
+    .topline{
+      position: sticky;
+      top:0;
+      z-index: 1000;
+
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      background: rgba(0,0,0,0.45);
+      border-bottom: 1px solid rgba(255,255,255,.12);
+
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 18px;
+      padding:14px 26px;
+    }
+
+    .brand{
+      color:#fff;
+      text-decoration:none;
+      font-size:.78rem;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      line-height:1.1;
+      white-space:nowrap;
+      user-select:none;
+      display:block;
+    }
+    .brand span{
+      display:block;
+      opacity:.7;
+      margin-top:4px;
+      letter-spacing:.12em;
+      font-size:.70rem;
+      text-transform: none;
+    }
+
+    .top-links{
+      display:flex;
+      gap:26px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+
+    .top-links > a,
+    .top-links .drop-trigger{
+      color: rgba(255,255,255,.78);
+      font-size: .82rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 8px 6px;
+      transition: .18s;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      user-select:none;
+    }
+    .top-links > a:hover,
+    .top-links .drop-trigger:hover{ color:#fff; }
+    .top-links > a.active{ color:#fff; font-weight:700; }
+
+    .right-controls{
+      display:flex;
+      align-items:center;
+      gap:22px;
+    }
+
+    .icon-link{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:4px;
+      color: rgba(255,255,255,.78);
+      font-size: .60rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      transition: .18s;
+      user-select:none;
+      min-width: 72px;
+    }
+    .icon-link svg{
+      width:22px;
+      height:22px;
+      stroke:#fff;
+      fill:none;
+      stroke-width:1.6;
+      opacity:.85;
+      transition:.18s;
+    }
+    .icon-link:hover{ color:#fff; text-shadow: 0 0 14px rgba(255,255,255,.22); }
+    .icon-link:hover svg{
+      opacity:1;
+      transform: translateY(-2px);
+      filter: drop-shadow(0 0 10px rgba(255,255,255,.22));
+    }
+
+    .dropdown{ position:relative; display:inline-flex; align-items:center; }
+    .dropdown-panel{
+      position:absolute;
+      top:120%;
+      left:0;
+      background: rgba(0,0,0,.86);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 14px;
+      padding: 10px 0;
+      min-width: 200px;
+
+      opacity: 0;
+      pointer-events:none;
+      transform: translateY(6px);
+      transition: .18s;
+      z-index: 9999;
+    }
+    .dropdown:hover .dropdown-panel{
+      opacity:1;
+      pointer-events:auto;
+      transform: translateY(0);
+    }
+    .dropdown-panel a{
+      display:block;
+      padding: 10px 16px;
+      color: rgba(255,255,255,.82);
+      font-size: .75rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .dropdown-panel a:hover{ background: rgba(255,255,255,.08); color:#fff; }
+
+    .icon-dropdown .dropdown-panel{ right:0; left:auto; min-width: 200px; }
+
+    .caret{
+      width:10px;
+      height:10px;
+      display:inline-block;
+      border-right: 2px solid rgba(255,255,255,.70);
+      border-bottom: 2px solid rgba(255,255,255,.70);
+      transform: rotate(45deg);
+      margin-top:-2px;
+      transition:.18s;
+      opacity:.85;
+    }
+    .dropdown:hover .caret{ opacity:1; border-color:#fff; }
+
+    @media (max-width: 760px){
+      .top-links{ display:none; }
+      .topline{ padding: 12px 16px; }
+      .right-controls{ gap:14px; }
+      .icon-link{ min-width: 62px; }
+    }
+
+    /* ===== Page wrapper ===== */
+    .wrap{
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 36px 20px 90px;
+    }
+
+    .hero{
+      text-align:center;
+      padding: 34px 0 10px;
+      margin: 0 auto;
+    }
+    .hero h1{
+      margin: 0 0 10px;
+      font-size: 56px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+    .hero p{
+      margin: 0 auto;
+      max-width: 820px;
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 14px;
+    }
+
+    .rule{
+      height: 1px;
+      background: rgba(255,255,255,.08);
+      margin: 26px 0;
+    }
+
+    /* ===== Sections ===== */
+    .section{ margin-top: 26px; }
+    .h2{
+      font-size: 28px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      margin: 0 0 10px;
+      font-weight: 600;
+    }
+    .sub{
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    /* ===== Panels ===== */
+    .panel{
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+    .panel.inset{
+      padding: 20px;
+      background: rgba(255,255,255,.035);
+    }
+
+    /* ===== Newsletter ===== */
+    .newsletter{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 18px;
+      align-items:center;
+    }
+    .newsletter h3{
+      margin:0 0 6px;
+      font-size: 14px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.90);
+    }
+    .newsletter p{
+      margin:0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .nl-form{
+      display:flex;
+      gap: 10px;
+      justify-content:flex-end;
+      flex-wrap:wrap;
+    }
+    .input{
+      min-width: 260px;
+      flex: 1;
+      height: 42px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      color: var(--ink);
+      padding: 0 14px;
+      outline:none;
+    }
+    .input::placeholder{ color: rgba(255,255,255,.45); }
+    .btn{
+      border: 1px solid rgba(255,255,255,.14);
+      background: var(--btn);
+      color: rgba(255,255,255,.90);
+      padding: 11px 16px;
+      border-radius: 999px;
+      cursor:pointer;
+      font-size: 12px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      user-select:none;
+    }
+    .btn:hover{ background: var(--btnHover); }
+    .btn.primary{
+      background: var(--btnPrimary);
+      color: var(--btnPrimaryInk);
+      border-color: rgba(255,255,255,.0);
+      font-weight: 700;
+    }
+    .btn.primary:hover{ filter: brightness(.96); }
+
+    /* ===== Card grids ===== */
+    .grid4{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+    .grid3{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+    .card{
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      border-radius: 16px;
+      overflow:hidden;
+      box-shadow: var(--shadow);
+      display:flex;
+      flex-direction:column;
+      min-height: 210px;
+    }
+    .cap{ height: 6px; background: var(--g-focus); }
+    .card-body{
+      padding: 16px 16px 14px;
+      display:flex;
+      flex-direction:column;
+      gap: 8px;
+      flex: 1;
+    }
+    .card h4{
+      margin: 0;
+      font-size: 13px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .card .small{
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+      margin: 0;
+    }
+    .meta{
+      margin-top: 6px;
+      color: rgba(255,255,255,.70);
+      font-size: 12px;
+      line-height: 1.7;
+      white-space: pre-line;
+    }
+    .card-footer{
+      padding: 12px 16px 16px;
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      justify-content:space-between;
+    }
+
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.75);
+      opacity:.95;
+    }
+    .dot{
+      width: 10px; height: 10px;
+      border-radius: 999px;
+      background: var(--g-focus);
+      box-shadow: 0 0 0 3px rgba(255,255,255,.05);
+    }
+
+    /* ===== Calendar of Events  ===== */
+    .calendar-wrap{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 18px;
+      align-items:start;
+    }
+    .cal-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      padding: 8px 4px 14px;
+    }
+    .cal-title{
+      display:flex;
+      flex-direction:column;
+      gap: 4px;
+    }
+    .cal-title .m{
+      font-size: 14px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.92);
+    }
+    .cal-title .h{
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .cal-nav{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+    }
+    .iconbtn{
+      width: 44px;
+      height: 42px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      color: rgba(255,255,255,.85);
+      cursor:pointer;
+      font-size: 18px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      user-select:none;
+    }
+    .iconbtn:hover{ background: rgba(255,255,255,.07); }
+
+    .calendar{
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+    .dow{
+      display:grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+      margin-top: 8px;
+      padding: 0 4px;
+      color: rgba(255,255,255,.60);
+      font-size: 11px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .days{
+      display:grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .day{
+      position: relative;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.02);
+      min-height: 78px;
+      padding: 10px 10px 12px;
+      cursor:pointer;
+      transition: .12s ease;
+    }
+    .day:hover{
+      background: rgba(255,255,255,.05);
+      border-color: rgba(255,255,255,.14);
+    }
+    .day.muted{ opacity: .35; cursor: default; }
+    .day .n{ font-size: 12px; color: rgba(255,255,255,.88); }
+    .day.is-selected{
+      outline: 2px solid rgba(255,255,255,.85);
+      outline-offset: -2px;
+      background: rgba(255,255,255,.06);
+    }
+
+    .dots{
+      position:absolute;
+      left: 10px;
+      bottom: 10px;
+      display:flex;
+      gap: 6px;
+      flex-wrap:wrap;
+      max-width: calc(100% - 20px);
+    }
+    .edot{
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      box-shadow: 0 0 0 3px rgba(255,255,255,.05);
+    }
+
+    /* Agenda */
+    .agenda{
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      padding: 16px;
+      min-height: 360px;
+    }
+    .agenda h3{
+      margin: 0 0 6px;
+      font-size: 13px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+    .agenda .sel{
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    .agenda-item{
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      border-radius: 14px;
+      overflow:hidden;
+      margin-bottom: 12px;
+    }
+    .agenda-cap{ height: 6px; background: var(--g-focus); }
+    .agenda-body{ padding: 12px 12px 14px; }
+    .agenda-body .t{
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: .04em;
+      margin-bottom: 6px;
+    }
+    .agenda-body .m{
+      color: rgba(255,255,255,.75);
+      font-size: 12px;
+      line-height: 1.6;
+      margin-bottom: 6px;
+    }
+    .agenda-body .meta{
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .agenda-body .btn{
+      width: 100%;
+      justify-content:center;
+      text-align:center;
+    }
+
+    /* ===== Programs ===== */
+    .program{ min-height: 220px; }
+    .price{
+      margin-top: 10px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      color: rgba(255,255,255,.92);
+    }
+
+    /* ===== Footer ===== */
+    footer{
+      margin-top: 40px;
+      border-top: 1px solid rgba(255,255,255,.06);
+      padding: 26px 0 0;
+      color: rgba(255,255,255,.55);
+      font-size: 12px;
+    }
+    .foot-grid{
+      display:grid;
+      grid-template-columns: 1.1fr 1fr 1fr;
+      gap: 18px;
+      align-items:start;
+    }
+    .foot h5{
+      margin:0 0 10px;
+      font-size: 11px;
+      letter-spacing:.16em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.72);
+    }
+    .foot a{
+      color: rgba(255,255,255,.55);
+      text-decoration:none;
+      display:inline-block;
+      margin: 6px 0;
+    }
+    .foot a:hover{ color: rgba(255,255,255,.80); }
+
+    /* ===== Modal ===== */
+    .modal-backdrop{
+      position: fixed;
+      inset:0;
+      background: rgba(0,0,0,.65);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 18px;
+      z-index: 200;
+    }
+    .modal-backdrop.is-on{ display:flex; }
+    .modal{
+      width: min(980px, 100%);
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(10,12,15,.96);
+      box-shadow: 0 30px 90px rgba(0,0,0,.60);
+      overflow:hidden;
+    }
+    .modal-cap{ height: 8px; background: var(--g-connect); }
+    .modal-inner{ padding: 18px 18px 20px; }
+    .modal-top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+    .modal-title{
+      margin: 0;
+      font-size: 16px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .modal-sub{
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    .close{
+      width: 44px; height: 42px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      color: rgba(255,255,255,.85);
+      cursor:pointer;
+      font-size: 18px;
+    }
+    .close:hover{ background: rgba(255,255,255,.08); }
+
+    .modal-grid{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 16px;
+      align-items:start;
+      margin-top: 12px;
+    }
+    .form{
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      border-radius: 16px;
+      padding: 14px;
+    }
+    .form .row{
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .fg{
+      display:flex;
+      flex-direction:column;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .lbl{
+      font-size: 11px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.65);
+    }
+    .field{
+      height: 42px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      color: rgba(255,255,255,.92);
+      padding: 0 14px;
+      outline:none;
+    }
+    .field:disabled{ opacity: .7; cursor: not-allowed; }
+    select.field{ cursor:pointer; }
+
+    .summary{
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      border-radius: 16px;
+      overflow:hidden;
+    }
+    .sum-cap{ height: 6px; background: var(--g-focus); }
+    .sum-body{ padding: 14px; }
+    .sum-h{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .sum-h h4{
+      margin:0;
+      font-size: 12px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.88);
+    }
+    .sum-h .saved{
+      color: rgba(255,255,255,.55);
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .kv{
+      display:grid;
+      grid-template-columns: 130px 1fr;
+      gap: 10px 12px;
+      font-size: 12px;
+      line-height: 1.6;
+      color: rgba(255,255,255,.78);
+    }
+    .kv .k{
+      color: rgba(255,255,255,.55);
+      letter-spacing: .10em;
+      text-transform: uppercase;
+      font-size: 10px;
+      padding-top: 2px;
+    }
+    .modal-actions{
+      display:flex;
+      gap: 10px;
+      justify-content:flex-end;
+      margin-top: 12px;
+      flex-wrap:wrap;
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 1100px){
+      .grid4{ grid-template-columns: repeat(2, 1fr); }
+      .calendar-wrap{ grid-template-columns: 1fr; }
+      .newsletter{ grid-template-columns: 1fr; }
+      .nl-form{ justify-content:flex-start; }
+      .modal-grid{ grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px){
+      .hero h1{ font-size: 40px; }
+      .grid4{ grid-template-columns: 1fr; }
+      .grid3{ grid-template-columns: 1fr; }
+      .form .row{ grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!--UNIVERSAL NAV -->
+  <header class="topline">
+    <a class="brand" href="index.html">
+      BOTANIC ELIXIR<br><span>adaptive café</span>
+    </a>
+
+    <nav class="top-links" aria-label="Main">
+      <a href="experiences.html">Experiences</a>
+      <a href="how-it-works.html">How It Works</a>
+      <a href="menu.html">Menu</a>
+      <a href="About-Connect.html">Connect</a>
+      <a href="contact.html">Contact</a>
+
+      <div class="dropdown">
+        <a class="drop-trigger" href="#" aria-label="Open about submenu" onclick="return false;">
+          About <span class="caret" aria-hidden="true"></span>
+        </a>
+        <div class="dropdown-panel" role="menu" aria-label="About submenu">
+          <a href="about.html">About Us</a>
+          <a class="active" href="community.html">Community</a>
+          <a href="learn-more.html">Learn More</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="right-controls">
+      <a class="icon-link" href="bag.html" aria-label="Go to bag">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6 7h12l-1 13H7L6 7z"></path>
+          <path d="M9 7a3 3 0 0 1 6 0"></path>
+        </svg>
+        BAG
+      </a>
+
+      <a class="icon-link" href="booked.html" aria-label="Go to bookings">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 4h16v16H4z"></path>
+          <path d="M8 2v4M16 2v4M4 10h16"></path>
+        </svg>
+        BOOKINGS
+      </a>
+
+      <div class="dropdown icon-dropdown" aria-label="Inquiries menu">
+        <a class="icon-link" href="#" aria-label="Open inquiries submenu" onclick="return false;">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="7" r="4"></circle>
+            <path d="M4 21c1.5-4 14.5-4 16 0"></path>
+          </svg>
+          INQUIRIES
+        </a>
+        <div class="dropdown-panel" role="menu" aria-label="Inquiries submenu">
+          <a href="book-consultation.html">Consultation</a>
+          <a href="hiring.html">Hiring</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" id="community">
+
+    <!-- HERO -->
+    <section class="hero">
+      <h1>COMMUNITY</h1>
+      <p>
+        Stay connected through recurring gatherings, special events, and community programs.
+        Choose an event by intention, then register or join in a few steps.
+      </p>
+    </section>
+
+    <div class="rule"></div>
+
+    <!-- STAY CONNECTED -->
+    <section class="section">
+      <div class="panel inset newsletter">
+        <div>
+          <h3>Stay Connected</h3>
+          <p>
+            Subscribe for event updates, special offerings, and community news.
+            We send one thoughtful email per week.
+          </p>
+        </div>
+
+        <form class="nl-form" action="community.html#subscribed" method="get">
+          <input class="input" name="email" type="email" placeholder="Your email address" required />
+          <button class="btn primary" type="submit">Subscribe</button>
+        </form>
+      </div>
+    </section>
+
+    <div class="rule"></div>
+
+    <!-- RECURRING EVENTS -->
+    <section class="section" id="recurring">
+      <div class="h2">Recurring Events</div>
+      <p class="sub">Weekly gatherings you can count on</p>
+
+      <div class="grid4" id="recurringGrid"></div>
+    </section>
+
+    <div class="rule"></div>
+
+    <!-- SPECIAL EVENTS -->
+    <section class="section" id="special">
+      <div class="h2">Special Events</div>
+      <p class="sub">Unique experiences happening soon</p>
+
+      <div class="grid4" id="specialGrid"></div>
+    </section>
+
+    <div class="rule"></div>
+
+    <!-- CALENDAR OF EVENTS -->
+    <section class="section" id="calendar">
+      <div class="h2">Calendar of Events</div>
+      <p class="sub">Browse by date — click a day to view events, then register/join from the agenda.</p>
+
+      <div class="panel inset">
+        <div class="calendar-wrap">
+          <!-- Calendar -->
+          <div class="calendar">
+            <div class="cal-head">
+              <div class="cal-title">
+                <div class="m" id="monthLabel">FEBRUARY 2026</div>
+                <div class="h">Dots indicate event moods (focus/play/connect/restore + pink).</div>
+              </div>
+              <div class="cal-nav">
+                <button class="iconbtn" id="prevMonth" type="button" aria-label="Previous month">‹</button>
+                <button class="iconbtn" id="nextMonth" type="button" aria-label="Next month">›</button>
+              </div>
+            </div>
+
+            <div class="dow">
+              <div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div>
+            </div>
+
+            <div class="days" id="days"></div>
+          </div>
+
+          <!-- Agenda -->
+          <div class="agenda">
+            <h3 id="agendaTitle">AGENDA</h3>
+            <p class="sel" id="agendaSub">Selected date: —</p>
+            <div id="agendaList"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="rule"></div>
+
+    <!-- COMMUNITY PROGRAMS -->
+    <section class="section" id="programs">
+      <div class="h2">Community Programs</div>
+      <p class="sub">Ongoing memberships for dedicated community members</p>
+
+      <div class="grid3" id="programGrid"></div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="foot-grid">
+        <div class="foot">
+          <h5>Botanic Elixir</h5>
+          <div style="color:rgba(255,255,255,.55); line-height:1.7;">
+            Shift your mind. Shape your experience.<br><br>
+            42 Kingsland Road<br>
+            Shoreditch, London E2 8DA
+          </div>
+        </div>
+
+        <div class="foot">
+          <h5>Explore</h5>
+          <a href="index.html">Home</a><br>
+          <a href="experiences.html">Experiences</a><br>
+          <a href="how-it-works.html#how">How It Works</a><br>
+          <a href="menu.html#menu">Menu</a>
+        </div>
+
+        <div class="foot">
+          <h5>Connect</h5>
+          <a href="community.html#community">Community & Events</a><br>
+          <a href="contact.html#contact">Contact</a><br>
+          <a href="about.html#about">About</a><br>
+          <a href="bookings.html">Book Experience</a>
+        </div>
+      </div>
+
+      <div class="rule"></div>
+      <div style="display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap;">
+        <div>© 2026 Botanic Elixir. All rights reserved.</div>
+        <div style="display:flex; gap:14px;">
+          <a href="#" style="color:rgba(255,255,255,.55); text-decoration:none;">Privacy Policy</a>
+          <a href="#" style="color:rgba(255,255,255,.55); text-decoration:none;">Terms of Service</a>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <!-- MODAL -->
+  <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Register / Join">
+      <div class="modal-cap" id="modalCap"></div>
+
+      <div class="modal-inner">
+        <div class="modal-top">
+          <div>
+            <h3 class="modal-title" id="modalTitle">Register</h3>
+            <p class="modal-sub" id="modalSubtitle">Fill out the form — your booking will be saved to both Checked Out and Booked.</p>
+          </div>
+          <button class="close" type="button" id="closeModal" aria-label="Close">✕</button>
+        </div>
+
+        <div class="modal-grid">
+          <!-- Form -->
+          <div class="form">
+            <div class="fg">
+              <div class="lbl">Experience</div>
+              <input class="field" id="fExperience" disabled />
+            </div>
+
+            <div class="row">
+              <div class="fg">
+                <div class="lbl">Date</div>
+                <input class="field" id="fDate" type="date" />
+              </div>
+              <div class="fg">
+                <div class="lbl">Time</div>
+                <input class="field" id="fTime" type="time" />
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="fg">
+                <div class="lbl">Guests</div>
+                <select class="field" id="fGuests">
+                  <option value="—">—</option>
+                  <option>1</option><option>2</option><option>3</option><option>4</option>
+                  <option>5</option><option>6</option><option>7</option><option>8</option>
+                  <option>9+</option>
+                </select>
+              </div>
+              <div class="fg">
+                <div class="lbl">Space</div>
+                <select class="field" id="fSpace">
+                  <option value="—">—</option>
+                  <option>Individual Pod</option>
+                  <option>Private Booth</option>
+                  <option>Communal Table</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="fg">
+                <div class="lbl">Name</div>
+                <input class="field" id="fName" placeholder="Full name" value="Kaitlyn Marie Head" />
+              </div>
+              <div class="fg">
+                <div class="lbl">Email</div>
+                <input class="field" id="fEmail" placeholder="you@email.com" value="khead4@asu.edu" />
+              </div>
+            </div>
+
+            <div class="modal-actions">
+              <button class="btn" type="button" id="cancelBtn">Cancel</button>
+
+              <!-- Confirm & Add (HTML-only “close” by navigation) -->
+              <a class="btn primary" id="saveBtn" href="booked.html">Confirm & Add</a>
+            </div>
+          </div>
+
+          <!-- Summary -->
+          <div class="summary">
+            <div class="sum-cap" id="sumCap"></div>
+            <div class="sum-body">
+              <div class="sum-h">
+                <h4>Booking Summary</h4>
+                <div class="saved" id="sumSaved">SAVED: —</div>
+              </div>
+
+              <div class="kv">
+                <div class="k">Reference</div> <div id="sumRef">—</div>
+
+                <div class="k">Experience</div> <div id="sumExp">—</div>
+                <div class="k">Date</div> <div id="sumDate">2026-02-28</div>
+                <div class="k">Time</div> <div id="sumTime">—</div>
+                <div class="k">Guests</div> <div id="sumGuests">—</div>
+                <div class="k">Space</div> <div id="sumSpace">—</div>
+                <div class="k">Name</div> <div id="sumName">Kaitlyn Marie Head</div>
+                <div class="k">Email</div> <div id="sumEmail">khead4@asu.edu</div>
+              </div>
+
+              <div style="margin-top:14px; color:rgba(255,255,255,.55); font-size:12px; line-height:1.6;">
+                This is a demo: the record is saved into localStorage arrays:
+                <span style="color:rgba(255,255,255,.78);">Checked Out</span> and
+                <span style="color:rgba(255,255,255,.78);">Booked</span>.
+              </div>
+            </div>
+          </div>
+        </div><!-- /grid -->
+      </div><!-- /inner -->
+    </div>
+  </div>
+
+  <script>
+    /* =========================
+       Storage keys (two lists)
+    ========================== */
+    const BOOKED_KEY = "botanic_bookings";          // "booked"
+    const CHECKED_OUT_KEY = "botanic_checked_out";  // "checked out"
+    const LAST_ID_KEY = "botanic_last_booking_id";
+
+    function safeJsonGet(key){
+      try { return JSON.parse(localStorage.getItem(key)) || []; }
+      catch(e){ return []; }
+    }
+    function safeJsonSet(key, val){
+      localStorage.setItem(key, JSON.stringify(val));
+    }
+    function makeId(){
+      return "BKG-" + Date.now() + "-" + Math.floor(Math.random()*1000);
+    }
+
+    /* =========================
+       Mood -> cap gradient
+    ========================== */
+    function capForMood(mood){
+      switch(String(mood || "").toLowerCase()){
+        case "focus": return getComputedStyle(document.documentElement).getPropertyValue("--g-focus").trim();
+        case "play": return getComputedStyle(document.documentElement).getPropertyValue("--g-play").trim();
+        case "connect": return getComputedStyle(document.documentElement).getPropertyValue("--g-connect").trim();
+        case "restore": return getComputedStyle(document.documentElement).getPropertyValue("--g-restore").trim();
+        case "pink": return getComputedStyle(document.documentElement).getPropertyValue("--g-pink").trim();
+        default: return getComputedStyle(document.documentElement).getPropertyValue("--g-focus").trim();
+      }
+    }
+
+    /* =========================
+       DATA (Recurring, Special, Programs)
+       - Dates are concrete so the calendar can show events
+       - Feb 14 has TWO options (your request)
+    ========================== */
+    const recurringEvents = [
+      {
+        title: "Morning Writing Circle",
+        cadence: "Every Tuesday",
+        desc: "Start your day with guided prompts and silent writing time in a focused, creative atmosphere.",
+        mood: "focus",
+        timeLabel: "8:00 AM – 10:00 AM",
+        space: "Communal Table",
+        guests: "12",
+        actionLabel: "REGISTER",
+        dates: ["2026-02-03","2026-02-10","2026-02-17","2026-02-24"]
+      },
+      {
+        title: "Wellness Wednesday",
+        cadence: "Every Wednesday",
+        desc: "Guided meditation, gentle movement, and restorative practices for midweek renewal.",
+        mood: "restore",
+        timeLabel: "6:30 PM – 8:00 PM",
+        space: "Communal Table",
+        guests: "15",
+        actionLabel: "REGISTER",
+        dates: ["2026-02-04","2026-02-11","2026-02-18","2026-02-25"]
+      },
+      {
+        title: "Game Night Fridays",
+        cadence: "Every Friday",
+        desc: "Board games, video games, and playful competition in an energized social setting.",
+        mood: "play",
+        timeLabel: "7:00 PM – 11:00 PM",
+        space: "Communal Table",
+        guests: "20",
+        actionLabel: "REGISTER",
+        dates: ["2026-02-06","2026-02-13","2026-02-20","2026-02-27"]
+      },
+      {
+        title: "Sunday Salon",
+        cadence: "Last Sunday of Month",
+        desc: "Guided conversations on meaningful topics with intentional dialogue and deep listening.",
+        mood: "connect",
+        timeLabel: "4:00 PM – 6:00 PM",
+        space: "Communal Table",
+        guests: "10",
+        actionLabel: "REGISTER",
+        dates: ["2026-02-22"]
+      }
+    ];
+
+    const specialEvents = [
+      {
+        title: "New Moon Intention Setting",
+        date: "2026-01-28",
+        timeLabel: "7:00 PM – 9:00 PM",
+        desc: "Align with lunar cycles to set intentions and elevate mood through guided reflection.",
+        mood: "pink",
+        space: "Communal Table",
+        guests: "—",
+        actionLabel: "RESERVE"
+      },
+      {
+        title: "Creative Collaboration Lab",
+        date: "2026-02-08",
+        timeLabel: "7:00 PM – 9:00 PM",
+        desc: "Bring your projects and collaborate with other creatives in a focused, supportive space.",
+        mood: "focus",
+        space: "Communal Table",
+        guests: "—",
+        actionLabel: "RESERVE"
+      },
+      {
+        title: "Valentine’s Connection Experience (Early Seating)",
+        date: "2026-02-14",
+        timeLabel: "6:00 PM – 7:15 PM",
+        desc: "A gentle connection experience designed for couples and close conversation.",
+        mood: "connect",
+        space: "Private Booth",
+        guests: "2",
+        actionLabel: "RESERVE"
+      },
+      {
+        title: "Valentine’s Connection Experience (Late Seating)",
+        date: "2026-02-14",
+        timeLabel: "7:30 PM – 10:00 PM",
+        desc: "An evening designed for deep connection through curated ambiance and shared presence.",
+        mood: "connect",
+        space: "Private Booth",
+        guests: "2",
+        actionLabel: "RESERVE"
+      },
+      {
+        title: "Sound Bath & Serum Tasting",
+        date: "2026-02-15",
+        timeLabel: "6:00 PM – 8:00 PM",
+        desc: "Experience the synergy of sound healing and curated serums for reflection and reset.",
+        mood: "restore",
+        space: "Communal Table",
+        guests: "—",
+        actionLabel: "RESERVE"
+      }
+    ];
+
+    const programs = [
+      {
+        title: "Writers Guild",
+        desc: "Monthly membership for writers seeking consistent creative space and community.",
+        bullets: ["4 sessions per month","Priority booking","10% off serums","Access to guild events"],
+        price: "£45/month",
+        mood: "focus",
+        actionLabel: "JOIN PROGRAM"
+      },
+      {
+        title: "Balance Tonic",
+        desc: "Ongoing support for those committed to mindfulness and restorative practices.",
+        bullets: ["Weekly sessions","Guided practices","Community support","Special workshops"],
+        price: "£50/month",
+        mood: "restore",
+        actionLabel: "JOIN PROGRAM"
+      },
+      {
+        title: "Creative Collective",
+        desc: "For artists, designers, and makers who want dedicated workspace and collaboration.",
+        bullets: ["Flexible hours","Project space","Networking events","Exhibition opportunities"],
+        price: "£60/month",
+        mood: "connect",
+        actionLabel: "JOIN PROGRAM"
+      }
+    ];
+
+    /* =========================
+       Render: Recurring / Special / Programs
+    ========================== */
+    const recurringGrid = document.getElementById("recurringGrid");
+    const specialGrid = document.getElementById("specialGrid");
+    const programGrid = document.getElementById("programGrid");
+
+    function makeCard({ title, desc, mood, metaLines, actionLabel, onClick }){
+      const el = document.createElement("article");
+      el.className = "card";
+
+      const cap = document.createElement("div");
+      cap.className = "cap";
+      cap.style.background = capForMood(mood);
+
+      const body = document.createElement("div");
+      body.className = "card-body";
+      body.innerHTML = `
+        <h4>${title}</h4>
+        <p class="small">${desc}</p>
+        <div class="meta">${metaLines}</div>
+      `;
+
+      const footer = document.createElement("div");
+      footer.className = "card-footer";
+
+      const chip = document.createElement("div");
+      chip.className = "chip";
+      chip.innerHTML = `<span class="dot" style="background:${capForMood(mood)}"></span><span>${String(mood).toUpperCase()}</span>`;
+
+      const btn = document.createElement("button");
+      btn.className = "btn";
+      btn.type = "button";
+      btn.textContent = actionLabel;
+      btn.addEventListener("click", onClick);
+
+      footer.appendChild(chip);
+      footer.appendChild(btn);
+
+      el.appendChild(cap);
+      el.appendChild(body);
+      el.appendChild(footer);
+      return el;
+    }
+
+    recurringEvents.forEach(ev => {
+      const meta = `${ev.cadence}\n\n${ev.timeLabel}\n${ev.guests} people`;
+      recurringGrid.appendChild(
+        makeCard({
+          title: ev.title,
+          desc: ev.desc,
+          mood: ev.mood,
+          metaLines: meta,
+          actionLabel: ev.actionLabel,
+          onClick: () => openModal({
+            kind: "recurring",
+            mood: ev.mood,
+            title: ev.title,
+            date: ev.dates?.[0] || "2026-02-28",
+            timeLabel: ev.timeLabel,
+            space: ev.space,
+            defaultGuests: ev.guests,
+            actionLabel: ev.actionLabel
+          })
+        })
+      );
+    });
+
+    specialEvents.forEach(ev => {
+      const meta = `${ev.date}\n${ev.timeLabel}`;
+      specialGrid.appendChild(
+        makeCard({
+          title: ev.title,
+          desc: ev.desc,
+          mood: ev.mood,
+          metaLines: meta,
+          actionLabel: ev.actionLabel,
+          onClick: () => openModal({
+            kind: "special",
+            mood: ev.mood,
+            title: ev.title,
+            date: ev.date,
+            timeLabel: ev.timeLabel,
+            space: ev.space,
+            defaultGuests: ev.guests,
+            actionLabel: ev.actionLabel
+          })
+        })
+      );
+    });
+
+    programs.forEach(p => {
+      const meta = p.bullets.map(b => `• ${b}`).join("\n");
+      const card = makeCard({
+        title: p.title,
+        desc: p.desc,
+        mood: p.mood,
+        metaLines: `${meta}\n\n${p.price}`,
+        actionLabel: p.actionLabel,
+        onClick: () => openModal({
+          kind: "program",
+          mood: p.mood,
+          title: p.title + " — Membership",
+          date: "2026-02-28",
+          timeLabel: "—",
+          space: "—",
+          defaultGuests: "—",
+          actionLabel: "JOIN"
+        })
+      });
+      card.classList.add("program");
+      programGrid.appendChild(card);
+    });
+
+    /* =========================
+       Calendar: Build events list
+    ========================== */
+    function expandRecurringToCalendar(){
+      const items = [];
+      recurringEvents.forEach(ev => {
+        (ev.dates || []).forEach(d => {
+          items.push({
+            title: ev.title,
+            date: d,
+            timeLabel: ev.timeLabel,
+            mood: ev.mood,
+            space: ev.space,
+            guests: ev.guests,
+            actionLabel: ev.actionLabel,
+            kind: "recurring"
+          });
+        });
+      });
+      return items;
+    }
+
+    const calendarEvents = [
+      ...expandRecurringToCalendar(),
+      ...specialEvents.map(s => ({
+        title: s.title,
+        date: s.date,
+        timeLabel: s.timeLabel,
+        mood: s.mood,
+        space: s.space,
+        guests: s.guests,
+        actionLabel: s.actionLabel,
+        kind: "special"
+      }))
+    ];
+
+    function eventsForMonth(year, monthIndex){
+      const ym = `${year}-${String(monthIndex+1).padStart(2,"0")}`;
+      return calendarEvents.filter(e => String(e.date || "").startsWith(ym));
+    }
+
+    /* =========================
+       Calendar UI
+    ========================== */
+    const monthLabel = document.getElementById("monthLabel");
+    const daysEl = document.getElementById("days");
+    const agendaSub = document.getElementById("agendaSub");
+    const agendaList = document.getElementById("agendaList");
+
+    let viewYear = 2026;
+    let viewMonth = 1; // February
+    let selectedDateISO = "2026-02-14";
+
+    function monthName(y, m){
+      const d = new Date(y, m, 1);
+      const name = d.toLocaleString(undefined, { month: "long" }).toUpperCase();
+      return `${name} ${y}`;
+    }
+    function daysInMonth(y, m){ return new Date(y, m+1, 0).getDate(); }
+    function firstDow(y, m){ return new Date(y, m, 1).getDay(); }
+
+    function parseStartMinutes(timeRange){
+      if(!timeRange || timeRange === "—") return 99999;
+      const start = timeRange.split("–")[0].split("-")[0].trim();
+      const parts = start.split(" ");
+      if(parts.length < 2) return 99999;
+
+      const clock = parts[0];
+      const ampm = parts[1].toUpperCase();
+      const [hhRaw, mmRaw] = clock.split(":");
+      let hh = parseInt(hhRaw, 10);
+      const mm = parseInt(mmRaw || "0", 10);
+      if(Number.isNaN(hh) || Number.isNaN(mm)) return 99999;
+
+      if(ampm === "PM" && hh !== 12) hh += 12;
+      if(ampm === "AM" && hh === 12) hh = 0;
+      return hh * 60 + mm;
+    }
+
+    function renderAgenda(){
+      const monthEvents = eventsForMonth(viewYear, viewMonth);
+      let todays = monthEvents.filter(e => e.date === selectedDateISO);
+      todays = todays.sort((a,b) => parseStartMinutes(a.timeLabel) - parseStartMinutes(b.timeLabel));
+
+      agendaSub.textContent = `Selected date: ${selectedDateISO}`;
+      agendaList.innerHTML = "";
+
+      if(todays.length === 0){
+        const empty = document.createElement("div");
+        empty.style.color = "rgba(255,255,255,.55)";
+        empty.style.fontSize = "12px";
+        empty.style.lineHeight = "1.7";
+        empty.innerHTML = `No events scheduled for this date.<br><br>Try another day, or use “Book Now” to reserve an experience.`;
+        agendaList.appendChild(empty);
+        return;
+      }
+
+      todays.forEach(e => {
+        const item = document.createElement("div");
+        item.className = "agenda-item";
+        item.innerHTML = `
+          <div class="agenda-cap" style="background:${capForMood(e.mood)}"></div>
+          <div class="agenda-body">
+            <div class="t">${e.title}</div>
+            <div class="m">${e.timeLabel || "—"}</div>
+            <div class="meta">Mood: ${e.mood} · Space: ${e.space || "—"}</div>
+            <button class="btn">${e.actionLabel || "REGISTER"}</button>
+          </div>
+        `;
+
+        item.querySelector("button").addEventListener("click", () => {
+          openModal({
+            kind: e.kind,
+            mood: e.mood,
+            title: e.title,
+            date: e.date,
+            timeLabel: e.timeLabel,
+            space: e.space || "—",
+            defaultGuests: e.guests || "—",
+            actionLabel: e.actionLabel || "REGISTER"
+          });
+        });
+
+        agendaList.appendChild(item);
+      });
+    }
+
+    function renderCalendar(){
+      monthLabel.textContent = monthName(viewYear, viewMonth);
+      daysEl.innerHTML = "";
+
+      const start = firstDow(viewYear, viewMonth);
+      const total = daysInMonth(viewYear, viewMonth);
+      const monthEvents = eventsForMonth(viewYear, viewMonth);
+
+      const cells = 42;
+      let dayNum = 1 - start;
+
+      for(let i=0; i<cells; i++){
+        const cellDate = new Date(viewYear, viewMonth, dayNum);
+        const inMonth = cellDate.getMonth() === viewMonth;
+        const iso = `${cellDate.getFullYear()}-${String(cellDate.getMonth()+1).padStart(2,"0")}-${String(cellDate.getDate()).padStart(2,"0")}`;
+
+        const box = document.createElement("div");
+        box.className = "day" + (inMonth ? "" : " muted");
+        box.innerHTML = `<div class="n">${cellDate.getDate()}</div><div class="dots"></div>`;
+
+        const todays = monthEvents.filter(e => e.date === iso);
+        const dotsWrap = box.querySelector(".dots");
+        todays.forEach(e => {
+          const d = document.createElement("span");
+          d.className = "edot";
+          d.style.background = capForMood(e.mood);
+          dotsWrap.appendChild(d);
+        });
+
+        if(inMonth && iso === selectedDateISO){
+          box.classList.add("is-selected");
+        }
+
+        if(inMonth){
+          box.addEventListener("click", () => {
+            selectedDateISO = iso;
+            renderCalendar();
+            renderAgenda();
+          });
+        }
+
+        daysEl.appendChild(box);
+        dayNum++;
+      }
+
+      const ym = `${viewYear}-${String(viewMonth+1).padStart(2,"0")}`;
+      if(!String(selectedDateISO).startsWith(ym)){
+        selectedDateISO = `${ym}-01`;
+      }
+
+      renderAgenda();
+    }
+
+    document.getElementById("prevMonth").addEventListener("click", () => {
+      viewMonth--;
+      if(viewMonth < 0){ viewMonth = 11; viewYear--; }
+      renderCalendar();
+    });
+    document.getElementById("nextMonth").addEventListener("click", () => {
+      viewMonth++;
+      if(viewMonth > 11){ viewMonth = 0; viewYear++; }
+      renderCalendar();
+    });
+
+    /* =========================
+       Modal logic
+    ========================== */
+    const modalBackdrop = document.getElementById("modalBackdrop");
+    const modalCap = document.getElementById("modalCap");
+    const sumCap = document.getElementById("sumCap");
+    const modalTitle = document.getElementById("modalTitle");
+
+    const fExperience = document.getElementById("fExperience");
+    const fDate = document.getElementById("fDate");
+    const fTime = document.getElementById("fTime");
+    const fGuests = document.getElementById("fGuests");
+    const fSpace = document.getElementById("fSpace");
+    const fName = document.getElementById("fName");
+    const fEmail = document.getElementById("fEmail");
+
+    const sumSaved = document.getElementById("sumSaved");
+    const sumRef = document.getElementById("sumRef");
+    const sumExp = document.getElementById("sumExp");
+    const sumDate = document.getElementById("sumDate");
+    const sumTime = document.getElementById("sumTime");
+    const sumGuests = document.getElementById("sumGuests");
+    const sumSpace = document.getElementById("sumSpace");
+    const sumName = document.getElementById("sumName");
+    const sumEmail = document.getElementById("sumEmail");
+
+    let modalContext = null;
+
+    function toTimeInput(timeLabel){
+      if(!timeLabel || timeLabel === "—") return "";
+      const start = timeLabel.split("–")[0].split("-")[0].trim();
+      const parts = start.split(" ");
+      if(parts.length < 2) return "";
+      const clock = parts[0];
+      const ampm = parts[1].toUpperCase();
+      let [hh, mm] = clock.split(":");
+      let h = parseInt(hh, 10);
+      let m = parseInt(mm || "0", 10);
+      if(Number.isNaN(h) || Number.isNaN(m)) return "";
+      if(ampm === "PM" && h !== 12) h += 12;
+      if(ampm === "AM" && h === 12) h = 0;
+      return `${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}`;
+    }
+
+    function openModal(ctx){
+      modalContext = ctx;
+
+      modalCap.style.background = capForMood(ctx.mood);
+      sumCap.style.background = capForMood(ctx.mood);
+
+      modalTitle.textContent = (String(ctx.actionLabel || "REGISTER").toUpperCase() === "JOIN") ? "Join Program" : "Register / Reserve";
+
+      fExperience.value = ctx.title || "—";
+      fDate.value = (ctx.date && /^\d{4}-\d{2}-\d{2}$/.test(ctx.date)) ? ctx.date : "2026-02-28";
+      fTime.value = toTimeInput(ctx.timeLabel || "—");
+
+      const g = String(ctx.defaultGuests ?? "—");
+      fGuests.value = Array.from(fGuests.options).some(o => o.value === g || o.textContent === g) ? g : "—";
+
+      const s = String(ctx.space ?? "—");
+      fSpace.value = Array.from(fSpace.options).some(o => o.value === s || o.textContent === s) ? s : "—";
+
+      sumSaved.textContent = "SAVED: —";
+      sumRef.textContent = "—";
+      sumExp.textContent = fExperience.value || "—";
+      sumDate.textContent = fDate.value || "2026-02-28";
+      sumTime.textContent = fTime.value ? fTime.value : "—";
+      sumGuests.textContent = fGuests.value || "—";
+      sumSpace.textContent = fSpace.value || "—";
+      sumName.textContent = fName.value || "Kaitlyn Marie Head";
+      sumEmail.textContent = fEmail.value || "khead4@asu.edu";
+
+      fDate.oninput = () => sumDate.textContent = fDate.value || "2026-02-28";
+      fTime.oninput = () => sumTime.textContent = fTime.value || "—";
+      fGuests.onchange = () => sumGuests.textContent = fGuests.value || "—";
+      fSpace.onchange = () => sumSpace.textContent = fSpace.value || "—";
+      fName.oninput = () => sumName.textContent = fName.value || "—";
+      fEmail.oninput = () => sumEmail.textContent = fEmail.value || "—";
+
+      modalBackdrop.classList.add("is-on");
+      modalBackdrop.setAttribute("aria-hidden", "false");
+    }
+
+    function closeModal(){
+      modalBackdrop.classList.remove("is-on");
+      modalBackdrop.setAttribute("aria-hidden", "true");
+      modalContext = null;
+    }
+
+    document.getElementById("closeModal").addEventListener("click", closeModal);
+    document.getElementById("cancelBtn").addEventListener("click", closeModal);
+    modalBackdrop.addEventListener("click", (e) => {
+      if(e.target === modalBackdrop) closeModal();
+    });
+    document.addEventListener("keydown", (e) => {
+      if(e.key === "Escape" && modalBackdrop.classList.contains("is-on")) closeModal();
+    });
+
+    document.getElementById("saveBtn").addEventListener("click", () => {
+      const booking = {
+        id: makeId(),
+        createdAt: new Date().toISOString(),
+        reference: null,
+        experience: fExperience.value || "—",
+        date: fDate.value || "2026-02-28",
+        time: fTime.value || "—",
+        guests: fGuests.value || "—",
+        space: fSpace.value || "—",
+        name: fName.value || "—",
+        email: fEmail.value || "—",
+        mood: modalContext?.mood || "focus",
+        kind: modalContext?.kind || "event"
+      };
+      booking.reference = booking.id;
+
+      const bookedList = safeJsonGet(BOOKED_KEY);
+      bookedList.push(booking);
+      safeJsonSet(BOOKED_KEY, bookedList);
+
+      const cartList = safeJsonGet(CHECKED_OUT_KEY);
+      cartList.push({
+        id: booking.id,
+        createdAt: booking.createdAt,
+        experience: booking.experience,
+        date: booking.date,
+        time: booking.time,
+        guests: booking.guests,
+        space: booking.space,
+        name: booking.name,
+        email: booking.email,
+        mood: booking.mood,
+        kind: booking.kind
+      });
+      safeJsonSet(CHECKED_OUT_KEY, cartList);
+
+      localStorage.setItem(LAST_ID_KEY, booking.id);
+
+      sumSaved.textContent = "SAVED: YES";
+      sumRef.textContent = booking.id;
+      sumExp.textContent = booking.experience;
+      sumDate.textContent = booking.date;
+      sumTime.textContent = booking.time;
+      sumGuests.textContent = booking.guests;
+      sumSpace.textContent = booking.space;
+      sumName.textContent = booking.name;
+      sumEmail.textContent = booking.email;
+    });
+
+    renderCalendar();
+  </script>
+</body>
+</html>
