@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Botanic Elixir — Connect</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@350;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      /* ===== Core theme ===== */
+      --bg:#000;
+      --panel: rgba(255,255,255,.04);
+      --panel2: rgba(255,255,255,.06);
+      --border: rgba(255,255,255,.10);
+      --border2: rgba(255,255,255,.14);
+      --ink: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.64);
+      --soft: rgba(255,255,255,.12);
+      --shadow: 0 18px 60px rgba(0,0,0,.45);
+
+      /* Mood gradients */
+      --g-focus: linear-gradient(90deg, #2a9bd8, #3a64ff);
+      --g-play: linear-gradient(90deg, #f0b35a, #a8a3ff);
+      --g-connect: linear-gradient(90deg, #ff5cc8, #9b63ff);
+      --g-restore: linear-gradient(90deg, #6bf08b, #45d8d1);
+      --g-pink: linear-gradient(90deg, #ff5cc8, #ff8adf);
+
+      /* Buttons */
+      --btn: rgba(255,255,255,.06);
+      --btnHover: rgba(255,255,255,.10);
+      --btnPrimary: rgba(255,255,255,.90);
+      --btnPrimaryInk: rgba(0,0,0,.85);
+
+      /* Layout */
+      --max: 1320px;
+      --content: 1100px;
+      --radius: 18px;
+
+      /* Type scale (more variation / easier scanning) */
+      --h1: clamp(2.25rem, 2.6vw, 3.25rem);
+      --h2: clamp(1.3rem, 1.45vw, 1.75rem);
+      --h3: 0.85rem;
+      --p: 1rem;
+      --small: 0.92rem;
+
+      --tight: 1.45;
+      --bodyLH: 1.85;
+    }
+
+    *{ box-sizing:border-box; }
+    html, body{ height:100%; }
+    body{
+      margin:0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Inter", Arial, Helvetica, sans-serif;
+      letter-spacing: 0.01em;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* =========================================================
+       UNIVERSAL NAV 
+       ========================================================= */
+    .topline{
+      position: fixed;
+      top:0; left:0; right:0;
+      z-index: 100;
+
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      background: rgba(0,0,0,0.38);
+      border-bottom: 1px solid rgba(255,255,255,.12);
+
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 18px;
+      padding: 0.65rem 1.75rem; /* slim */
+    }
+
+    .brand{
+      color:#fff;
+      text-decoration:none;
+      font-size:.78rem;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      line-height:1.1;
+      white-space:nowrap;
+      opacity:.92;
+    }
+    .brand span{
+      display:block;
+      opacity:.68;
+      margin-top:4px;
+      letter-spacing:.12em;
+      font-size:.70rem;
+    }
+
+    .top-links{
+      display:flex;
+      gap: 22px;
+      align-items:center;
+      flex-wrap:wrap;
+      justify-content:center;
+      min-width: 0;
+    }
+    .top-links > a,
+    .top-links .drop-trigger{
+      color: rgba(255,255,255,.76);
+      text-decoration:none;
+      font-size: .80rem;
+      letter-spacing: .10em;
+      text-transform: uppercase;
+      padding: 8px 6px;
+      transition: color .18s ease, text-shadow .18s ease;
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+    .top-links > a:hover,
+    .top-links .drop-trigger:hover{
+      color:#fff;
+      text-shadow: 0 0 14px rgba(255,255,255,.16);
+    }
+    .top-links > a.active{
+      color:#fff;
+      font-weight:700;
+    }
+
+    .right-controls{
+      display:flex;
+      align-items:center;
+      gap: 18px;
+    }
+
+    .icon-link{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap: 4px;
+      text-decoration:none;
+      color: rgba(255,255,255,.76);
+      font-size: .60rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      transition: .18s;
+      user-select:none;
+      min-width: 68px;
+    }
+    .icon-link svg{
+      width: 22px;
+      height: 22px;
+      stroke:#fff;
+      fill:none;
+      stroke-width: 1.6;
+      opacity: .84;
+      transition: .18s;
+    }
+    .icon-link:hover{
+      color:#fff;
+      text-shadow: 0 0 14px rgba(255,255,255,.18);
+    }
+    .icon-link:hover svg{
+      opacity: 1;
+      transform: translateY(-2px);
+      filter: drop-shadow(0 0 10px rgba(255,255,255,.18));
+    }
+
+    /* dropdown base */
+    .dropdown{
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+    }
+    .dropdown-panel{
+      position:absolute;
+      top: 120%;
+      left: 0;
+      background: rgba(0,0,0,.86);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 14px;
+      padding: 10px 0;
+      min-width: 190px;
+
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(6px);
+      transition: .18s;
+      z-index: 999;
+    }
+    .dropdown:hover .dropdown-panel{
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+    .dropdown-panel a{
+      display:block;
+      padding: 10px 16px;
+      color: rgba(255,255,255,.82);
+      text-decoration:none;
+      font-size: .75rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .dropdown-panel a:hover{
+      background: rgba(255,255,255,.08);
+      color: #fff;
+    }
+
+    /* icon dropdown aligns to right edge */
+    .icon-dropdown .dropdown-panel{
+      right: 0;
+      left: auto;
+      min-width: 185px;
+    }
+
+    .caret{
+      width: 10px;
+      height: 10px;
+      display:inline-block;
+      border-right: 2px solid rgba(255,255,255,.70);
+      border-bottom: 2px solid rgba(255,255,255,.70);
+      transform: rotate(45deg);
+      margin-top: -2px;
+      transition: .18s;
+      opacity: .85;
+    }
+    .dropdown:hover .caret{
+      opacity: 1;
+      border-color:#fff;
+    }
+
+    /* =========================================================
+       PAGE LAYOUT 
+       ========================================================= */
+    main{
+      max-width: var(--content);
+      margin: 0 auto;
+      padding: 96px 22px 120px; /* accounts for fixed nav; controlled spacing */
+    }
+
+    /* ===== HERO (more typographic variation) ===== */
+    .hero{
+      text-align:center;
+      padding: 10px 0 18px;
+    }
+    .kicker{
+      margin: 0 0 14px;
+      font-size: .78rem;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.70);
+    }
+    .hero h1{
+      margin: 0 0 14px;
+      font-size: var(--h1);
+      letter-spacing: .20em;
+      text-transform: uppercase;
+      font-weight: 560;
+      line-height: 1.1;
+    }
+    .lead{
+      margin: 0 auto 14px;
+      max-width: 880px;
+      color: rgba(255,255,255,.74);
+      font-size: 1.05rem;
+      line-height: 1.85;
+    }
+    .hero-note{
+      margin: 0 auto;
+      max-width: 920px;
+      color: rgba(255,255,255,.58);
+      font-size: .95rem;
+      line-height: 1.8;
+    }
+
+    .rule{
+      height: 1px;
+      background: rgba(255,255,255,.08);
+      margin: 44px 0;
+    }
+
+    /* ===== Section headers  ===== */
+    .section-head{
+      text-align:center;
+      max-width: 920px;
+      margin: 0 auto 22px;
+    }
+    .h2{
+      font-size: var(--h2);
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      margin: 0 0 10px;
+      font-weight: 650;
+      line-height: 1.25;
+    }
+    .sub{
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: var(--small);
+      line-height: 1.85;
+    }
+
+    /* ===== Small link cards ===== */
+    .gridCards{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    .mini{
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      min-height: 168px;
+      transition: transform .12s ease, border-color .18s ease, background .18s ease;
+    }
+    .mini:hover{
+      transform: translateY(-2px);
+      border-color: rgba(255,255,255,.18);
+      background: rgba(255,255,255,.055);
+    }
+    .mini .cap{ height: 6px; background: var(--g-focus); }
+    .mini .body{ padding: 14px 14px 14px; }
+    .mini h4{
+      margin:0 0 10px;
+      font-size: var(--h3);
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      font-weight: 750;
+      color: rgba(255,255,255,.94);
+      line-height: 1.25;
+    }
+    .mini p{
+      margin:0;
+      color: rgba(255,255,255,.74);
+      font-size: .92rem;
+      line-height: 1.75;
+    }
+    .mini .meta{
+      margin-top: 10px;
+      color: rgba(255,255,255,.58);
+      font-size: .82rem;
+      line-height: 1.55;
+      white-space: pre-line;
+    }
+    .mini .foot{
+      padding: 12px 14px 14px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap: 10px;
+      margin-top:auto;
+    }
+    .mini a{
+      color: rgba(255,255,255,.86);
+      text-decoration:none;
+      font-size: .78rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+    .mini a:hover{ color:#fff; text-shadow: 0 0 12px rgba(255,255,255,.16); }
+
+    /* ===== Body blocks with improved density (two-column at wide) ===== */
+    .content-split{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 18px;
+      max-width: 980px;
+      margin: 0 auto;
+      align-items:start;
+    }
+    .story{
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      padding: 22px;
+      color: rgba(255,255,255,.78);
+      font-size: 1rem;
+      line-height: 2.0;
+    }
+    .sidecard{
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.45);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      padding: 18px 18px 16px;
+    }
+    .sidecard .st{
+      margin: 0 0 10px;
+      font-size: .78rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.78);
+      font-weight: 650;
+    }
+    .sidecard .li{
+      margin: 0;
+      padding-left: 16px;
+      color: rgba(255,255,255,.70);
+      font-size: .92rem;
+      line-height: 1.8;
+    }
+    .sidecard .li li{ margin: 8px 0; }
+
+    /* ===== Philosophy banner ===== */
+    .philo{
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 16px;
+      background: rgba(0,0,0,.55);
+      box-shadow: var(--shadow);
+      padding: 28px 22px;
+      max-width: 980px;
+      margin: 0 auto;
+    }
+    .philo .kicker2{
+      font-size: .78rem;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.80);
+      margin-bottom: 10px;
+      text-align:center;
+      font-weight: 650;
+    }
+    .philo .copy{
+      color: rgba(255,255,255,.72);
+      font-size: 1rem;
+      line-height: 1.95;
+      text-align:center;
+      max-width: 860px;
+      margin: 0 auto 14px;
+    }
+
+    .nl-form{
+      display:flex;
+      gap: 10px;
+      justify-content:center;
+      flex-wrap:wrap;
+      margin-top: 12px;
+    }
+    .input{
+      min-width: 320px;
+      flex: 1;
+      max-width: 540px;
+      height: 48px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      color: var(--ink);
+      padding: 0 14px;
+      outline:none;
+      font-size: 1rem;
+    }
+    .input::placeholder{ color: rgba(255,255,255,.45); }
+
+    .btn{
+      border: 1px solid rgba(255,255,255,.14);
+      background: var(--btn);
+      color: rgba(255,255,255,.90);
+      padding: 12px 18px;
+      border-radius: 999px;
+      cursor:pointer;
+      font-size: .82rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      user-select:none;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      height: 48px;
+      white-space: nowrap;
+    }
+    .btn:hover{ background: var(--btnHover); }
+    .btn.primary{
+      background: var(--btnPrimary);
+      color: var(--btnPrimaryInk);
+      border-color: rgba(255,255,255,0);
+      font-weight: 800;
+    }
+    .btn.primary:hover{ filter: brightness(.96); }
+
+    /* ===== CTA row ===== */
+    .grid3{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    /* ===== Team cards ===== */
+    .gridTeam{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      max-width: 980px;
+      margin: 0 auto;
+    }
+    .role{
+      margin: 8px 0 10px;
+      color: rgba(255,255,255,.64);
+      font-size: .80rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      line-height: 1.4;
+    }
+
+    /* ===== Vision ===== */
+    .vision{
+      max-width: 920px;
+      margin: 0 auto;
+      text-align:center;
+      color: rgba(255,255,255,.78);
+      font-size: 1rem;
+      line-height: 2.0;
+    }
+    .vision strong{ color: rgba(255,255,255,.95); }
+
+    /* ===== Footer ===== */
+    footer{
+      margin-top: 64px;
+      border-top: 1px solid rgba(255,255,255,.06);
+      padding: 26px 0 0;
+      color: rgba(255,255,255,.55);
+      font-size: .9rem;
+    }
+    .foot-grid{
+      display:grid;
+      grid-template-columns: 1.1fr 1fr 1fr;
+      gap: 18px;
+      align-items:start;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .foot h5{
+      margin:0 0 10px;
+      font-size: .78rem;
+      letter-spacing:.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.72);
+      font-weight: 750;
+    }
+    .foot a{
+      color: rgba(255,255,255,.55);
+      text-decoration:none;
+      display:inline-block;
+      margin: 6px 0;
+    }
+    .foot a:hover{ color: rgba(255,255,255,.85); }
+
+    /* ===== Subscribe Popup ===== */
+    .popup-backdrop{
+      position: fixed;
+      inset:0;
+      background: rgba(0,0,0,.65);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 18px;
+      z-index: 250;
+    }
+    .popup-backdrop.is-on{ display:flex; }
+    .popup{
+      width: min(560px, 100%);
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(10,12,15,.96);
+      box-shadow: 0 30px 90px rgba(0,0,0,.60);
+      overflow:hidden;
+    }
+    .popup-cap{ height: 8px; background: var(--g-pink); }
+    .popup-inner{ padding: 18px 18px 16px; }
+    .popup-top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 12px;
+    }
+    .popup-title{
+      margin: 0;
+      font-size: .90rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      font-weight: 750;
+    }
+    .popup-sub{
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: .95rem;
+      line-height: 1.6;
+    }
+    .close{
+      width: 44px; height: 42px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      color: rgba(255,255,255,.85);
+      cursor:pointer;
+      font-size: 18px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .close:hover{ background: rgba(255,255,255,.08); }
+    .popup-actions{
+      display:flex;
+      justify-content:flex-end;
+      gap: 10px;
+      margin-top: 14px;
+      flex-wrap:wrap;
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 1100px){
+      .gridCards{ grid-template-columns: repeat(2, 1fr); }
+      .gridTeam{ grid-template-columns: repeat(2, 1fr); }
+      .grid3{ grid-template-columns: 1fr; }
+      .content-split{ grid-template-columns: 1fr; }
+    }
+    @media (max-width: 740px){
+      .top-links{ display:none; }
+      .right-controls{ gap: 14px; }
+      .icon-link{ min-width: 64px; }
+      main{ padding: 92px 18px 100px; }
+      .gridCards{ grid-template-columns: 1fr; }
+      .gridTeam{ grid-template-columns: 1fr; }
+      .input{ min-width: 240px; }
+    }
+
+    /* Accessibility: reduce motion */
+    @media (prefers-reduced-motion: reduce){
+      *{ scroll-behavior:auto !important; transition:none !important; animation:none !important; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ===== UNIVERSAL NAV ===== -->
+  <header class="topline">
+    <a class="brand" href="index.html">
+      BOTANIC ELIXIR<br><span>adaptive café</span>
+    </a>
+
+    <nav class="top-links" aria-label="Main">
+      <a href="experiences.html">Experiences</a>
+      <a href="how-it-works.html">How It Works</a>
+      <a href="menu.html">Menu</a>
+      <a class="active" href="connect.html">Connect</a>
+      <a href="contact.html">Contact</a>
+
+      <!-- ABOUT DROPDOWN -->
+      <div class="dropdown">
+        <a class="drop-trigger" href="#" aria-haspopup="true" aria-expanded="false">
+          ABOUT <span class="caret" aria-hidden="true"></span>
+        </a>
+        <div class="dropdown-panel" role="menu" aria-label="About submenu">
+          <a href="about.html" role="menuitem">About Us</a>
+          <a href="community.html" role="menuitem">Connect</a>
+          <a href="learn-more.html" role="menuitem">Learn More</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="right-controls">
+      <!-- BAG -->
+      <a class="icon-link" href="bag.html" aria-label="Go to bag">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6 7h12l-1 13H7L6 7z"/>
+          <path d="M9 7a3 3 0 0 1 6 0"/>
+        </svg>
+        BAG
+      </a>
+
+      <!-- BOOKINGS -->
+      <a class="icon-link" href="booked.html" aria-label="Go to bookings">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 4h16v16H4z"/>
+          <path d="M8 2v4M16 2v4M4 10h16"/>
+        </svg>
+        BOOKINGS
+      </a>
+
+      <!-- INQUIRIES (icon + label + dropdown) -->
+      <div class="dropdown icon-dropdown" aria-label="Inquiries menu">
+        <a class="icon-link" href="#" aria-label="Open inquiries options">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="7" r="4"/>
+            <path d="M4 21c1.5-4 14.5-4 16 0"/>
+          </svg>
+          INQUIRIES
+        </a>
+
+        <div class="dropdown-panel" role="menu" aria-label="Inquiries submenu">
+          <a href="book-consultation.html" role="menuitem">Consultation</a>
+          <a href="hiring.html" role="menuitem">Hiring</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- HERO -->
+    <section class="hero">
+      <p class="kicker">COMMUNITY / RITUAL / CONTACT</p><br><br>
+      <h1>CONNECT</h1><br><br>
+     <h2> <p class="lead">
+        Botanic Elixir is an adaptive café designed to support focus, restoration, play, and connection —
+        through space, ritual, and community.<br>
+      </p></h2><br>
+      <p class="hero-note">
+        Use this page as a map: scan the cards for quick navigation, then drop into deeper sections when you want context.
+      </p>
+    </section>
+
+    <div class="rule"></div>
+
+    <!-- QUICK SECTIONS -->
+    <section>
+      <div class="section-head">
+        <div class="h2">EXPLORE THE EXPERIENCE</div><br>
+        <p class="sub">
+          Quick links for first-time visitors — then deeper blocks for story, values, philosophy, and team.
+        </p><br>
+      </div><br><br>
+
+      <div class="gridCards">
+        <article class="mini">
+          <div class="cap" style="background: var(--g-connect);"></div>
+          <div class="body">
+            <h4>Our Story</h4><br>
+            <p>Why Botanic Elixir exists — and what we’re building.</p><br>
+            <div class="meta">Origin • Design Intent • Community</div>
+          </div>
+          <div class="foot"><a href="#story">Explore →</a></div>
+        </article>
+
+        <article class="mini">
+          <div class="cap" style="background: var(--g-focus);"></div>
+          <div class="body">
+            <h4>Our Values</h4><br>
+            <p>The principles that guide every experience and decision.</p><br>
+            <div class="meta">Clarity • Care • Craft</div>
+          </div>
+          <div class="foot"><a href="#values">Explore →</a></div>
+        </article>
+
+        <article class="mini">
+          <div class="cap" style="background: var(--g-restore);"></div>
+          <div class="body">
+            <h4>Our Philosophy</h4><br>
+            <p>How environment shapes attention, emotion, and behavior.</p><br>
+            <div class="meta">Presence • Ritual • Regulation</div>
+          </div>
+          <div class="foot"><a href="#philosophy">Explore →</a></div>
+        </article>
+
+        <article class="mini">
+          <div class="cap" style="background: var(--g-pink);"></div>
+          <div class="body">
+            <h4>Our Team</h4><br>
+            <p>The people behind the space, events, and operations.</p><br>
+            <div class="meta">Design • Events • Community</div>
+          </div>
+          <div class="foot"><a href="#team">Explore →</a></div>
+        </article>
+
+        <article class="mini">
+          <div class="cap" style="background: var(--g-play);"></div>
+          <div class="body">
+            <h4>Book Experience</h4><br>
+            <p>Reserve a mood-aligned space or guided experience.</p><br>
+            <div class="meta">Focus Pods • Booths • Rituals</div>
+          </div>
+          <div class="foot"><a href="bookings.html">Book Now →</a></div>
+        </article>
+
+        <article class="mini">
+          <div class="cap" style="background: var(--g-connect);"></div>
+          <div class="body">
+            <h4>Community &amp; Events</h4><br>
+            <p>Weekly gatherings, special events, and programs.</p><br>
+            <div class="meta">Salons • Labs • Circles</div>
+          </div>
+          <div class="foot"><a href="community.html#calendar">Explore →</a></div>
+        </article>
+
+        <article class="mini">
+          <div class="cap" style="background: var(--g-restore);"></div>
+          <div class="body">
+            <h4>Contact &amp; Location</h4><br>
+            <p>Hours, address, and how to reach us.</p><br>
+            <div class="meta">Visit • Message • Collaborate</div>
+          </div>
+          <div class="foot"><a href="contact.html#contact">Explore →</a></div>
+        </article>
+
+        <article class="mini">
+          <div class="cap" style="background: var(--g-focus);"></div>
+          <div class="body">
+            <h4>Careers</h4><br>
+            <p>Join the team shaping adaptive experiences.</p><br>
+            <div class="meta">Events • Service • Design</div>
+          </div>
+          <div class="foot"><a href="#careers">Explore →</a></div>
+        </article>
+      </div>
+    </section>
+
+    <div class="rule"></div>
+
+    <!-- OUR STORY (split density: main text + side bullets) -->
+    <section id="story">
+      <div class="section-head">
+        <div class="h2">OUR STORY</div><br>
+        <p class="sub">
+          Botanic Elixir began as a question: what if the space supported your intention — instead of fighting it?
+        </p>
+      </div><br>
+
+      <div class="content-split">
+        <div class="story">
+         <br> <p style="margin:0 0 14px;">
+            Botanic Elixir was created for people who move through multiple inner states in a single day —
+            deep focus, quiet restoration, playful energy, meaningful connection.
+          </p><br>
+          <p style="margin:0 0 14px;">
+            Most cafés optimize for speed and sameness. We designed for presence. The environment is a tool:
+            lighting, texture, sound, and layout work together to support how you want to feel and what you want to do.
+          </p>
+          <p style="margin:0 0 14px;">
+            We combine experiential design, environmental psychology, and botanical rituals to help people access clarity,
+            calm, curiosity, and community — without performance pressure.
+          </p>
+          <p style="margin:0;">
+            Located in Shoreditch, London, Botanic Elixir is both a café and a community system:
+            a place to work, reset, play, and return to yourself.
+          </p>
+        </div>
+
+        <aside class="sidecard" aria-label="Story highlights">
+          <h2><div class="st">AT A GLANCE</div></h2><br>
+          <ul class="li">
+            <li>Designed for intention, not speed.</li>
+            <li>Four mood states: Focus, Play, Connect, Restore.</li>
+            <li>Rituals + environment as a support system.</li>
+            <li>Community programming built into the space.</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <div class="rule"></div>
+
+    <!-- VALUES -->
+    <section id="values">
+      <div class="section-head">
+        <div class="h2">OUR VALUES</div><br>
+        <p class="sub">The principles that guide every experience we design.</p><br>
+      </div>
+
+      <div class="gridCards">
+        <article class="mini">
+          <div class="cap" style="background: var(--g-focus);"></div>
+          <div class="body">
+            <h4>Intentional Design</h4><br>
+            <p>Clarity in layout, calm in pacing, elegance in function.</p>
+          </div>
+        </article>
+
+        <article class="mini">
+          <div class="cap" style="background: var(--g-connect);"></div>
+          <div class="body">
+            <h4>Conscious Connection</h4><br>
+            <p>Spaces that support meaningful conversation — and protect quiet.</p>
+          </div>
+        </article>
+
+        <article class="mini">
+          <div class="cap" style="background: var(--g-restore);"></div>
+          <div class="body">
+            <h4>Botanic Wisdom</h4><br>
+            <p>Plants as sensory tools for grounding, focus, and restoration.</p>
+          </div>
+        </article>
+
+        <article class="mini">
+          <div class="cap" style="background: var(--g-play);"></div>
+          <div class="body">
+            <h4>Community First</h4><br>
+            <p>Belonging through repeat rituals, gatherings, and gentle structure.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <div class="rule"></div>
+
+    <!-- PHILOSOPHY -->
+    <section id="philosophy">
+      <div class="section-head">
+        <div class="h2">OUR PHILOSOPHY</div><br>
+        <p class="sub">A space is never neutral — it’s always shaping attention, emotion, and behavior.</p><br>
+      </div>
+
+      <div class="philo">
+        <div class="kicker2">Stay Connected</div><br>
+        <div class="copy">
+          Join our newsletter for weekly updates on events, new rituals, and stories from our community.
+          One thoughtful email per week — no spam, no noise, just intentional content.
+        </div><br>
+
+        <form class="nl-form" id="subscribeForm">
+          <input class="input" id="subEmail" type="email" placeholder="Your email address" required />
+          <button class="btn primary" type="submit">Subscribe</button>
+        </form>
+      </div>
+
+      <div style="height: 28px;"></div>
+
+      <div class="section-head" style="margin-bottom: 18px;">
+        <br><div class="h2" style="font-size: clamp(1.05rem, 1.1vw, 1.2rem); letter-spacing:.20em;">READY TO BEGIN?</div>
+        <p class="sub">Choose your next step.</p><br><br>
+      </div>
+
+      <div class="grid3">
+        <article class="mini">
+          <div class="cap" style="background: var(--g-focus);"></div>
+          <div class="body">
+            <h4>Book Now</h4><br>
+            <p>Reserve your experience.</p>
+          </div>
+          <div class="foot"><a href="bookings.html">Explore →</a></div>
+        </article>
+
+        <article class="mini">
+          <div class="cap" style="background: var(--g-connect);"></div>
+          <div class="body">
+            <h4>Join Events</h4><br>
+            <p>Explore recurring gatherings and programs.</p>
+          </div>
+          <div class="foot"><a href="community.html#calendar">Explore →</a></div>
+        </article>
+
+        <article class="mini">
+          <div class="cap" style="background: var(--g-restore);"></div>
+          <div class="body">
+            <h4>Visit Us</h4><br>
+            <p>Find location &amp; hours.</p>
+          </div>
+          <div class="foot"><a href="contact.html#visit">Explore →</a></div>
+        </article>
+      </div>
+    </section>
+
+    <div class="rule"></div>
+
+    <!-- TEAM -->
+    <section id="team">
+      <div class="section-head">
+        <div class="h2">OUR TEAM</div>
+        <p class="sub">The people shaping the experience.</p><br>
+      </div>
+
+      <div class="gridTeam">
+        <article class="mini">
+          <div class="cap" style="background: var(--g-focus);"></div>
+          <div class="body">
+            <h4>Elena Martinez</h4><br>
+            <div class="role">Founder &amp; Creative Director</div><br>
+            <p>Leads experiential design and the overall vision — shaping spaces that feel like guided emotional architecture.</p>
+          </div>
+        </article>
+
+        <article class="mini">
+          <div class="cap" style="background: var(--g-connect);"></div>
+          <div class="body">
+            <h4>James Chen</h4><br>
+            <div class="role">Rituals &amp; Events</div><br>
+            <p>Designs gatherings and conversations that support belonging, curiosity, and real connection.</p>
+          </div>
+        </article>
+
+        <article class="mini">
+          <div class="cap" style="background: var(--g-restore);"></div>
+          <div class="body">
+            <h4>Anika Patel</h4><br>
+            <div class="role">Environmental Design</div><br>
+            <p>Focuses on light, sensory pacing, and spatial flow — ensuring each area supports the intended mood.</p>
+          </div>
+        </article>
+
+        <article class="mini">
+          <div class="cap" style="background: var(--g-pink);"></div>
+          <div class="body">
+            <h4>Marcus Thompson</h4><br>
+            <div class="role">Community Operations</div><br>
+            <p>Keeps everything running smoothly — memberships, partnerships, and the rhythm of daily experience.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <div class="rule"></div>
+
+    <!-- VISION -->
+    <section id="vision">
+      <div class="section-head">
+        <div class="h2">OUR VISION</div><br>
+        <p class="sub">Where this grows next.</p>
+      </div>
+
+      <div class="vision">
+        <strong>We envision a world where intentional experiences are the norm, not the exception.</strong><br><br>
+        Where people have access to spaces that support their highest purpose — and where environments become a helping hand
+        for who we are meant to become.<br><br>
+        Botanic Elixir is just the beginning. We’re pioneering a model of experiential design that inspires others to build
+        spaces that serve intention, honor presence, and support human flourishing.
+      </div>
+    </section>
+
+    <div class="rule"></div>
+
+    <!-- CAREERS -->
+    <section id="careers">
+      <div class="section-head">
+        <div class="h2">CAREERS</div>
+        <p class="sub">
+          Want to help build adaptive experiences? Send a short note with your interests and availability.
+        </p><br>
+      </div>
+
+      <div class="story" style="max-width: 980px; margin: 0 auto;">
+        <div style="color:rgba(255,255,255,.78); font-size:1rem; line-height:1.9;">
+          <span style="letter-spacing:.18em; text-transform:uppercase; color:rgba(255,255,255,.70); font-size:.80rem; font-weight:650;">Email</span><br>
+          <span style="color:rgba(255,255,255,.92);">hello@botanicelixir.com</span><br><br>
+          <span style="letter-spacing:.18em; text-transform:uppercase; color:rgba(255,255,255,.70); font-size:.80rem; font-weight:650;">Subject line</span><br>
+          <span style="color:rgba(255,255,255,.92);">CAREERS — Your Name</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="foot-grid">
+        <div class="foot">
+          <h5>Botanic Elixir</h5>
+          <div style="color:rgba(255,255,255,.55); line-height:1.7;">
+            Shift your mind. Shape your experience.<br><br>
+            42 Kingsland Road<br>
+            Shoreditch, London E2 8DA
+          </div>
+        </div>
+
+        <div class="foot">
+          <h5>Explore</h5>
+          <a href="index.html">Home</a><br>
+          <a href="experiences.html">Experiences</a><br>
+          <a href="how-it-works.html">How It Works</a><br>
+          <a href="menu.html">Menu</a>
+        </div>
+
+        <div class="foot">
+          <h5>Connect</h5>
+          <a href="community.html">Community &amp; Events</a><br>
+          <a href="contact.html">Contact</a><br>
+          <a href="about.html">About</a><br>
+          <a href="bookings.html">Book Experience</a>
+        </div>
+      </div>
+
+      <div class="rule" style="margin: 22px auto; max-width: 1100px;"></div>
+      <div style="max-width:1100px; margin: 0 auto; display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap;">
+        <div>© 2026 Botanic Elixir. All rights reserved.</div>
+        <div style="display:flex; gap:14px;">
+          <a href="#" style="color:rgba(255,255,255,.55); text-decoration:none;">Privacy Policy</a>
+          <a href="#" style="color:rgba(255,255,255,.55); text-decoration:none;">Terms of Service</a>
+        </div>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- SUBSCRIBE POPUP -->
+  <div class="popup-backdrop" id="subscribePopup" aria-hidden="true">
+    <div class="popup" role="dialog" aria-modal="true" aria-label="Subscription Confirmation">
+      <div class="popup-cap"></div>
+      <div class="popup-inner">
+        <div class="popup-top">
+          <div>
+            <h3 class="popup-title">You are now subscribed</h3>
+            <p class="popup-sub">Thanks for joining. We’ll send one thoughtful email per week.</p>
+          </div>
+          <button class="close" type="button" id="closePopup" aria-label="Close">✕</button>
+        </div>
+
+        <div class="popup-actions">
+          <button class="btn primary" type="button" id="closePopup2">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Subscribe popup logic
+    const popup = document.getElementById("subscribePopup");
+    const close1 = document.getElementById("closePopup");
+    const close2 = document.getElementById("closePopup2");
+
+    function openPopup(){
+      popup.classList.add("is-on");
+      popup.setAttribute("aria-hidden", "false");
+    }
+    function closePopup(){
+      popup.classList.remove("is-on");
+      popup.setAttribute("aria-hidden", "true");
+    }
+
+    document.getElementById("subscribeForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const input = document.getElementById("subEmail");
+      if(!input.checkValidity()){ input.reportValidity(); return; }
+      input.value = "";
+      openPopup();
+    });
+
+    close1.addEventListener("click", closePopup);
+    close2.addEventListener("click", closePopup);
+    popup.addEventListener("click", (e) => { if(e.target === popup) closePopup(); });
+    document.addEventListener("keydown", (e) => {
+      if(e.key === "Escape" && popup.classList.contains("is-on")) closePopup();
+    });
+  </script>
+
+</body>
+</html>

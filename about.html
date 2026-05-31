@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Botanic Elixir — About</title>
+
+  <style>
+    :root{
+      /* ===== Core theme ===== */
+      --bg:#000000;
+      --panel: rgba(255,255,255,.04);
+      --panel2: rgba(255,255,255,.06);
+      --border: rgba(255,255,255,.10);
+      --border2: rgba(255,255,255,.14);
+      --ink: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.62);
+      --shadow: 0 18px 60px rgba(0,0,0,.45);
+
+      /* Mood gradients */
+      --g-focus: linear-gradient(90deg, #2a9bd8, #3a64ff);
+      --g-play: linear-gradient(90deg, #f0b35a, #a8a3ff);
+      --g-connect: linear-gradient(90deg, #ff5cc8, #9b63ff);
+      --g-restore: linear-gradient(90deg, #6bf08b, #45d8d1);
+      --g-pink: linear-gradient(90deg, #ff5cc8, #ff8adf);
+
+      /* Buttons */
+      --btn: rgba(255,255,255,.06);
+      --btnHover: rgba(255,255,255,.10);
+      --btnPrimary: rgba(255,255,255,.90);
+      --btnPrimaryInk: rgba(0,0,0,.85);
+
+      /* Layout */
+      --max: 1320px;
+      --content: 1060px;
+      --radius: 18px;
+    }
+
+    *{ box-sizing:border-box; }
+    html, body{ height:100%; }
+    body{
+      margin:0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
+      letter-spacing: 0.01em;
+    }
+
+    /* =========================================================
+       UNIVERSAL NAV 
+       ========================================================= */
+    .topline{
+      position: sticky;
+      top:0;
+      z-index: 100;
+
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      background: rgba(0,0,0,0.45);
+      border-bottom:1px solid rgba(255,255,255,.12);
+
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 18px;
+
+    
+      padding: 12px 22px;
+    }
+
+    .brand{
+      color:#fff;
+      text-decoration:none;
+      font-size:.78rem;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      line-height:1.1;
+      white-space:nowrap;
+    }
+    .brand span{
+      display:block;
+      opacity:.7;
+      margin-top:4px;
+      letter-spacing:.12em;
+      font-size:.70rem;
+    }
+
+    .top-links{
+      display:flex;
+      gap:24px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .top-links > a,
+    .top-links .drop-trigger{
+      color:rgba(255,255,255,.78);
+      text-decoration:none;
+      font-size:.82rem;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      padding:8px 6px;
+      transition:.18s;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      white-space: nowrap;
+    }
+    .top-links > a:hover,
+    .top-links .drop-trigger:hover{ color:#fff; }
+
+    .top-links > a.active{
+      color:#fff;
+      font-weight:700;
+    }
+
+    /* dropdown base */
+    .dropdown{
+      position:relative;
+      display:inline-flex;
+      align-items:center;
+    }
+    .dropdown-panel{
+      position:absolute;
+      top:120%;
+      left:0;
+      background:rgba(0,0,0,.86);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border:1px solid rgba(255,255,255,.16);
+      border-radius:14px;
+      padding:10px 0;
+      min-width:190px;
+
+      opacity:0;
+      pointer-events:none;
+      transform:translateY(6px);
+      transition:.18s;
+      z-index: 999;
+    }
+    .dropdown:hover .dropdown-panel{
+      opacity:1;
+      pointer-events:auto;
+      transform:translateY(0);
+    }
+    .dropdown-panel a{
+      display:block;
+      padding:10px 16px;
+      color:rgba(255,255,255,.82);
+      text-decoration:none;
+      font-size:.75rem;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+    .dropdown-panel a:hover{
+      background:rgba(255,255,255,.08);
+      color:#fff;
+    }
+    .dropdown-panel a.active{
+      color:#fff;
+      font-weight:700;
+    }
+
+    .caret{
+      width:10px;
+      height:10px;
+      display:inline-block;
+      border-right: 2px solid rgba(255,255,255,.70);
+      border-bottom: 2px solid rgba(255,255,255,.70);
+      transform: rotate(45deg);
+      margin-top:-2px;
+      transition:.18s;
+      opacity:.85;
+    }
+    .dropdown:hover .caret{
+      opacity:1;
+      border-color:#fff;
+    }
+
+    .right-controls{
+      display:flex;
+      align-items:center;
+      gap:18px;
+    }
+    .icon-link{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:4px;
+      text-decoration:none;
+      color:rgba(255,255,255,.78);
+      font-size:.60rem;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      transition:.18s;
+      user-select:none;
+      min-width: 66px;
+    }
+    .icon-link svg{
+      width:22px;
+      height:22px;
+      stroke:#fff;
+      fill:none;
+      stroke-width:1.6;
+      opacity:.85;
+      transition:.18s;
+    }
+    .icon-link:hover{ color:#fff; }
+    .icon-link:hover svg{
+      opacity:1;
+      transform:translateY(-2px);
+      filter: drop-shadow(0 0 10px rgba(255,255,255,.22));
+    }
+
+    .icon-dropdown .dropdown-panel{
+      right:0;
+      left:auto;
+      min-width:170px;
+    }
+
+    /* ===== Page wrapper ===== */
+    .wrap{
+      max-width: var(--content);
+      margin: 0 auto;
+      padding: 52px 22px 110px;
+    }
+
+    .hero{
+      text-align:center;
+      padding: 18px 0 10px;
+    }
+    .hero h1{
+      margin: 0 0 12px;
+      font-size: 56px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+    .hero p{
+      margin: 0 auto;
+      max-width: 860px;
+      color: var(--muted);
+      line-height: 1.75;
+      font-size: 14px;
+    }
+
+    .rule{
+      height: 1px;
+      background: rgba(255,255,255,.08);
+      margin: 34px 0;
+    }
+
+    .h2{
+      font-size: 28px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      margin: 0 0 12px;
+      font-weight: 600;
+      text-align:center;
+    }
+    .sub{
+      margin: 0 auto 22px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.75;
+      text-align:center;
+      max-width: 900px;
+    }
+
+    /* ===== Panels ===== */
+    .panel{
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px;
+    }
+    .panel.inset{
+      padding: 24px;
+      background: rgba(255,255,255,.035);
+    }
+
+    /* ===== Subscribe row ===== */
+    .newsletter{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 18px;
+      align-items:center;
+    }
+    .newsletter h3{
+      margin:0 0 8px;
+      font-size: 14px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.90);
+    }
+    .newsletter p{
+      margin:0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+    .nl-form{
+      display:flex;
+      gap: 10px;
+      justify-content:flex-end;
+      flex-wrap:wrap;
+    }
+    .input{
+      min-width: 320px;
+      flex: 1;
+      height: 46px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      color: var(--ink);
+      padding: 0 14px;
+      outline:none;
+    }
+    .input::placeholder{ color: rgba(255,255,255,.45); }
+
+    .btn{
+      border: 1px solid rgba(255,255,255,.14);
+      background: var(--btn);
+      color: rgba(255,255,255,.90);
+      padding: 12px 18px;
+      border-radius: 999px;
+      cursor:pointer;
+      font-size: 12px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      user-select:none;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      height: 46px;
+      white-space: nowrap;
+    }
+    .btn:hover{ background: var(--btnHover); }
+    .btn.primary{
+      background: var(--btnPrimary);
+      color: var(--btnPrimaryInk);
+      border-color: rgba(255,255,255,0);
+      font-weight: 700;
+    }
+    .btn.primary:hover{ filter: brightness(.96); }
+
+    /* ===== Content blocks ===== */
+    .story{
+      max-width: 980px;
+      margin: 0 auto;
+      color: rgba(255,255,255,.78);
+      font-size: 13px;
+      line-height: 1.95;
+    }
+
+    .grid4{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+    .card{
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      border-radius: 16px;
+      overflow:hidden;
+      box-shadow: var(--shadow);
+      min-height: 210px;
+      display:flex;
+      flex-direction:column;
+    }
+    .cap{ height: 6px; background: var(--g-focus); }
+    .card-body{
+      padding: 16px 16px 18px;
+    }
+    .card h4{
+      margin: 0 0 10px;
+      font-size: 13px;
+      letter-spacing: .10em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .card p{
+      margin:0;
+      color: rgba(255,255,255,.70);
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .philo{
+      max-width: 980px;
+      margin: 0 auto;
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 16px;
+      background: rgba(0,0,0,.55);
+      box-shadow: var(--shadow);
+      padding: 22px 22px;
+    }
+    .philo p{
+      margin: 0 0 14px;
+      color: rgba(255,255,255,.78);
+      font-size: 13px;
+      line-height: 1.95;
+    }
+    .philo p:last-child{ margin-bottom:0; }
+
+    .gridTeam{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+    .role{
+      margin: 6px 0 12px;
+      color: rgba(255,255,255,.70);
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .vision{
+      max-width: 920px;
+      margin: 0 auto;
+      text-align:center;
+      color: rgba(255,255,255,.78);
+      font-size: 13px;
+      line-height: 1.95;
+    }
+    .vision strong{ color: rgba(255,255,255,.92); }
+
+    /* ===== Footer ===== */
+    footer{
+      margin-top: 56px;
+      border-top: 1px solid rgba(255,255,255,.06);
+      padding: 26px 0 0;
+      color: rgba(255,255,255,.55);
+      font-size: 12px;
+    }
+    .foot-grid{
+      display:grid;
+      grid-template-columns: 1.1fr 1fr 1fr;
+      gap: 18px;
+      align-items:start;
+    }
+    .foot h5{
+      margin:0 0 10px;
+      font-size: 11px;
+      letter-spacing:.16em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.72);
+    }
+    .foot a{
+      color: rgba(255,255,255,.55);
+      text-decoration:none;
+      display:inline-block;
+      margin: 6px 0;
+    }
+    .foot a:hover{ color: rgba(255,255,255,.80); }
+
+    /* ===== Subscribe Popup ===== */
+    .popup-backdrop{
+      position: fixed;
+      inset:0;
+      background: rgba(0,0,0,.65);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 18px;
+      z-index: 250;
+    }
+    .popup-backdrop.is-on{ display:flex; }
+    .popup{
+      width: min(560px, 100%);
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(10,12,15,.96);
+      box-shadow: 0 30px 90px rgba(0,0,0,.60);
+      overflow:hidden;
+    }
+    .popup-cap{ height: 8px; background: var(--g-pink); }
+    .popup-inner{ padding: 18px 18px 16px; }
+    .popup-top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 12px;
+    }
+    .popup-title{
+      margin: 0;
+      font-size: 13px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+    .popup-sub{
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    .close{
+      width: 44px; height: 42px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      color: rgba(255,255,255,.85);
+      cursor:pointer;
+      font-size: 18px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .close:hover{ background: rgba(255,255,255,.08); }
+    .popup-actions{
+      display:flex;
+      justify-content:flex-end;
+      gap: 10px;
+      margin-top: 14px;
+      flex-wrap:wrap;
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 1100px){
+      .newsletter{ grid-template-columns: 1fr; }
+      .nl-form{ justify-content:flex-start; }
+      .grid4{ grid-template-columns: repeat(2, 1fr); }
+      .gridTeam{ grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px){
+      .hero h1{ font-size: 40px; }
+      .top-links{ display:none; } /* matches your CONNECT behavior */
+      .grid4, .gridTeam{ grid-template-columns: 1fr; }
+      .input{ min-width: 240px; }
+      .wrap{ padding: 40px 18px 90px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =====UNIVERSAL NAV  ===== -->
+  <header class="topline">
+    <a class="brand" href="index.html">
+      BOTANIC ELIXIR<br><span>adaptive café</span>
+    </a>
+
+    <nav class="top-links" aria-label="Main">
+      <a href="experiences.html">Experiences</a>
+      <a href="how-it-works.html">How It Works</a>
+      <a href="menu.html">Menu</a>
+      <a href="About-Connect.html">Connect</div>
+      <a href="contact.html">Contact</a>
+
+      <div class="dropdown">
+        <a class="drop-trigger" href="#">
+          ABOUT <span class="caret" aria-hidden="true"></span>
+        </a>
+        <div class="dropdown-panel" role="menu" aria-label="About submenu">
+          <a class="active" href="about.html">About Us</a>
+          <a href="community.html">Connect</a>
+          <a href="learn-more.html">Learn More</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="right-controls">
+      <!-- BAG -->
+      <a class="icon-link" href="bag.html" aria-label="Go to bag">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6 7h12l-1 13H7L6 7z"/>
+          <path d="M9 7a3 3 0 0 1 6 0"/>
+        </svg>
+        BAG
+      </a>
+
+      <!-- BOOKINGS -->
+      <a class="icon-link" href="booked.html" aria-label="Go to bookings">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 4h16v16H4z"/>
+          <path d="M8 2v4M16 2v4M4 10h16"/>
+        </svg>
+        BOOKINGS
+      </a>
+
+      <!-- INQUIRIES -->
+      <div class="dropdown icon-dropdown" aria-label="Inquiries menu">
+        <a class="icon-link" href="#" aria-label="Open inquiries options">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="7" r="4"/>
+            <path d="M4 21c1.5-4 14.5-4 16 0"/>
+          </svg>
+          INQUIRIES
+        </a>
+
+        <div class="dropdown-panel" role="menu" aria-label="Inquiries submenu">
+          <a href="book-consultation.html">Consultation</a>
+          <a href="hiring.html">Hiring</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- IMPORTANT: your pasted code had </main> but no opening main -->
+  <main class="wrap">
+
+    <!-- HERO -->
+    <section class="hero">
+      <h1>ABOUT US</h1>
+      <p>Shift your mind. Shape your experience.</p><br>
+    </section>
+
+    <!-- SUBSCRIBE (glassy panel) -->
+    <section class="panel inset newsletter" style="margin-top: 22px;">
+      <div>
+        <h3>Stay Connected</h3><br>
+        <p>
+          Subscribe for updates, special offerings, and community news.
+          We send one thoughtful email per week.
+        </p>
+        <div style="margin-top:10px; color:rgba(255,255,255,.55); font-size:12px; line-height:1.6;">
+          We respect your privacy. Unsubscribe anytime.
+        </div>
+      </div>
+
+      <form class="nl-form" id="subscribeForm">
+     <br> <br>  <input class="input" id="subEmail" type="email" placeholder="Your email address" required />
+        <button class="btn primary" type="submit">Subscribe</button>
+      </form>
+    </section>
+
+    <div class="rule"></div>
+
+    <!-- OUR STORY -->
+    <section>
+      <div class="h2">OUR STORY</div><br>
+      <p class="sub">
+      <h4> <em><strong> Botanic Elixir is a mood-aligned café and community space built for focus, restoration, play, and connection.</strong></em><br>
+      </p></h4>
+
+      <div class="story"><br>
+        <h2>Botanic Elixir was born from a simple question: What if our environments could adapt to our intentions instead of the other way around?</h2><br><br>
+        In a world of constant distraction and one-size-fits-all spaces, we envisioned something different — <em><strong>a place that supports focus, restoration, play, and connection.</strong></em>
+        Whether you arrive <strong>seeking</strong> <em>deep work</em>, <em>gentle renewal</em>, <em>playful energy</em>, or <em>social connection</em>, your <em><strong>environment responds</strong></em> to meet you where you are.<br><br>
+        We combine <em>experiential design</em>, <em>biophilic aesthetics</em>, <em>environmental psychology</em>, and <em>community building</em> to create intentional, mood-aligned spaces.
+        Not a blank café — an anchor for presence and a catalyst for meaningful engagement and change.<br><br>
+        <br>Located in the heart of Shoreditch, London, Botanic Elixir opened its doors in 2024.
+        Since then, we’ve welcomed thousands of visitors who’ve discovered that when you shift your world, you can shift your experience.
+      </div>
+    </section>
+
+    <div class="rule"></div>
+
+    <!-- OUR VALUES -->
+    <section>
+      <div class="h2">OUR VALUES</div>
+      <p class="sub">What guides every experience we design</p><br>
+
+      <div class="grid4">
+        <article class="card">
+          <div class="cap" style="background: var(--g-focus);"></div>
+          <div class="card-body">
+            <h4>Intentional Design</h4><br>
+            <p>Every detail supports presence — from lighting and layout to sound and flow. Design is direction.</p>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="cap" style="background: var(--g-connect);"></div>
+          <div class="card-body">
+            <h4>Conscious Connection</h4><br>
+            <p>We build spaces where conversations feel safe, meaningful, and human — with room for quiet and depth.</p>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="cap" style="background: var(--g-restore);"></div>
+          <div class="card-body">
+            <h4>Botanic Wisdom</h4><br>
+            <p>Plants, aromas, and ingredients are sensory tools for grounding, regulation, and renewal.</p>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="cap" style="background: var(--g-play);"></div>
+          <div class="card-body">
+            <h4>Community First</h4><br>
+            <p>We design for belonging. The goal isn’t throughput — it’s a place people return to and grow within.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <div class="rule"></div>
+
+    <!-- OUR PHILOSOPHY -->
+    <section>
+      <div class="h2">OUR PHILOSOPHY</div>
+      <p class="sub">A space is never neutral — it’s always shaping someone</p><br>
+
+      <div class="philo">
+        <p>
+       <h2> <br> <em> “The space we build shapes our inner landscape. When we design with intention, we create the conditions for transformation.”</h2>
+       </em> </p><br>
+       <h3><p>
+         We believe environments do not simply sit — they actively influence our <em><strong>thoughts</strong>, <strong>emotions</strong>, and <strong>behavior</strong>.</em><br><br>
+       </h3></p>
+      <br><p> Traditional places focus on a single job to fulfill; Botanic Elixir is built to support a range of states and needs.
+        <br>
+        </p>
+          <p>This adaptive approach extends beyond physical space. Our mood-based experiences use botanical compounds to support your desired state —
+          whether it’s <em><strong>clarity</strong>, <strong>calm</strong>, <strong>courage</strong>, or <strong>creative coherence</strong>.</em><br></p>
+        </p>
+        <p>
+         We’re <strong>not</strong> interested in escape or abstraction. We <strong>create</strong> containers for <em><strong>presence</em></strong>, <em><strong>purpose</em></strong>, and <em><strong>authentic engagement</strong></em> —
+          with your work, your community, or yourself.
+        </p></h6>
+      </div>
+    </section>
+
+    <div class="rule"></div>
+
+    <!-- OUR TEAM -->
+    <section>
+      <div class="h2">OUR TEAM</div><br>
+      <p class="sub">The people shaping the experience</p><br>
+
+      <div class="gridTeam">
+        <article class="card">
+          <div class="cap" style="background: var(--g-focus);"></div>
+          <div class="card-body">
+            <h4>Elena Martinez</h4><br>
+            <div class="role">Founder & Creative Director</div><br>
+            <p>Leads experiential design and the overall vision — shaping spaces that feel like guided emotional architecture.</p>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="cap" style="background: var(--g-connect);"></div>
+          <div class="card-body">
+            <h4>James Chen</h4><br>
+            <div class="role">Rituals & Events</div><br>
+            <p>Designs gatherings and conversations that support belonging, curiosity, and real connection.</p>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="cap" style="background: var(--g-restore);"></div>
+          <div class="card-body">
+            <h4>Anika Patel</h4><br>
+            <div class="role">Environmental Design</div><br>
+            <p>Focuses on light, sensory pacing, and spatial flow — ensuring each area supports the intended mood.</p>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="cap" style="background: var(--g-pink);"></div>
+          <div class="card-body">
+            <h4>Marcus Thompson</h4><br>
+            <div class="role">Community Operations</div><br>
+            <p>Keeps everything running smoothly — memberships, partnerships, and the rhythm of daily experience.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <div class="rule"></div>
+
+    <!-- OUR VISION -->
+    <section>
+      <div class="h2">OUR VISION</div><br>
+      <p class="sub">Where this grows next</p>
+
+      <div class="vision">
+        <strong>We envision a world where intentional experiences are the norm, not the exception.</strong><br><br><br>
+        Where people have access to spaces that support their highest purpose — and where environments become a helping hand
+        for who we are meant to become.<br><br><br>
+        Botanic Elixir is just the beginning. We’re pioneering a model of experiential design that inspires others to build
+        spaces that serve intention, honor presence, and support human flourishing.
+      </div><br><br>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="foot-grid">
+        <div class="foot">
+          <h5>Botanic Elixir</h5>
+          <div style="color:rgba(255,255,255,.55); line-height:1.7;">
+            Shift your mind. Shape your experience.<br><br>
+            42 Kingsland Road<br>
+            Shoreditch, London E2 8DA
+          </div>
+        </div>
+
+        <div class="foot">
+          <h5>Explore</h5>
+          <a href="index.html">Home</a><br>
+          <a href="experiences.html">Experiences</a><br>
+          <a href="how-it-works.html">How It Works</a><br>
+          <a href="menu.html">Menu</a>
+        </div>
+
+        <div class="foot">
+          <h5>Connect</h5>
+          <a href="community.html">Community & Events</a><br>
+          <a href="contact.html">Contact</a><br>
+          <a href="about.html">About</a><br>
+          <a href="bookings.html">Book Experience</a>
+        </div>
+      </div>
+
+      <div class="rule" style="margin: 22px 0;"></div>
+      <div style="display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap;">
+        <div>© 2026 Botanic Elixir. All rights reserved.</div>
+        <div style="display:flex; gap:14px;">
+          <a href="#" style="color:rgba(255,255,255,.55); text-decoration:none;">Privacy Policy</a>
+          <a href="#" style="color:rgba(255,255,255,.55); text-decoration:none;">Terms of Service</a>
+        </div>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- SUBSCRIBE POPUP -->
+  <div class="popup-backdrop" id="subscribePopup" aria-hidden="true">
+    <div class="popup" role="dialog" aria-modal="true" aria-label="Subscription Confirmation">
+      <div class="popup-cap"></div>
+      <div class="popup-inner">
+        <div class="popup-top">
+          <div>
+            <h3 class="popup-title">You are now subscribed</h3>
+            <p class="popup-sub">Thanks for joining. We’ll send one thoughtful email per week.</p>
+          </div>
+          <button class="close" type="button" id="closePopup" aria-label="Close">✕</button>
+        </div>
+
+        <div class="popup-actions">
+          <button class="btn primary" type="button" id="closePopup2">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // subscribe popup
+    const popup = document.getElementById("subscribePopup");
+    const close1 = document.getElementById("closePopup");
+    const close2 = document.getElementById("closePopup2");
+
+    function openPopup(){
+      popup.classList.add("is-on");
+      popup.setAttribute("aria-hidden", "false");
+    }
+    function closePopup(){
+      popup.classList.remove("is-on");
+      popup.setAttribute("aria-hidden", "true");
+    }
+
+    document.getElementById("subscribeForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const input = document.getElementById("subEmail");
+      if(!input.checkValidity()){ input.reportValidity(); return; }
+      input.value = "";
+      openPopup();
+    });
+
+    close1.addEventListener("click", closePopup);
+    close2.addEventListener("click", closePopup);
+    popup.addEventListener("click", (e) => { if(e.target === popup) closePopup(); });
+    document.addEventListener("keydown", (e) => {
+      if(e.key === "Escape" && popup.classList.contains("is-on")) closePopup();
+    });
+  </script>
+
+</body>
+</html>
