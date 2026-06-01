@@ -1939,3 +1939,138 @@ body.page-learn #network .net-title::before{
     aspect-ratio: 1.35 / 1;
   }
 }
+
+/* ===== Learn More: cinematic pathway pass ===== */
+body.page-learn{
+  background:#000;
+}
+
+body.page-learn .video-bg video{
+  opacity:.34;
+  filter:saturate(1.22) contrast(1.12) brightness(.58);
+}
+
+body.page-learn .video-bg::after{
+  background:
+    radial-gradient(900px 520px at 50% 18%, rgba(255,255,255,.08), transparent 60%),
+    linear-gradient(180deg, rgba(0,0,0,.54), rgba(0,0,0,.92));
+}
+
+body.page-learn #network.panel{
+  min-height: 100vh;
+  padding: clamp(92px, 9vw, 132px) 6vw clamp(96px, 9vw, 144px);
+  background:
+    radial-gradient(900px 520px at 50% 0%, rgba(216,189,114,.10), transparent 62%),
+    linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,0) 20%),
+    #000;
+}
+
+body.page-learn #network .panel-title{
+  font-size: clamp(2.4rem, 5.2vw, 5.8rem);
+  letter-spacing: .14em;
+  line-height: .96;
+  text-wrap: balance;
+}
+
+body.page-learn #network .panel-sub{
+  max-width: 620px;
+  font-size: clamp(14px, 1.2vw, 17px);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+body.page-learn #network .network-grid{
+  max-width: 1380px;
+  gap: clamp(16px, 1.8vw, 24px);
+}
+
+body.page-learn #network .net-frame{
+  aspect-ratio: 1 / 1.12;
+  border-radius: 8px;
+  border-color: rgba(255,255,255,.18);
+  background: rgba(255,255,255,.045);
+  box-shadow:
+    0 26px 90px rgba(0,0,0,.52),
+    inset 0 1px 0 rgba(255,255,255,.08);
+}
+
+body.page-learn #network .net-frame::before{
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.08), rgba(0,0,0,.12) 36%, rgba(0,0,0,.90)),
+    linear-gradient(90deg, rgba(0,0,0,.55), rgba(0,0,0,.02) 56%);
+}
+
+body.page-learn #network .net-frame::after{
+  left: 24px;
+  right: 24px;
+  bottom: 24px;
+  opacity: .95;
+}
+
+body.page-learn #network .net-media video{
+  opacity:.9;
+  filter:saturate(1.24) contrast(1.18) brightness(.72);
+  transform:scale(1.04);
+}
+
+body.page-learn #network .net-card:hover .net-media video,
+body.page-learn #network .net-card:focus-visible .net-media video{
+  filter:saturate(1.42) contrast(1.18) brightness(.88);
+  transform:scale(1.11);
+}
+
+body.page-learn #network .net-kicker,
+body.page-learn #network .net-copy{
+  position:absolute;
+  left:24px;
+  right:24px;
+  z-index:4;
+  text-shadow:0 2px 18px rgba(0,0,0,.86);
+}
+
+body.page-learn #network .net-kicker{
+  top:22px;
+  color:var(--net-accent);
+  font-size:10px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+}
+
+body.page-learn #network .net-title{
+  left:24px;
+  right:24px;
+  bottom:66px;
+  font-size:clamp(15px, 1.55vw, 22px);
+  letter-spacing:.14em;
+  line-height:1.12;
+}
+
+body.page-learn #network .net-title::before{
+  margin-bottom:12px;
+}
+
+body.page-learn #network .net-copy{
+  bottom:34px;
+  max-width: 260px;
+  color:rgba(255,255,255,.68);
+  font-size:12px;
+  line-height:1.45;
+  letter-spacing:.02em;
+  opacity:.86;
+}
+
+@media (max-width: 980px){
+  body.page-learn #network .net-frame{
+    aspect-ratio:1.2 / 1;
+  }
+}
+
+@media (max-width: 640px){
+  body.page-learn #network .net-frame{
+    aspect-ratio:1.05 / 1;
+  }
+
+  body.page-learn #network .net-title{
+    bottom:64px;
+  }
+}

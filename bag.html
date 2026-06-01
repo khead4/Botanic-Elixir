@@ -45,6 +45,30 @@
       letter-spacing: 0.01em;
     }
 
+    .video-bg{
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      overflow: hidden;
+      background:#000;
+      pointer-events:none;
+    }
+    .video-bg video{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      opacity:.24;
+      filter:saturate(1.22) contrast(1.12) brightness(.66);
+    }
+    .video-bg::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(900px 520px at 50% 12%, rgba(216,189,114,.10), transparent 58%),
+        linear-gradient(180deg, rgba(0,0,0,.58), rgba(0,0,0,.92));
+    }
+
     /* Remove ALL default link styling */
     a{ color:inherit; text-decoration:none; }
 
@@ -424,6 +448,11 @@
 </head>
 
 <body>
+  <div class="video-bg" aria-hidden="true">
+    <video autoplay muted loop playsinline>
+      <source src="Menu.mp4" type="video/mp4" />
+    </video>
+  </div>
 
   <!-- ===== UNIVERSAL NAV ===== -->
   <header class="topline">
