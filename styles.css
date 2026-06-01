@@ -42,8 +42,19 @@ a { color: inherit; }
   content:"";
   position:absolute;
   inset:0;
-  background: rgba(0,0,0,0,0,0);
+  background: transparent;
   z-index: 1;
+}
+
+body.page-home .video-bg video{
+  opacity:.54;
+  filter:saturate(1.16) contrast(1.08) brightness(.70);
+}
+
+body.page-home .video-bg::after{
+  background:
+    radial-gradient(1000px 560px at 50% 18%, rgba(216,189,114,.08), transparent 60%),
+    linear-gradient(180deg, rgba(0,0,0,.48), rgba(0,0,0,.88));
 }
 
 /* Content wrapper sits above video */

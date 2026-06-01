@@ -44,6 +44,22 @@
       overflow-x:hidden;
     }
 
+    .video-bg{
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      overflow: hidden;
+      background:#000;
+      pointer-events:none;
+    }
+    .video-bg video{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      opacity:.32;
+      filter:saturate(1.16) contrast(1.08) brightness(.72);
+    }
+
     /* subtle cinematic glow */
     body::before{
       content:"";
@@ -554,6 +570,11 @@
 </head>
 
 <body>
+  <div class="video-bg" aria-hidden="true">
+    <video autoplay muted loop playsinline poster="assets/bg-how-it-works.png">
+      <source src="assets/bg-how-it-works-motion.mp4" type="video/mp4" />
+    </video>
+  </div>
   <!--  navigation -->
   <header class="topnav" role="banner">
     <div class="nav-inner">
