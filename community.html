@@ -57,7 +57,7 @@
       pointer-events:none;
     }
     .video-bg.community-image{
-      background: #000 url("assets/story-community-4k.png") center center / cover no-repeat;
+      background: #000 url("assets/bg-community.png") center center / cover no-repeat;
     }
     .video-bg video,
     .video-bg img{
@@ -805,8 +805,10 @@
 </head>
 
 <body>
-  <div class="video-bg community-image" aria-hidden="true" style="--be-page-poster: url('assets/story-community-4k.png');">
-    <img src="assets/story-community-4k.png" alt="" />
+  <div class="video-bg community-image" aria-hidden="true" style="--be-page-poster: url('assets/bg-community.png'); --be-media-position: center 60%;">
+    <video autoplay muted loop playsinline poster="assets/bg-community.png" preload="auto">
+      <source src="assets/bg-community-motion.mp4" type="video/mp4" />
+    </video>
   </div>
 
   <!--UNIVERSAL NAV -->

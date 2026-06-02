@@ -43,7 +43,7 @@ body{
   pointer-events: none !important;
   background-color: #000 !important;
   background-image: var(--be-page-poster, none) !important;
-  background-position: center center !important;
+  background-position: var(--be-media-position, center center) !important;
   background-repeat: no-repeat !important;
   background-size: cover !important;
 }
@@ -57,7 +57,7 @@ body{
   min-width: 100% !important;
   min-height: 100% !important;
   object-fit: cover !important;
-  object-position: center center !important;
+  object-position: var(--be-media-position, center center) !important;
 }
 
 :where(.video-bg img){
@@ -70,15 +70,15 @@ body{
 }
 
 body:not(.page-home):not(.page-learn) :where(.video-bg video, .video-bg img){
-  opacity: .68 !important;
-  filter: saturate(1.14) contrast(1.08) brightness(1.03) !important;
+  opacity: .78 !important;
+  filter: saturate(1.14) contrast(1.08) brightness(1.1) !important;
 }
 
 body:not(.page-home):not(.page-learn) .video-bg::after{
   background:
-    radial-gradient(920px 560px at 52% 16%, rgba(216,189,114,.16), transparent 58%),
+    radial-gradient(920px 560px at 52% 16%, rgba(216,189,114,.13), transparent 58%),
     radial-gradient(800px 540px at 76% 52%, rgba(67,205,216,.11), transparent 62%),
-    linear-gradient(180deg, rgba(0,0,0,.16), rgba(0,0,0,.60)) !important;
+    linear-gradient(180deg, rgba(0,0,0,.06), rgba(0,0,0,.52)) !important;
 }
 
 :where(a, button, input, select, textarea){
@@ -148,20 +148,20 @@ body:not(.page-home):not(.page-learn) .video-bg::after{
 }
 
 body.page-home .video-bg{
-  background: #000 url("assets/story-home.png") center center / cover no-repeat;
+  background: #000 url("assets/bg-home.png") center center / cover no-repeat;
 }
 
 body.page-home .video-bg video{
-  opacity: .84;
-  filter: saturate(1.16) contrast(1.08) brightness(1.02);
+  opacity: .9;
+  filter: saturate(1.16) contrast(1.07) brightness(1.14);
 }
 
 body.page-home .video-bg::after{
   background:
-    radial-gradient(900px 520px at 54% 18%, rgba(216,189,114,.14), transparent 62%),
-    radial-gradient(720px 460px at 18% 70%, rgba(112,176,116,.10), transparent 64%),
-    linear-gradient(90deg, rgba(0,0,0,.34), rgba(0,0,0,.08) 48%, rgba(0,0,0,.34)),
-    linear-gradient(180deg, rgba(0,0,0,.16), rgba(0,0,0,.62));
+    radial-gradient(900px 560px at 44% 20%, rgba(216,189,114,.12), transparent 60%),
+    radial-gradient(760px 520px at 18% 42%, rgba(83,211,225,.10), transparent 62%),
+    linear-gradient(90deg, rgba(0,0,0,.26), rgba(0,0,0,.03) 48%, rgba(0,0,0,.28)),
+    linear-gradient(180deg, rgba(0,0,0,.06), rgba(0,0,0,.52));
 }
 
 body.page-home .page-content{
@@ -177,12 +177,19 @@ body.page-home main.hero{
 }
 
 body.page-learn .video-bg{
-  background: #000 url("assets/story-connect-4k.png") center center / cover no-repeat;
+  background: #000 url("assets/bg-community.png") center center / cover no-repeat;
 }
 
 body.page-learn .video-bg video{
-  opacity: .48;
-  filter: saturate(1.22) contrast(1.12) brightness(.70);
+  opacity: .72;
+  filter: saturate(1.15) contrast(1.08) brightness(1.02);
+}
+
+body.page-learn .video-bg::after{
+  background:
+    radial-gradient(920px 560px at 48% 14%, rgba(216,189,114,.13), transparent 60%),
+    radial-gradient(760px 520px at 70% 44%, rgba(83,211,225,.10), transparent 62%),
+    linear-gradient(180deg, rgba(0,0,0,.08), rgba(0,0,0,.58)) !important;
 }
 
 body.page-learn #mood.panel{
