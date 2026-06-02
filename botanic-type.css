@@ -2,53 +2,58 @@
 
 /*
   Botanic Elixir type guide
-  Scale is anchored to the Menu page and restrained for dense How It Works panels.
+  Scale is anchored to the softer display feel from Menu / How It Works,
+  with compact overrides for utility labels, cards, and footers.
 */
 :root{
   --be-heading-font: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
 
-  --be-h1-size: 2.75rem;       /* 44px, Menu page title */
-  --be-h1-line: 1.08;
-  --be-h1-weight: 600;
-  --be-h1-tracking: .12em;
+  --be-h1-size: 4rem;          /* 64px, cinematic page title */
+  --be-h1-line: 1.02;
+  --be-h1-weight: 500;
+  --be-h1-tracking: .07em;
 
-  --be-h2-size: .875rem;       /* 14px, Menu section label */
-  --be-h2-line: 1.28;
-  --be-h2-weight: 700;
-  --be-h2-tracking: .22em;
+  --be-h2-size: 1.75rem;       /* 28px, soft section title */
+  --be-h2-line: 1.14;
+  --be-h2-weight: 500;
+  --be-h2-tracking: .085em;
 
-  --be-h3-size: .8125rem;      /* 13px, Menu card title */
-  --be-h3-line: 1.32;
-  --be-h3-weight: 700;
-  --be-h3-tracking: .06em;
+  --be-h3-size: 1.125rem;      /* 18px, card / module title */
+  --be-h3-line: 1.22;
+  --be-h3-weight: 600;
+  --be-h3-tracking: .055em;
 
-  --be-h4-size: .75rem;        /* 12px, modal/detail title */
-  --be-h4-line: 1.35;
-  --be-h4-weight: 700;
-  --be-h4-tracking: .12em;
+  --be-h4-size: .9375rem;      /* 15px, modal/detail title */
+  --be-h4-line: 1.28;
+  --be-h4-weight: 600;
+  --be-h4-tracking: .08em;
 
-  --be-h5-size: .6875rem;      /* 11px, footer/eyebrow */
+  --be-h5-size: .75rem;        /* 12px, footer/eyebrow */
   --be-h5-line: 1.4;
   --be-h5-weight: 700;
-  --be-h5-tracking: .16em;
+  --be-h5-tracking: .14em;
 
-  --be-h6-size: .625rem;       /* 10px, annotation */
+  --be-h6-size: .6875rem;      /* 11px, annotation */
   --be-h6-line: 1.4;
   --be-h6-weight: 700;
-  --be-h6-tracking: .18em;
+  --be-h6-tracking: .16em;
 }
 
 @media (max-width: 1100px){
   :root{
-    --be-h1-size: 2.5rem;
-    --be-h1-tracking: .11em;
+    --be-h1-size: 3.25rem;
+    --be-h2-size: 1.55rem;
+    --be-h3-size: 1.05rem;
+    --be-h1-tracking: .065em;
   }
 }
 
 @media (max-width: 640px){
   :root{
-    --be-h1-size: 2.125rem;
-    --be-h1-tracking: .095em;
+    --be-h1-size: 2.5rem;
+    --be-h2-size: 1.35rem;
+    --be-h3-size: .975rem;
+    --be-h1-tracking: .055em;
   }
 }
 
@@ -109,6 +114,15 @@
 }
 
 :where(.mini-title, .process-kicker, .step-tag, .f-title, .small-top, .cal-title .m){
+  font-family: var(--be-heading-font) !important;
+  font-size: var(--be-h5-size) !important;
+  line-height: var(--be-h5-line) !important;
+  font-weight: var(--be-h5-weight) !important;
+  letter-spacing: var(--be-h5-tracking) !important;
+  text-transform: uppercase !important;
+}
+
+:where(footer h2, .foot h2, footer h3, .foot h3){
   font-family: var(--be-heading-font) !important;
   font-size: var(--be-h5-size) !important;
   line-height: var(--be-h5-line) !important;
