@@ -1,0 +1,122 @@
+:root{
+  --be-carbon: #000;
+  --be-ink: rgba(255,255,255,.92);
+  --be-muted: rgba(255,255,255,.66);
+  --be-line: rgba(255,255,255,.12);
+  --be-line-strong: rgba(255,255,255,.20);
+  --be-glass: rgba(255,255,255,.075);
+  --be-glass-deep: rgba(0,0,0,.42);
+  --be-gold: #d6a95e;
+  --be-green: #70b074;
+  --be-cap: linear-gradient(90deg, rgba(112,176,116,.94), rgba(214,169,94,.94));
+  --be-focus-ring: 0 0 0 3px rgba(214,169,94,.28), 0 0 0 1px rgba(255,255,255,.42);
+}
+
+html{
+  scroll-behavior: smooth;
+  background: var(--be-carbon);
+}
+
+body{
+  background-color: var(--be-carbon);
+  text-rendering: geometricPrecision;
+}
+
+::selection{
+  color: #050505;
+  background: rgba(214,169,94,.88);
+}
+
+:where(img, video, canvas, svg){
+  max-width: 100%;
+}
+
+:where(.video-bg video){
+  transform: scale(1.01);
+  filter: saturate(1.08) contrast(1.06) brightness(.92);
+}
+
+:where(a, button, input, select, textarea){
+  -webkit-tap-highlight-color: transparent;
+}
+
+:where(a, button, input, select, textarea):focus-visible{
+  outline: 0;
+  box-shadow: var(--be-focus-ring);
+}
+
+:where(button, .btn, .exp-cta, .hero-link, .tab, .pill, .add, .reserve-link, .modal-btn, .path a){
+  transition:
+    transform .18s ease,
+    border-color .18s ease,
+    background-color .18s ease,
+    color .18s ease,
+    opacity .18s ease,
+    box-shadow .18s ease,
+    filter .18s ease;
+}
+
+:where(.btn, .exp-cta, .hero-link, .tab, .add, .reserve-link, .modal-btn, .path a):hover{
+  filter: brightness(1.04);
+}
+
+:where(.panel, .glass, .card, .summary, .surface, .path, .glass-panel, .mini, .role-card, .agenda-card, .checkout-grid > *, .mood-frame){
+  border-color: var(--be-line);
+}
+
+:where(.panel, .glass, .card, .summary, .surface, .path, .glass-panel, .mini, .role-card, .agenda-card, .checkout-grid > *){
+  box-shadow:
+    0 24px 80px rgba(0,0,0,.42),
+    inset 0 1px 0 rgba(255,255,255,.055);
+}
+
+:where(.panel, .glass, .card, .summary, .surface, .path, .glass-panel, .mini, .role-card, .agenda-card){
+  isolation: isolate;
+}
+
+:where(.cap, .summary-cap, .confirm-accent, .agenda-cap, .modal-cap, .sum-cap){
+  background: var(--be-cap);
+}
+
+:where(.footer-bottom a, footer a, .foot a){
+  text-underline-offset: 4px;
+}
+
+:where(.footer-bottom a:hover, footer a:hover, .foot a:hover){
+  color: #fff;
+}
+
+:where(input, select, textarea){
+  color-scheme: dark;
+}
+
+:where(input::placeholder, textarea::placeholder){
+  color: rgba(255,255,255,.46);
+}
+
+:where(p, li, .muted, .lead, .desc, .f-text){
+  text-wrap: pretty;
+}
+
+:where(h1, h2, h3, .hero-title, .section-title){
+  text-wrap: balance;
+}
+
+@media (prefers-reduced-motion: reduce){
+  html{
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after{
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+  }
+
+  video{
+    animation: none !important;
+  }
+}
