@@ -32,6 +32,15 @@ body{
 }
 
 :where(.video-bg){
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  height: 100svh !important;
+  min-height: 100vh !important;
+  overflow: hidden !important;
+  z-index: -2 !important;
+  pointer-events: none !important;
   background-color: #000 !important;
   background-image: var(--be-page-poster, none) !important;
   background-position: center center !important;
@@ -40,13 +49,18 @@ body{
 }
 
 :where(.video-bg video, .video-bg img){
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  position: absolute !important;
+  inset: 0 !important;
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 100% !important;
+  min-height: 100% !important;
+  object-fit: cover !important;
+  object-position: center center !important;
 }
 
 :where(.video-bg img){
-  display: block;
   filter: saturate(1.08) contrast(1.06) brightness(.92);
 }
 
