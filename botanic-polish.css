@@ -102,6 +102,50 @@ body{
   text-wrap: balance;
 }
 
+body.page-home .video-bg{
+  background: #000 url("assets/story-home.png") center center / cover no-repeat;
+}
+
+body.page-home .video-bg video{
+  opacity: .84;
+  filter: saturate(1.16) contrast(1.08) brightness(1.02);
+}
+
+body.page-home .video-bg::after{
+  background:
+    radial-gradient(900px 520px at 54% 18%, rgba(216,189,114,.14), transparent 62%),
+    radial-gradient(720px 460px at 18% 70%, rgba(112,176,116,.10), transparent 64%),
+    linear-gradient(90deg, rgba(0,0,0,.34), rgba(0,0,0,.08) 48%, rgba(0,0,0,.34)),
+    linear-gradient(180deg, rgba(0,0,0,.16), rgba(0,0,0,.62));
+}
+
+body.page-home .page-content{
+  min-height: 100svh;
+  padding-top: 0 !important;
+}
+
+body.page-home main.hero{
+  min-height: 100svh;
+  padding-top: clamp(6.5rem, 13vh, 10rem);
+  padding-bottom: clamp(2.5rem, 7vh, 5rem);
+  justify-content: flex-start;
+}
+
+body.page-learn .video-bg{
+  background: #000 url("assets/story-connect-4k.png") center center / cover no-repeat;
+}
+
+body.page-learn .video-bg video{
+  opacity: .48;
+  filter: saturate(1.22) contrast(1.12) brightness(.70);
+}
+
+body.page-learn #mood.panel{
+  min-height: calc(100svh - 136px);
+  padding-top: clamp(2.5rem, 6vh, 5rem);
+  align-items: flex-start;
+}
+
 @media (prefers-reduced-motion: reduce){
   html{
     scroll-behavior: auto;
