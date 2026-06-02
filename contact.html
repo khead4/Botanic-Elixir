@@ -19,11 +19,12 @@
       --muted: rgba(255,255,255,.62);
       --shadow: 0 18px 60px rgba(0,0,0,.45);
 
-      /* Mood caps */
-      --g-focus: linear-gradient(90deg, #2a9bd8, #3a64ff);
-      --g-restore: linear-gradient(90deg, #6bf08b, #45d8d1);
-      --g-connect: linear-gradient(90deg, #ff5cc8, #9b63ff);
-      --g-pink: linear-gradient(90deg, #ff5cc8, #ff8adf);
+      /* Botanic cap gradient */
+      --botanic-cap: linear-gradient(90deg, rgba(112,176,116,.94), rgba(214,169,94,.94));
+      --g-focus: var(--botanic-cap);
+      --g-restore: var(--botanic-cap);
+      --g-connect: var(--botanic-cap);
+      --g-pink: var(--botanic-cap);
 
       /* Buttons */
       --btn: rgba(255,255,255,.06);
@@ -828,10 +829,10 @@
 
         L.circle(venue, {
           radius: 260,
-          color: "#45d8d1",
+          color: "#d6a95e",
           weight: 1,
-          fillColor: "#2a9bd8",
-          fillOpacity: 0.08
+          fillColor: "#70b074",
+          fillOpacity: 0.10
         }).addTo(map);
       }
 

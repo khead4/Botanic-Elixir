@@ -20,11 +20,12 @@
       --border: rgba(255,255,255,.10);
       --shadow: 0 18px 60px rgba(0,0,0,.45);
       --radius: 18px;
-      --max: 1100px;
+      --max: 1220px;
 
-      /* accents  */
-      --accent-blue: linear-gradient(90deg, #2a9bd8, #3a64ff);
-      --accent-purple: linear-gradient(90deg, #8b2be2, #ff5cc8);
+      /* Botanic cap gradient */
+      --botanic-cap: linear-gradient(90deg, rgba(112,176,116,.94), rgba(214,169,94,.94));
+      --accent-blue: var(--botanic-cap);
+      --accent-purple: var(--botanic-cap);
     }
 
     *{ box-sizing:border-box; }
@@ -63,8 +64,8 @@
       z-index:-1;
       background:
         radial-gradient(1100px 520px at 50% 18%, rgba(255,255,255,.06), transparent 60%),
-        radial-gradient(900px 520px at 18% 80%, rgba(42,155,216,.07), transparent 60%),
-        radial-gradient(900px 520px at 82% 80%, rgba(255,92,200,.06), transparent 60%),
+        radial-gradient(900px 520px at 18% 80%, rgba(112,176,116,.07), transparent 60%),
+        radial-gradient(900px 520px at 82% 80%, rgba(214,169,94,.07), transparent 60%),
         linear-gradient(to bottom, rgba(0,0,0,.30), rgba(0,0,0,.74));
     }
 
@@ -263,8 +264,8 @@
 
     .grid{
       display:grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      gap: 26px;
+      grid-template-columns: minmax(0, 1fr) minmax(420px, .82fr);
+      gap: clamp(24px, 3vw, 36px);
       align-items:start;
       margin-top: 18px;
     }
@@ -290,6 +291,7 @@
         0 18px 60px rgba(0,0,0,.45),
         inset 0 1px 0 rgba(255,255,255,.06);
       overflow: hidden;
+      min-width: 0;
     }
     .glass::before{
       content:"";
@@ -313,6 +315,9 @@
     }
     .glass--blue{ --accent: var(--accent-blue); }
     .glass--purple{ --accent: var(--accent-purple); }
+    #apply{
+      min-width: 0;
+    }
 
     .label{
       margin: 0 0 14px;
@@ -451,7 +456,7 @@
     form{ margin-top: 12px; }
     .form-grid{
       display:grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 14px;
       margin-top: 14px;
     }
@@ -459,6 +464,7 @@
       display:flex;
       flex-direction: column;
       gap: 8px;
+      min-width: 0;
     }
     .field label{
       font-size: 12px;
@@ -476,6 +482,8 @@
       font-size: 14px;
       border-radius: 12px;
       outline: none;
+      width: 100%;
+      min-width: 0;
     }
     .field textarea{
       min-height: 120px;
@@ -661,7 +669,7 @@
       </section>
 
       <section class="grid">
-        <!-- LEFT: ROLES (blue accent) -->
+        <!-- LEFT: ROLES -->
         <section class="glass glass--blue" aria-label="Open roles">
           <h2 class="label">Open roles</h2>
           <p class="muted">Pick the role that fits you. If you’re hybrid, apply anyway — we love overlap.<br></p><br>
@@ -779,7 +787,7 @@
           </div>
         </section>
 
-        <!-- RIGHT: APPLY (purple accent) -->
+        <!-- RIGHT: APPLY -->
         <aside class="glass glass--purple" aria-label="Application form" id="apply">
           <h2 class="label">Apply</h2>
           <p class="muted">Tell us which role fits, when you can start, and what kind of service or systems work you have done. Submitting saves a confirmation in this browser and prepares an email for the team.</p><!--
