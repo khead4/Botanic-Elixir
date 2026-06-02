@@ -19,13 +19,13 @@
       --shadow: 0 18px 60px rgba(0,0,0,.45);
 
       /* ===== Mood gradients  ===== */
-      --g-focus: linear-gradient(90deg, #2a9bd8, #3a64ff);
-      --g-play: linear-gradient(90deg, #f0b35a, #a8a3ff);
-      --g-connect: linear-gradient(90deg, #ff5cc8, #9b63ff);
-      --g-restore: linear-gradient(90deg, #6bf08b, #45d8d1);
+      --g-focus: linear-gradient(90deg, rgba(111,213,222,.92), rgba(202,157,82,.88));
+      --g-play: linear-gradient(90deg, rgba(216,176,98,.92), rgba(92,190,164,.84));
+      --g-connect: linear-gradient(90deg, rgba(205,166,97,.94), rgba(83,211,225,.82));
+      --g-restore: linear-gradient(90deg, rgba(114,171,112,.90), rgba(210,168,94,.82));
 
       /* ===== Pink variant  ===== */
-      --g-pink: linear-gradient(90deg, #ff5cc8, #ff8adf);
+      --g-pink: linear-gradient(90deg, rgba(215,171,91,.94), rgba(112,219,221,.78));
 
       /* Buttons */
       --btn: rgba(255,255,255,.06);
@@ -56,6 +56,9 @@
       background:#000;
       pointer-events:none;
     }
+    .video-bg.community-image{
+      background: #000 url("assets/community-4k.png") center center / cover no-repeat;
+    }
     .video-bg video{
       width:100%;
       height:100%;
@@ -68,8 +71,9 @@
       position:absolute;
       inset:0;
       background:
-        radial-gradient(900px 520px at 50% 12%, rgba(216,189,114,.10), transparent 58%),
-        linear-gradient(180deg, rgba(0,0,0,.32), rgba(0,0,0,.76));
+        radial-gradient(900px 520px at 50% 12%, rgba(216,189,114,.12), transparent 58%),
+        radial-gradient(780px 520px at 78% 58%, rgba(67,205,216,.10), transparent 62%),
+        linear-gradient(180deg, rgba(0,0,0,.24), rgba(0,0,0,.72));
     }
 
     a{ color:inherit; text-decoration:none; }
@@ -281,14 +285,14 @@
     /* ===== Panels ===== */
     .panel{
       border: 1px solid var(--border);
-      background: rgba(255,255,255,.03);
-      border-radius: var(--radius);
+      background: rgba(0,0,0,.40);
+      border-radius: 8px;
       box-shadow: var(--shadow);
       padding: 18px;
     }
     .panel.inset{
       padding: 20px;
-      background: rgba(255,255,255,.035);
+      background: rgba(0,0,0,.44);
     }
 
     /* ===== Newsletter ===== */
@@ -363,15 +367,15 @@
     }
     .card{
       border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
-      border-radius: 16px;
+      background: rgba(0,0,0,.40);
+      border-radius: 8px;
       overflow:hidden;
       box-shadow: var(--shadow);
       display:flex;
       flex-direction:column;
       min-height: 210px;
     }
-    .cap{ height: 6px; background: var(--g-focus); }
+    .cap{ height: 8px; background: var(--g-focus); }
     .card-body{
       padding: 16px 16px 14px;
       display:flex;
@@ -477,8 +481,8 @@
 
     .calendar{
       border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.03);
-      border-radius: 16px;
+      background: rgba(0,0,0,.40);
+      border-radius: 8px;
       box-shadow: var(--shadow);
       padding: 16px;
     }
@@ -540,8 +544,8 @@
     /* Agenda */
     .agenda{
       border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.03);
-      border-radius: 16px;
+      background: rgba(0,0,0,.40);
+      border-radius: 8px;
       box-shadow: var(--shadow);
       padding: 16px;
       min-height: 360px;
@@ -560,12 +564,12 @@
     }
     .agenda-item{
       border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.03);
-      border-radius: 14px;
+      background: rgba(0,0,0,.36);
+      border-radius: 8px;
       overflow:hidden;
       margin-bottom: 12px;
     }
-    .agenda-cap{ height: 6px; background: var(--g-focus); }
+    .agenda-cap{ height: 8px; background: var(--g-focus); }
     .agenda-body{ padding: 12px 12px 14px; }
     .agenda-body .t{
       font-weight: 700;
@@ -642,7 +646,7 @@
     .modal-backdrop.is-on{ display:flex; }
     .modal{
       width: min(980px, 100%);
-      border-radius: 18px;
+      border-radius: 10px;
       border: 1px solid rgba(255,255,255,.14);
       background: rgba(10,12,15,.96);
       box-shadow: 0 30px 90px rgba(0,0,0,.60);
@@ -689,8 +693,8 @@
     }
     .form{
       border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.03);
-      border-radius: 16px;
+      background: rgba(0,0,0,.38);
+      border-radius: 8px;
       padding: 14px;
     }
     .form .row{
@@ -724,11 +728,11 @@
 
     .summary{
       border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.03);
-      border-radius: 16px;
+      background: rgba(0,0,0,.38);
+      border-radius: 8px;
       overflow:hidden;
     }
-    .sum-cap{ height: 6px; background: var(--g-focus); }
+    .sum-cap{ height: 8px; background: var(--g-focus); }
     .sum-body{ padding: 14px; }
     .sum-h{
       display:flex;
@@ -791,11 +795,7 @@
 </head>
 
 <body>
-  <div class="video-bg" aria-hidden="true">
-    <video autoplay muted loop playsinline poster="assets/story-community.png">
-      <source src="assets/story-community-motion.mp4" type="video/mp4" />
-    </video>
-  </div>
+  <div class="video-bg community-image" aria-hidden="true"></div>
 
   <!--UNIVERSAL NAV -->
   <header class="topline">
@@ -811,7 +811,7 @@
       <a href="contact.html">Contact</a>
 
       <div class="dropdown">
-        <a class="drop-trigger" href="#" aria-label="Open about submenu" onclick="return false;">
+        <a class="drop-trigger" href="about.html" aria-label="Open about submenu">
           About <span class="caret" aria-hidden="true"></span>
         </a>
         <div class="dropdown-panel" role="menu" aria-label="About submenu">
@@ -840,7 +840,7 @@
       </a>
 
       <div class="dropdown icon-dropdown" aria-label="Inquiries menu">
-        <a class="icon-link" href="#" aria-label="Open inquiries submenu" onclick="return false;">
+        <a class="icon-link" href="inquiries.html" aria-label="Open inquiries submenu">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <circle cx="12" cy="7" r="4"></circle>
             <path d="M4 21c1.5-4 14.5-4 16 0"></path>
@@ -861,8 +861,8 @@
     <section class="hero">
       <h1>COMMUNITY</h1>
       <p>
-        Stay connected through recurring gatherings, special events, and community programs.
-        Choose an event by intention, then register or join in a few steps.
+        Enter the calendar of the space: recurring salons, ritual evenings, creative circles, and programs designed around connection.
+        Choose an event by intention, then register or join from the same flow used across the experience system.
       </p>
     </section>
 
@@ -1707,6 +1707,9 @@
       safeJsonSet(CHECKED_OUT_KEY, cartList);
 
       localStorage.setItem(LAST_ID_KEY, booking.id);
+
+      const saveLink = document.getElementById("saveBtn");
+      if(saveLink) saveLink.href = `booked.html?id=${encodeURIComponent(booking.id)}`;
 
       sumSaved.textContent = "SAVED: YES";
       sumRef.textContent = booking.id;
