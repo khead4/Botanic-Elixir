@@ -17,12 +17,12 @@
       --muted: rgba(255,255,255,.62);
       --shadow: 0 18px 60px rgba(0,0,0,.45);
 
-      /* Mood gradients */
-      --g-focus: linear-gradient(90deg, #2a9bd8, #3a64ff);
-      --g-play: linear-gradient(90deg, #f0b35a, #a8a3ff);
-      --g-connect: linear-gradient(90deg, #ff5cc8, #9b63ff);
-      --g-restore: linear-gradient(90deg, #6bf08b, #45d8d1);
-      --g-pink: linear-gradient(90deg, #ff5cc8, #ff8adf);
+      /* Intent gradients */
+      --g-focus: linear-gradient(90deg, rgba(105,210,222,.94), rgba(205,162,88,.86));
+      --g-play: linear-gradient(90deg, rgba(216,176,98,.92), rgba(92,190,164,.84));
+      --g-connect: linear-gradient(90deg, rgba(205,166,97,.94), rgba(83,211,225,.82));
+      --g-restore: linear-gradient(90deg, rgba(114,171,112,.90), rgba(210,168,94,.82));
+      --g-pink: linear-gradient(90deg, rgba(215,171,91,.94), rgba(112,219,221,.78));
 
       /* Buttons */
       --btn: rgba(255,255,255,.06);
@@ -71,7 +71,7 @@
     }
 
     /* =========================================================
-       UNIVERSAL NAV 
+       UNIVERSAL NAV
        ========================================================= */
     .topline{
       position: fixed;
@@ -90,7 +90,7 @@
       justify-content:space-between;
       gap: 18px;
 
-    
+
       padding: 12px 22px;
     }
 
@@ -342,7 +342,7 @@
     }
     .panel.inset{
       padding: 24px;
-      background: rgba(255,255,255,.035);
+      background: rgba(0,0,0,.44);
     }
 
     /* ===== Subscribe row ===== */
@@ -419,6 +419,44 @@
       font-size: 13px;
       line-height: 1.95;
     }
+    .story-grid{
+      display:grid;
+      grid-template-columns: minmax(0, 1.28fr) minmax(260px, .72fr);
+      gap: 18px;
+      max-width: 980px;
+      margin: 0 auto;
+      align-items: stretch;
+    }
+    .story-grid .story{
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 8px;
+      background: rgba(0,0,0,.38);
+      box-shadow: var(--shadow);
+      padding: 22px;
+    }
+    .story-aside{
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 8px;
+      background:
+        linear-gradient(180deg, rgba(205,166,97,.10), rgba(0,0,0,.40)),
+        rgba(0,0,0,.44);
+      box-shadow: var(--shadow);
+      padding: 20px;
+    }
+    .story-aside h3{
+      margin: 0 0 12px;
+      color: rgba(255,255,255,.88);
+      font-size: 12px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+    .story-aside ul{
+      margin:0;
+      padding-left: 18px;
+      color: rgba(255,255,255,.70);
+      font-size: 13px;
+      line-height: 1.9;
+    }
 
     .grid4{
       display:grid;
@@ -469,6 +507,31 @@
       line-height: 1.95;
     }
     .philo p:last-child{ margin-bottom:0; }
+    .philo-grid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 18px;
+    }
+    .philo-point{
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 8px;
+      background: rgba(0,0,0,.34);
+      padding: 16px;
+    }
+    .philo-point h3{
+      margin: 0 0 8px;
+      color: rgba(255,255,255,.88);
+      font-size: 12px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+    .philo-point p{
+      margin: 0;
+      color: rgba(255,255,255,.68);
+      font-size: 13px;
+      line-height: 1.75;
+    }
 
     .gridTeam{
       display:grid;
@@ -492,6 +555,40 @@
       line-height: 1.95;
     }
     .vision strong{ color: rgba(255,255,255,.92); }
+    .vision-lead{
+      display:block;
+      max-width: 780px;
+      margin: 0 auto 18px;
+      font-size: clamp(20px, 2.2vw, 30px);
+      line-height: 1.35;
+      letter-spacing: .03em;
+    }
+    .vision-grid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 22px;
+      text-align:left;
+    }
+    .vision-grid div{
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 8px;
+      background: rgba(0,0,0,.36);
+      padding: 16px;
+    }
+    .vision-grid h3{
+      margin:0 0 8px;
+      font-size: 12px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.88);
+    }
+    .vision-grid p{
+      margin:0;
+      color: rgba(255,255,255,.68);
+      font-size: 13px;
+      line-height: 1.75;
+    }
 
     /* ===== Footer ===== */
     footer{
@@ -589,6 +686,9 @@
       .nl-form{ justify-content:flex-start; }
       .grid4{ grid-template-columns: repeat(2, 1fr); }
       .gridTeam{ grid-template-columns: repeat(2, 1fr); }
+      .story-grid{ grid-template-columns: 1fr; }
+      .philo-grid,
+      .vision-grid{ grid-template-columns: 1fr; }
     }
     @media (max-width: 640px){
       .hero h1{ font-size: 40px; }
@@ -708,21 +808,33 @@
 
     <!-- OUR STORY -->
     <section class="surface" id="story">
-      <div class="h2">OUR STORY</div>
+      <h2 class="h2">OUR STORY</h2>
       <p class="sub">
         Botanic Elixir is a mood-aligned cafe and community space built around intentional states.
       </p>
 
-      <div class="story">
-        <p style="margin:0 0 14px;">
-          Botanic Elixir began with a simple question: what if an environment could respond to a person's intention instead of asking that person to adapt to the room?
-        </p>
-        <p style="margin:0 0 14px;">
-          In a world of constant distraction and one-size-fits-all spaces, we designed a place that supports deep work, gentle renewal, playful energy, and meaningful connection. Light, sound, seating, scent, and ritual all work together to shape the state you came to access.
-        </p>
-        <p style="margin:0;">
-          Located in Shoreditch, Botanic Elixir is not a blank cafe. It is an anchor for presence, a catalyst for engagement, and a more imaginative way to spend time with yourself or with others.
-        </p>
+      <div class="story-grid">
+        <div class="story">
+          <p style="margin:0 0 14px;">
+            Botanic Elixir began with a simple question: what if an environment could respond to a person's intention instead of asking that person to adapt to the room?
+          </p>
+          <p style="margin:0 0 14px;">
+            We designed a place that supports deep work, gentle renewal, playful energy, and meaningful connection. Light, sound, seating, scent, and ritual work together to shape the state you came to access.
+          </p>
+          <p style="margin:0;">
+            Located in Shoreditch, Botanic Elixir is an anchor for presence, a catalyst for engagement, and a more imaginative way to spend time with yourself or with others.
+          </p>
+        </div>
+
+        <aside class="story-aside" aria-label="Story in brief">
+          <h3>At a Glance</h3>
+          <ul>
+            <li>Designed for intention, not speed.</li>
+            <li>Four states: Focus, Play, Connect, Restore.</li>
+            <li>Botanical rituals meet adaptive environments.</li>
+            <li>A venue built for return, not one-time novelty.</li>
+          </ul>
+        </aside>
       </div>
     </section>
 
@@ -730,7 +842,7 @@
 
     <!-- OUR VALUES -->
     <section class="surface" id="values">
-      <div class="h2">OUR VALUES</div>
+      <h2 class="h2">OUR VALUES</h2>
       <p class="sub">What guides every experience we design.</p>
 
       <div class="grid4">
@@ -772,7 +884,7 @@
 
     <!-- OUR PHILOSOPHY -->
     <section class="surface" id="philosophy">
-      <div class="h2">OUR PHILOSOPHY</div>
+      <h2 class="h2">OUR PHILOSOPHY</h2>
       <p class="sub">A space is never neutral. It is always shaping attention, emotion, and behavior.</p>
 
       <div class="philo">
@@ -785,6 +897,21 @@
         <p>
           The goal is not escape. The goal is a more deliberate container for presence, purpose, and authentic engagement.
         </p>
+
+        <div class="philo-grid" aria-label="Philosophy principles">
+          <article class="philo-point">
+            <h3>State First</h3>
+            <p>Every choice begins with the inner state the guest wants to access.</p>
+          </article>
+          <article class="philo-point">
+            <h3>Ritual Matters</h3>
+            <p>Drinks, movement, seating, and timing turn intention into something embodied.</p>
+          </article>
+          <article class="philo-point">
+            <h3>Return Value</h3>
+            <p>The space should deepen with each visit, not exhaust itself at first glance.</p>
+          </article>
+        </div>
       </div>
     </section>
 
@@ -792,7 +919,7 @@
 
     <!-- OUR TEAM -->
     <section class="surface" id="team">
-      <div class="h2">OUR TEAM</div>
+      <h2 class="h2">OUR TEAM</h2>
       <p class="sub">The people shaping the experience.</p>
 
       <div class="gridTeam">
@@ -838,12 +965,28 @@
 
     <!-- OUR VISION -->
     <section class="surface" id="vision">
-      <div class="h2">OUR VISION</div>
+      <h2 class="h2">OUR VISION</h2>
       <p class="sub">Where this grows next</p>
 
       <div class="vision">
-        <strong>We envision a world where intentional experiences are the norm, not the exception.</strong><br><br>
-        A world where people can enter spaces that support what they are becoming, not only what they are buying. Botanic Elixir is a prototype for experiential design that serves intention, honors presence, and supports human flourishing.
+        <strong class="vision-lead">We envision a world where intentional experiences are the norm, not the exception.</strong>
+        <p style="margin:0 auto; max-width:780px;">
+          Botanic Elixir is a prototype for experiential design that serves intention, honors presence, and supports human flourishing.
+        </p>
+        <div class="vision-grid" aria-label="Vision directions">
+          <div>
+            <h3>Spaces That Listen</h3>
+            <p>Adaptive environments that respond to purpose, mood, and context.</p>
+          </div>
+          <div>
+            <h3>Hospitality With Memory</h3>
+            <p>Bookings, rituals, and preferences that make each return feel more personal.</p>
+          </div>
+          <div>
+            <h3>Community By Design</h3>
+            <p>Programs that make belonging feel intentional, elegant, and repeatable.</p>
+          </div>
+        </div>
       </div>
     </section>
 

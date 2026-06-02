@@ -1,5 +1,5 @@
 /* =========================================================
-   BOTANIC ELIXIR — styles.css 
+   BOTANIC ELIXIR — styles.css
    Works for:
    - index.html (landing)  -> <body class="page-home">
    - learn-more.html       -> <body class="page-learn">
@@ -21,7 +21,7 @@ a { color: inherit; }
 
 /* ================================
    1) BACKGROUND VIDEO SYSTEM
- 
+
 ================================ */
 .video-bg{
   position: fixed;
@@ -65,7 +65,7 @@ body.page-home .video-bg::after{
 }
 
 /* ================================
-   2) NAV 
+   2) NAV
 ================================ */
 .topline{
   position: fixed;
@@ -795,7 +795,7 @@ body.page-learn .page-content{
 }
 /* ================================
    MOOD SECTION — BIGGER + 2x2 GRID
- 
+
 ================================ */
 
 /* section spacing */
@@ -1738,7 +1738,7 @@ input, select{
   padding: 12px 18px;
 
   width: 100%;                 /* fills card width */
-  
+
   font-size: 12px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -2111,7 +2111,131 @@ body.page-learn #network .net-copy{
     aspect-ratio:1.05 / 1;
   }
 
-  body.page-learn #network .net-title{
+body.page-learn #network .net-title{
     bottom:64px;
   }
+}
+
+/* ===== Cohesion pass: carbon glass + Botanic intent palette ===== */
+body.page-learn{
+  --carbon: #000;
+  --carbon-panel: rgba(0,0,0,.54);
+  --carbon-panel-soft: rgba(0,0,0,.42);
+  --carbon-line: rgba(255,255,255,.12);
+  --botanic-gold: rgba(214,169,94,.94);
+  --botanic-teal: rgba(101,211,222,.90);
+  --botanic-green: rgba(112,176,116,.86);
+}
+
+body.page-learn .panel,
+body.page-learn .panel-light,
+body.page-learn .panel-soft{
+  background:
+    radial-gradient(900px 520px at 50% 0%, rgba(214,169,94,.08), transparent 62%),
+    linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,0) 22%),
+    #000 !important;
+  border-top: 1px solid rgba(255,255,255,.09);
+  border-bottom: 1px solid rgba(255,255,255,.07);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+body.page-learn #mood.panel,
+body.page-learn #learn.panel,
+body.page-learn #contact.panel{
+  min-height: 100vh;
+  padding: clamp(92px, 9vw, 136px) 6vw clamp(92px, 9vw, 136px);
+}
+
+body.page-learn .panel-title{
+  color: rgba(246,242,232,.96);
+  font-size: clamp(2.15rem, 4.8vw, 5.2rem);
+  letter-spacing: .14em;
+  line-height: 1;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+body.page-learn .panel-sub{
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+  color: rgba(255,255,255,.70);
+  font-size: clamp(.95rem, 1.2vw, 1.08rem);
+  line-height: 1.8;
+  letter-spacing: .04em;
+}
+
+body.page-learn #mood .mood-grid{
+  gap: clamp(18px, 2.3vw, 30px);
+}
+
+body.page-learn #mood .mood-frame{
+  border-radius: 8px !important;
+  background: rgba(0,0,0,.44) !important;
+  border-color: rgba(255,255,255,.14) !important;
+  box-shadow:
+    0 26px 80px rgba(0,0,0,.58),
+    inset 0 1px 0 rgba(255,255,255,.08);
+}
+
+body.page-learn #mood .mood-blue .mood-frame{
+  border-color: rgba(101,211,222,.58) !important;
+}
+body.page-learn #mood .mood-purple .mood-frame{
+  border-color: rgba(214,169,94,.62) !important;
+}
+body.page-learn #mood .mood-peach .mood-frame{
+  border-color: rgba(205,166,97,.62) !important;
+}
+body.page-learn #mood .mood-mint .mood-frame{
+  border-color: rgba(112,176,116,.56) !important;
+}
+
+body.page-learn #mood .mood-frame::after{
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.24), rgba(0,0,0,.26) 38%, rgba(0,0,0,.76)),
+    radial-gradient(680px 320px at 50% 0%, rgba(214,169,94,.12), transparent 62%) !important;
+}
+
+body.page-learn #mood .mood-media video{
+  opacity: .86 !important;
+  filter: saturate(1.24) contrast(1.16) brightness(.78) !important;
+}
+
+body.page-learn #network .net-card:nth-child(1){
+  --net-accent: rgba(101,211,222,.94);
+  --net-glow: rgba(101,211,222,.22);
+}
+body.page-learn #network .net-card:nth-child(2){
+  --net-accent: rgba(214,169,94,.94);
+  --net-glow: rgba(214,169,94,.24);
+}
+body.page-learn #network .net-card:nth-child(3){
+  --net-accent: rgba(216,176,98,.94);
+  --net-glow: rgba(216,176,98,.24);
+}
+body.page-learn #network .net-card:nth-child(4){
+  --net-accent: rgba(107,208,219,.92);
+  --net-glow: rgba(107,208,219,.22);
+}
+body.page-learn #network .net-card:nth-child(5){
+  --net-accent: rgba(112,176,116,.90);
+  --net-glow: rgba(112,176,116,.22);
+}
+body.page-learn #network .net-card:nth-child(6){
+  --net-accent: rgba(205,166,97,.92);
+  --net-glow: rgba(205,166,97,.22);
+}
+
+body.page-learn .cta{
+  border: 1px solid rgba(214,169,94,.34);
+  background: rgba(0,0,0,.42);
+  color: rgba(255,255,255,.88);
+  border-radius: 8px;
+}
+
+body.page-learn .cta:hover{
+  background: rgba(214,169,94,.16);
+  border-color: rgba(214,169,94,.62);
 }

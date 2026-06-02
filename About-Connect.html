@@ -71,12 +71,15 @@
       background:#000;
       pointer-events:none;
     }
-    .video-bg video{
+    .video-bg video,
+    .video-bg img{
       width:100%;
       height:100%;
       object-fit:cover;
       opacity:.66;
       filter:saturate(1.16) contrast(1.14) brightness(1.03);
+      transform: scale(1.04);
+      animation: bgDrift 18s ease-in-out infinite alternate;
     }
     .video-bg::after{
       content:"";
@@ -85,6 +88,10 @@
       background:
         radial-gradient(920px 540px at 50% 12%, rgba(216,189,114,.10), transparent 58%),
         linear-gradient(180deg, rgba(0,0,0,.24), rgba(0,0,0,.68));
+    }
+    @keyframes bgDrift{
+      from{ transform: scale(1.04) translate3d(-.5%, -.4%, 0); }
+      to{ transform: scale(1.085) translate3d(.55%, .45%, 0); }
     }
 
     /* =========================================================
@@ -263,7 +270,7 @@
     }
 
     /* =========================================================
-       PAGE LAYOUT 
+       PAGE LAYOUT
        ========================================================= */
     main{
       max-width: var(--content);
@@ -546,6 +553,32 @@
       max-width: 860px;
       margin: 0 auto 14px;
     }
+    .philo-grid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 18px;
+      text-align:left;
+    }
+    .philo-point{
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 8px;
+      background: rgba(0,0,0,.34);
+      padding: 16px;
+    }
+    .philo-point h3{
+      margin: 0 0 8px;
+      color: rgba(255,255,255,.88);
+      font-size: .78rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+    .philo-point p{
+      margin: 0;
+      color: rgba(255,255,255,.68);
+      font-size: .92rem;
+      line-height: 1.75;
+    }
 
     .nl-form{
       display:flex;
@@ -734,6 +767,7 @@
       .grid3{ grid-template-columns: 1fr; }
       .content-split{ grid-template-columns: 1fr; }
       .pathway{ grid-template-columns: 1fr; }
+      .philo-grid{ grid-template-columns: 1fr; }
     }
     @media (max-width: 740px){
       .top-links{ display:none; }
@@ -756,9 +790,7 @@
 
 <body>
   <div class="video-bg" aria-hidden="true">
-    <video autoplay muted loop playsinline poster="assets/story-connect.png">
-      <source src="assets/story-connect-motion.mp4" type="video/mp4" />
-    </video>
+    <img src="assets/story-connect-4k.png" alt="" />
   </div>
 
   <!-- ===== UNIVERSAL NAV ===== -->
@@ -831,11 +863,11 @@
       <p class="kicker">COMMUNITY / RITUAL / CONTACT</p>
       <h1>CONNECT</h1>
       <p class="lead">
-        Botanic Elixir is an adaptive cafe designed to support focus, restoration, play, and connection
-        through space, ritual, and community.
+        Enter the map of Botanic Elixir: the story, people, rituals, bookings, consultation paths, and community programs
+        that turn an adaptive cafe into a living system.
       </p>
       <p class="hero-note">
-        Story, values, philosophy, team, careers, and next steps converge into one guided view of the Botanic Elixir world.
+        Start here when you want the whole world in one view, then move toward the action that matches your intention.
       </p>
       <nav class="tabs" aria-label="Connect sections">
         <a class="tab is-on" href="#experience">Experience</a>
@@ -852,9 +884,9 @@
     <!-- QUICK SECTIONS -->
     <section class="surface" id="experience">
       <div class="section-head">
-        <div class="h2">EXPLORE THE EXPERIENCE</div>
+        <h2 class="h2">EXPLORE THE EXPERIENCE</h2>
         <p class="sub">
-          A curated path through the story, principles, people, and rituals behind the space.
+          A curated path through the principles, people, rituals, and next steps behind the space.
         </p>
       </div>
 
@@ -964,7 +996,7 @@
     <!-- OUR STORY (split density: main text + side bullets) -->
     <section class="surface" id="story">
       <div class="section-head">
-        <div class="h2">OUR STORY</div><br>
+        <h2 class="h2">OUR STORY</h2>
         <p class="sub">
           Botanic Elixir began as a question: what if the space supported your intention — instead of fighting it?
         </p>
@@ -991,7 +1023,7 @@
         </div>
 
         <aside class="sidecard" aria-label="Story highlights">
-          <h2><div class="st">AT A GLANCE</div></h2><br>
+          <h3 class="st">AT A GLANCE</h3>
           <ul class="li">
             <li>Designed for intention, not speed.</li>
             <li>Four mood states: Focus, Play, Connect, Restore.</li>
@@ -1007,7 +1039,7 @@
     <!-- VALUES -->
     <section class="surface" id="values">
       <div class="section-head">
-        <div class="h2">OUR VALUES</div><br>
+        <h2 class="h2">OUR VALUES</h2>
         <p class="sub">The principles that guide every experience we design.</p><br>
       </div>
 
@@ -1051,28 +1083,42 @@
     <!-- PHILOSOPHY -->
     <section class="surface" id="philosophy">
       <div class="section-head">
-        <div class="h2">OUR PHILOSOPHY</div><br>
-        <p class="sub">A space is never neutral — it’s always shaping attention, emotion, and behavior.</p><br>
+        <h2 class="h2">OUR PHILOSOPHY</h2>
+        <p class="sub">A space is never neutral. It is always shaping attention, emotion, and behavior.</p>
       </div>
 
       <div class="philo">
-        <div class="kicker2">Stay Connected</div><br>
+        <div class="kicker2">Designed Around State</div>
         <div class="copy">
-          Join our newsletter for weekly updates on events, new rituals, and stories from our community.
-          One thoughtful email per week — no spam, no noise, just intentional content.
-        </div><br>
+          Botanic Elixir treats environment as a collaborator. The room, menu, booking flow, and community calendar
+          are designed to help people move from vague need to chosen state.
+        </div>
+        <div class="copy">
+          The goal is not spectacle for its own sake. The goal is a deliberate container for focus, recovery,
+          play, conversation, and return.
+        </div>
 
-        <form class="nl-form" id="subscribeForm">
-          <input class="input" id="subEmail" type="email" placeholder="Your email address" required />
-          <button class="btn primary" type="submit">Subscribe</button>
-        </form>
+        <div class="philo-grid" aria-label="Connect philosophy principles">
+          <article class="philo-point">
+            <h3>Read the Need</h3>
+            <p>Every pathway starts with what the guest is trying to access: clarity, energy, calm, or belonging.</p>
+          </article>
+          <article class="philo-point">
+            <h3>Shape the Room</h3>
+            <p>Light, sound, table setting, and ritual cues translate intention into a physical experience.</p>
+          </article>
+          <article class="philo-point">
+            <h3>Carry It Forward</h3>
+            <p>Bookings, events, consultation, and careers all connect back to the same adaptive system.</p>
+          </article>
+        </div>
       </div>
 
       <div style="height: 28px;"></div>
 
       <div class="section-head" style="margin-bottom: 18px;">
-        <br><div class="h2" style="font-size: clamp(1.05rem, 1.1vw, 1.2rem); letter-spacing:.20em;">READY TO BEGIN?</div>
-        <p class="sub">Choose your next step.</p><br><br>
+        <h2 class="h2" style="font-size: clamp(1.05rem, 1.1vw, 1.2rem); letter-spacing:.20em;">READY TO BEGIN?</h2>
+        <p class="sub">Choose your next step.</p>
       </div>
 
       <div class="grid3">
@@ -1110,7 +1156,7 @@
     <!-- TEAM -->
     <section class="surface" id="team">
       <div class="section-head">
-        <div class="h2">OUR TEAM</div>
+        <h2 class="h2">OUR TEAM</h2>
         <p class="sub">The people shaping the experience.</p><br>
       </div>
 
@@ -1158,7 +1204,7 @@
     <!-- VISION -->
     <section class="surface" id="vision">
       <div class="section-head">
-        <div class="h2">OUR VISION</div><br>
+        <h2 class="h2">OUR VISION</h2>
         <p class="sub">Where this grows next.</p>
       </div>
 
@@ -1241,7 +1287,6 @@
         <div class="popup-top">
           <div>
             <h3 class="popup-title">You are now subscribed</h3>
-            <p class="popup-sub">Thanks for joining. We’ll send one thoughtful email per week.</p>
           </div>
           <button class="close" type="button" id="closePopup" aria-label="Close">✕</button>
         </div>

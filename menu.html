@@ -14,20 +14,20 @@
       --bg:#000;
       --ink: rgba(255,255,255,0.92);
       --muted: rgba(255,255,255,0.72);
-      --line: rgba(255,255,255,0.18);
+      --line: rgba(255,255,255,0.12);
 
-      --glass: rgba(255,255,255,0.08);
-      --glass2: rgba(0,0,0,0.26);
+      --glass: rgba(0,0,0,0.52);
+      --glass2: rgba(0,0,0,0.38);
 
       --max: 1200px;
       --shadow: 0 30px 90px rgba(0,0,0,0.45);
-      --r: 18px;
+      --r: 8px;
 
-      /* mood gradients */
-      --g-focus: linear-gradient(90deg,#77cde4,#6b86e6);
-      --g-play: linear-gradient(90deg,#d96b58,#a8a3d7);
-      --g-connect: linear-gradient(90deg,#ea76b8,#b78bff);
-      --g-restore: linear-gradient(90deg,#9bf071,#7ef0d6);
+      /* intent gradients */
+      --g-focus: linear-gradient(90deg, rgba(105,210,222,.94), rgba(205,162,88,.86));
+      --g-play: linear-gradient(90deg, rgba(216,176,98,.92), rgba(92,190,164,.84));
+      --g-connect: linear-gradient(90deg, rgba(205,166,97,.94), rgba(83,211,225,.82));
+      --g-restore: linear-gradient(90deg, rgba(114,171,112,.90), rgba(210,168,94,.82));
 
       /* nav */
       --navH: 78px;
@@ -69,7 +69,7 @@
     }
 
     /* ======================================================
-       NEW NAV 
+       NEW NAV
        brand left • links center • icons right • dropdown
     ======================================================= */
     .topnav{
@@ -301,7 +301,7 @@
       padding: 10px 12px;
       border-radius: 999px;
       border: 1px solid rgba(255,255,255,0.18);
-      background: rgba(255,255,255,0.06);
+      background: rgba(0,0,0,0.42);
       color: rgba(255,255,255,0.90);
       font-size: 11px;
       letter-spacing:.10em;
@@ -312,7 +312,7 @@
     .tab.is-on{
       border-color:#fff;
       box-shadow: 0 0 0 2px rgba(255,255,255,0.22);
-      background: rgba(255,255,255,0.12);
+      background: rgba(214,169,94,0.14);
     }
 
     /* ===== SECTION ===== */
@@ -358,7 +358,7 @@
     .card{
       border: 1px solid rgba(255,255,255,0.14);
       background: rgba(0,0,0,0.26);
-      border-radius: 18px;
+      border-radius: 8px;
       overflow:hidden;
       min-height: 320px;
       display:flex;
@@ -369,7 +369,7 @@
     .card:hover{
       transform: translateY(-2px);
       border-color: rgba(255,255,255,0.30);
-      background: rgba(255,255,255,0.06);
+      background: rgba(0,0,0,0.48);
     }
 
     /* top mood stripe */
@@ -1255,12 +1255,12 @@
       </div>
 
       <div class="about-box" align: center;>
-       <h1> <strong>About Our Ingredients</strong></h1>
+       <h2 class="section-title">ABOUT OUR INGREDIENTS</h2>
 <p>
        <br> All serums are handcrafted in-house using <em>organic</em>, <em>sustainably-sourced </em> ingredients.
         We work directly with herbalists and suppliers who share our commitment to quality and ethical practices.
         Each ingredient is third-party tested for purity and potency.
-       
+
         <em>We never use artificial flavors, colors, or preservatives. All our offerings are 100% non-alcoholic, vegan, and gluten-free.<em>
         <br><br><br>
         <strong>Please inform staff of any allergies or sensitivities. Individual responses to botanicals may vary.</strong>
@@ -1326,7 +1326,7 @@
         </div>
         <div>
           <div class="f-title">Subscribe</div>
-        
+
           <p class="f-text">Join our community for updates on events and experiences.</p>
           <div class="subscribe">
             <input type="email" placeholder="Your email" aria-label="Email address" />

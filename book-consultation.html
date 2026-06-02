@@ -25,12 +25,12 @@
       --muted: rgba(255,255,255,.62);
       --shadow: 0 18px 60px rgba(0,0,0,.45);
 
-      /* Mood gradients) */
-      --g-focus: linear-gradient(90deg, #2a9bd8, #3a64ff);
-      --g-play: linear-gradient(90deg, #f0b35a, #a8a3ff);
-      --g-connect: linear-gradient(90deg, #ff5cc8, #9b63ff);
-      --g-restore: linear-gradient(90deg, #6bf08b, #45d8d1);
-      --g-pink: linear-gradient(90deg, #ff5cc8, #ff8adf);
+      /* Intent gradients */
+      --g-focus: linear-gradient(90deg, rgba(105,210,222,.94), rgba(205,162,88,.86));
+      --g-play: linear-gradient(90deg, rgba(216,176,98,.92), rgba(92,190,164,.84));
+      --g-connect: linear-gradient(90deg, rgba(205,166,97,.94), rgba(83,211,225,.82));
+      --g-restore: linear-gradient(90deg, rgba(114,171,112,.90), rgba(210,168,94,.82));
+      --g-pink: linear-gradient(90deg, rgba(215,171,91,.94), rgba(112,219,221,.78));
 
       /* Layout */
       --max: 1320px;
@@ -51,7 +51,7 @@
 
     a{ color:inherit; text-decoration:none; }
 
-   
+
     .video-bg{
       position: fixed;
       inset: 0;
@@ -66,6 +66,8 @@
       object-fit: cover;
       opacity: 0.55;
       filter: saturate(1.05) contrast(1.05);
+      transform: scale(1.04);
+      animation: bgDrift 18s ease-in-out infinite alternate;
     }
     .video-bg::after{
       content:"";
@@ -76,9 +78,13 @@
         linear-gradient(to bottom, rgba(0,0,0,.32), rgba(0,0,0,.68));
       pointer-events:none;
     }
+    @keyframes bgDrift{
+      from{ transform: scale(1.04) translate3d(-.45%, -.35%, 0); }
+      to{ transform: scale(1.08) translate3d(.55%, .45%, 0); }
+    }
 
     /* =========================
-       UNIVERSAL NAV 
+       UNIVERSAL NAV
     ========================= */
     .topline{
       position: sticky;
@@ -229,7 +235,7 @@
     }
 
     /* =========================
-       PAGE LAYOUT 
+       PAGE LAYOUT
     ========================= */
     body.page-consult .page-content{
       padding-top: 64px;     /* more comfortable now that nav is sticky */
@@ -285,7 +291,7 @@
       overflow:hidden;
     }
 
-  
+
     .cap{
       height: 6px;
       background: var(--g-focus);
@@ -566,9 +572,7 @@
 
 <body class="page-consult">
   <div class="video-bg" aria-hidden="true">
-    <video autoplay muted loop playsinline poster="assets/story-consultation.png">
-      <source src="assets/story-consultation-motion.mp4" type="video/mp4" />
-    </video>
+    <img src="assets/story-consultation-4k.png" alt="" />
   </div>
 
   <!-- UNIVERSAL NAV -->
@@ -701,7 +705,7 @@
             <div class="pill-row" role="radiogroup" aria-label="Consultation format">
               <label class="pill-option">
                 <input class="pill-input" type="radio" name="format" value="short" required>
-                <span class="pill">5–10 min</span>
+                <span class="pill">5-10 min</span>
               </label>
 
               <label class="pill-option">
@@ -743,7 +747,7 @@
             </div>
 
             <p class="note">
-            <br>  After submission, you’ll land on a confirmation page. Later, we can swap this to a real booking flow.
+            <br>  After submission, you will land on a confirmation page with your consultation details.
             </p>
           </form>
         </section>
@@ -752,14 +756,14 @@
         <aside class="glass" aria-label="What to expect">
           <div class="cap" style="background: var(--g-focus);"></div>
 
-          <h1 class="label">What to expect</h1><br>
+          <h2 class="label">What to expect</h2><br>
           <p class="muted" style="margin-top: 8px;">
             We’ll ask a few quick questions to clarify your intention, then recommend:
           </p><br><br>
 
           <ul class="list">
             <li>A best-fit experience (or a sequence of experiences)</li><br>
-            <li>1–2 serums that support your state and goal</li><br>
+            <li>1-2 serums that support your state and goal</li><br>
             <li>Optional pairing suggestions (food + accessories)</li>
           </ul><br>
 
