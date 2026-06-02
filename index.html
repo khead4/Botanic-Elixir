@@ -147,6 +147,7 @@ padding: .5px;
     }
   </style>
   <link rel="stylesheet" href="botanic-type.css" />
+  <link rel="stylesheet" href="botanic-nav.css" />
 </head>
 
 <body class="page-home">
@@ -161,58 +162,70 @@ padding: .5px;
   <div class="page-content">
 
     <!-- ===== NAV ===== -->
-    <header class="topline">
-
-      <a class="brand" href="index.html">
-        BOTANIC<br>
-        <span>ELIXIR</span>
+  <header class="topnav" role="banner">
+    <div class="nav-inner">
+      <a class="brand" href="index.html" aria-label="Botanic Elixir Home">
+        BOTANIC ELIXIR
+        <span>adaptive cafe</span>
       </a>
 
-      <nav class="top-links">
+      <nav class="nav-links" aria-label="Primary">
         <a href="experiences.html">Experiences</a>
         <a href="how-it-works.html">How It Works</a>
         <a href="menu.html">Menu</a>
-        <a href="community.html">Community</a>
+        <a href="About-Connect.html">Connect</a>
         <a href="contact.html">Contact</a>
-        <a href="about.html">ABOUT</a>
-      </nav>
 
-      <div class="nav-icons">
-
-        <!-- BAG -->
-        <a href="bag.html" class="icon-block">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6">
-            <path d="M6 7h12l-1 13H7L6 7Z"/>
-            <path d="M9 7a3 3 0 0 1 6 0"/>
-          </svg>
-          <span>BAG</span>
-        </a>
-
-        <!-- BOOKINGS -->
-        <a href="bookings.html" class="icon-block">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6">
-            <rect x="3" y="5" width="18" height="16" rx="2"/>
-            <path d="M16 3v4M8 3v4M3 11h18"/>
-          </svg>
-          <span>BOOKINGS</span>
-        </a>
-
-        <!-- INQUIRIES -->
-        <div class="icon-block dropdown">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6">
-            <circle cx="12" cy="8" r="4"/>
-            <path d="M4 20c1.5-4 5-6 8-6s6.5 2 8 6"/>
-          </svg>
-          <span>INQUIRIES</span>
-
-          <div class="dropdown-menu">
-            <a href="book-consultation.html">Consultation</a>
+        <div class="dropdown">
+          <button class="dropbtn" type="button" aria-haspopup="true" aria-expanded="false">
+            About <span class="caret" aria-hidden="true"></span>
+          </button>
+          <div class="menu" role="menu" aria-label="About menu">
+            <a href="about.html">About</a>
             <a href="hiring.html">Hiring</a>
+            <a href="community.html#community">Community</a>
           </div>
         </div>
+      </nav>
 
+      <div class="nav-actions" aria-label="Quick links">
+        <a class="iconlink" href="bag.html" aria-label="Bag">
+          <span class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M6 7h12l-1 14H7L6 7z"></path>
+              <path d="M9 7a3 3 0 0 1 6 0"></path>
+            </svg>
+          </span>
+          BAG
+        </a>
+
+        <a class="iconlink" href="bookings.html" aria-label="Bookings">
+          <span class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M7 3v3"></path>
+              <path d="M17 3v3"></path>
+              <path d="M4 8h16"></path>
+              <rect x="4" y="5" width="16" height="16" rx="2"></rect>
+              <path d="M8 12h4"></path>
+              <path d="M8 16h6"></path>
+            </svg>
+          </span>
+          BOOKINGS
+        </a>
+
+        <a class="iconlink" href="inquiries.html" aria-label="Inquiries">
+          <span class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"></path>
+              <path d="M8 9h8"></path>
+              <path d="M8 13h6"></path>
+            </svg>
+          </span>
+          INQUIRIES
+        </a>
       </div>
-    </header>
+    </div>
+  </header>
 
     <!-- ===== HERO ===== -->
     <main class="hero">
