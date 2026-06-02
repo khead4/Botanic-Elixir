@@ -148,7 +148,7 @@ body:not(.page-home):not(.page-learn) .video-bg::after{
 }
 
 body.page-home .video-bg{
-  background: #000 url("assets/bg-home.png") center center / cover no-repeat;
+  background: #000 url("assets/story-home.png") center center / cover no-repeat;
 }
 
 body.page-home .video-bg video{
@@ -177,7 +177,7 @@ body.page-home main.hero{
 }
 
 body.page-learn .video-bg{
-  background: #000 url("assets/bg-community.png") center center / cover no-repeat;
+  background: #000 url("assets/story-connect-4k.png") center center / cover no-repeat;
 }
 
 body.page-learn .video-bg video{
@@ -196,6 +196,42 @@ body.page-learn #mood.panel{
   min-height: calc(100svh - 136px);
   padding-top: clamp(2.5rem, 6vh, 5rem);
   align-items: flex-start;
+}
+
+body:has(> .video-bg){
+  background: #000 !important;
+}
+
+body > .video-bg ~ :where(.page-content, main, section, footer, .hero),
+body > .video-bg ~ .page-content :where(section, main, footer, .panel, .panel-light, .panel-soft, .hero),
+body > .video-bg ~ main :where(section, .panel, .panel-light, .panel-soft),
+body:has(> .video-bg) :where(.page-content, main, footer, .hero, .panel, .panel-light, .panel-soft){
+  background: transparent !important;
+}
+
+body > .video-bg ~ .page-content :where(.panel, .panel-light, .panel-soft, #network, #mood, #learn, #contact),
+body > .video-bg ~ main :where(section, .panel, .panel-light, .panel-soft),
+body:has(> .video-bg) :where(.panel, .panel-light, .panel-soft){
+  background:
+    radial-gradient(900px 560px at 50% 0%, rgba(214,169,94,.09), transparent 62%),
+    linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.28)) !important;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+body.page-learn :where(.panel, .panel-light, .panel-soft),
+body.page-learn :where(#network.panel, #mood.panel, #learn.panel, #contact.panel){
+  background:
+    radial-gradient(900px 560px at 50% 0%, rgba(214,169,94,.10), transparent 62%),
+    radial-gradient(760px 520px at 80% 36%, rgba(83,211,225,.08), transparent 64%),
+    linear-gradient(180deg, rgba(0,0,0,.08), rgba(0,0,0,.30)) !important;
+  backdrop-filter: blur(2px) !important;
+  -webkit-backdrop-filter: blur(2px) !important;
+}
+
+body:has(> .video-bg) :where(.page-content, main){
+  position: relative;
+  z-index: 1;
 }
 
 @media (prefers-reduced-motion: reduce){
