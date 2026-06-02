@@ -63,8 +63,32 @@
       -moz-osx-font-smoothing: grayscale;
     }
 
+    .video-bg{
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      overflow: hidden;
+      background:#000;
+      pointer-events:none;
+    }
+    .video-bg video{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      opacity:.56;
+      filter:saturate(1.08) contrast(1.06) brightness(.96);
+    }
+    .video-bg::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(920px 540px at 50% 12%, rgba(216,189,114,.10), transparent 58%),
+        linear-gradient(180deg, rgba(0,0,0,.32), rgba(0,0,0,.76));
+    }
+
     /* =========================================================
-       UNIVERSAL NAV 
+       UNIVERSAL NAV
        ========================================================= */
     .topline{
       position: fixed;
@@ -648,6 +672,11 @@
 </head>
 
 <body>
+  <div class="video-bg" aria-hidden="true">
+    <video autoplay muted loop playsinline poster="assets/story-connect.png">
+      <source src="assets/story-connect-motion.mp4" type="video/mp4" />
+    </video>
+  </div>
 
   <!-- ===== UNIVERSAL NAV ===== -->
   <header class="topline">

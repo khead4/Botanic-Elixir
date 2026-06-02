@@ -24,11 +24,12 @@ padding: .5px;
   align-items: center;
   gap: 2rem;
 
-  padding: 0.65rem 2.2rem;   /* ← THIN */
+  padding: 0.65rem 2.2rem;
 
-  background: rgba(0,0,0,0.10);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(0,0,0,0.42);
+  border-bottom: 1px solid rgba(255,255,255,.12);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
 
@@ -151,8 +152,8 @@ padding: .5px;
 
   <!-- Background Video -->
   <div class="video-bg">
-    <video autoplay muted loop playsinline poster="assets/bg-home.png">
-      <source src="assets/bg-home-motion.mp4" type="video/mp4">
+    <video autoplay muted loop playsinline poster="assets/story-home.png">
+      <source src="assets/story-home-motion.mp4" type="video/mp4">
     </video>
   </div>
 
@@ -187,7 +188,7 @@ padding: .5px;
         </a>
 
         <!-- BOOKINGS -->
-        <a href="booked.html" class="icon-block">
+        <a href="bookings.html" class="icon-block">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6">
             <rect x="3" y="5" width="18" height="16" rx="2"/>
             <path d="M16 3v4M8 3v4M3 11h18"/>
@@ -214,27 +215,25 @@ padding: .5px;
 
     <!-- ===== HERO ===== -->
     <main class="hero">
-      <p class="kicker">SYSTEM OVERRIDE / BOTANIC ELIXIR ONE</p>
+      <p class="kicker">ADAPTIVE ELIXIR ATELIER</p>
 
       <h1 class="hero-title">
-        SHIFT YOUR<br>
-        REALITY
+        BOTANIC<br>
+        ELIXIR
       </h1>
 
       <p class="hero-sub">
         Shift your mind. Shape your experience.
       </p>
 
-      <br>
-
       <p class="hero-desc">
-        An immersive space that moves with your intention,
-        adapting to curiosity, focus, and emotional flow.
+        A living botanical environment where light, sound, flavor,
+        and space move with your intention.
       </p>
 
       <div class="hero-actions">
-        <a class="hero-link" href="experiences.html">ENTER EXPERIENCE &gt;</a>
-        <a class="hero-link" href="learn-more.html">LEARN MORE</a>
+        <a class="hero-link primary" href="experiences.html">Enter Experiences</a>
+        <a class="hero-link" href="menu.html">Explore Menu</a>
       </div>
     </main>
 
