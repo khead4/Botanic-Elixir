@@ -29,7 +29,7 @@
       --h2: clamp(34px, 3vw, 44px);
       --body: 17px;
 
-      --sectionGap: 120px;
+      --sectionGap: 54px;
       --navH: 78px;
     }
 
@@ -56,8 +56,8 @@
       width:100%;
       height:100%;
       object-fit:cover;
-      opacity:.56;
-      filter:saturate(1.08) contrast(1.06) brightness(.96);
+      opacity:.66;
+      filter:saturate(1.16) contrast(1.14) brightness(1.03);
     }
 
     /* subtle cinematic glow */
@@ -70,7 +70,7 @@
         radial-gradient(1100px 520px at 50% 14%, rgba(255,255,255,.06), transparent 60%),
         radial-gradient(900px 520px at 18% 84%, rgba(42,155,216,.07), transparent 62%),
         radial-gradient(900px 520px at 82% 84%, rgba(255,92,200,.06), transparent 62%),
-        linear-gradient(to bottom, rgba(0,0,0,.28), rgba(0,0,0,.76));
+        linear-gradient(to bottom, rgba(0,0,0,.22), rgba(0,0,0,.68));
       pointer-events:none;
     }
 
@@ -271,7 +271,7 @@
     main{
       max-width: var(--max);
       margin: 0 auto;
-      padding: calc(var(--navH) + 76px) 18px 92px;
+      padding: calc(var(--navH) + 56px) 18px 92px;
     }
 
     .hero{
@@ -293,6 +293,47 @@
       line-height: 1.75;
     }
 
+    .tabs{
+      display:flex;
+      justify-content:center;
+      flex-wrap:wrap;
+      gap: 12px;
+      margin: 28px auto 0;
+      max-width: 980px;
+    }
+    .tab{
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.42);
+      color: rgba(255,255,255,.76);
+      border-radius: 999px;
+      padding: 12px 16px;
+      font-size: 12px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: transform .16s ease, background .18s ease, border-color .18s ease, color .18s ease;
+    }
+    .tab:hover,
+    .tab.is-on{
+      color:#fff;
+      background: rgba(255,255,255,.09);
+      border-color: rgba(255,255,255,.24);
+      transform: translateY(-1px);
+    }
+
+    .process-panel,
+    .section{
+      border: 1px solid rgba(255,255,255,.12);
+      background: linear-gradient(180deg, rgba(0,0,0,.58), rgba(0,0,0,.36));
+      border-radius: 10px;
+      box-shadow: 0 28px 90px rgba(0,0,0,.46), inset 0 1px 0 rgba(255,255,255,.06);
+      padding: 28px;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .process-panel{ margin-top: 38px; }
     .section{ margin-top: var(--sectionGap); }
 
     .section-title{
@@ -315,7 +356,7 @@
     /* ===== Adaptive process ===== */
     .process-kicker{
       text-align:center;
-      margin-top: 36px;
+      margin-top: 0;
       font-size: 14px;
       letter-spacing: .20em;
       font-weight: 900;
@@ -324,14 +365,26 @@
     }
 
     .process-grid{
-      margin-top: 44px;
+      margin-top: 28px;
       display:grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 48px;
+      gap: 18px;
       align-items:start;
     }
 
-    .step{ display:flex; flex-direction:column; align-items:flex-start; }
+    .step{
+      display:flex;
+      flex-direction:column;
+      align-items:flex-start;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.38);
+      border-radius: 8px;
+      padding: 22px;
+      min-height: 280px;
+      box-shadow: 0 18px 60px rgba(0,0,0,.36);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
 
     .step-icon{
       width: 64px;
@@ -377,23 +430,23 @@
 
     /* ===== Cards w/ colored top strip ===== */
     .grid-3{
-      margin-top: 52px;
+      margin-top: 28px;
       display:grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 34px;
+      gap: 18px;
     }
     .grid-4{
-      margin-top: 52px;
+      margin-top: 28px;
       display:grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 28px;
+      gap: 18px;
     }
 
     .card{
       position:relative;
-      background: rgba(255,255,255,.035);
+      background: rgba(0,0,0,.38);
       border: 1px solid rgba(255,255,255,.10);
-      border-radius: 18px;
+      border-radius: 8px;
       padding: 28px 26px 26px;
       min-height: 210px;
       backdrop-filter: blur(14px);
@@ -563,6 +616,9 @@
     }
     @media (max-width: 560px){
       main{ padding: calc(var(--navH) + 64px) 16px 70px; }
+      .process-panel,
+      .section{ padding: 20px; }
+      .tabs{ justify-content:flex-start; }
       .process-grid{ grid-template-columns: 1fr; }
       .grid-4{ grid-template-columns: 1fr; }
     }
@@ -644,8 +700,16 @@
   <main>
     <section class="hero">
       <h1>HOW IT WORKS</h1>
-      <p>Understanding the science and design behind our adaptive environment</p>
+      <p>Understanding the science and design behind our adaptive environment.</p>
 
+      <nav class="tabs" aria-label="How it works sections">
+        <a class="tab is-on" href="#process">Process</a>
+        <a class="tab" href="#spaces">Spaces</a>
+        <a class="tab" href="#serums">Serums</a>
+        <a class="tab" href="#technology">Technology</a>
+      </nav>
+
+      <div class="process-panel" id="process">
       <div class="process-kicker">THE ADAPTIVE PROCESS</div>
       <p class="section-sub" style="margin-top:12px;">Four steps to create your intentional experience</p>
 
@@ -726,6 +790,7 @@
             to match your selected experience and enhance your state.
           </div>
         </div>
+      </div>
       </div>
     </section>
 

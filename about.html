@@ -58,8 +58,8 @@
       width:100%;
       height:100%;
       object-fit:cover;
-      opacity:.58;
-      filter:saturate(1.08) contrast(1.06) brightness(.96);
+      opacity:.66;
+      filter:saturate(1.16) contrast(1.14) brightness(1.03);
     }
     .video-bg::after{
       content:"";
@@ -67,15 +67,17 @@
       inset:0;
       background:
         radial-gradient(900px 520px at 50% 12%, rgba(216,189,114,.10), transparent 58%),
-        linear-gradient(180deg, rgba(0,0,0,.34), rgba(0,0,0,.78));
+        linear-gradient(180deg, rgba(0,0,0,.24), rgba(0,0,0,.68));
     }
 
     /* =========================================================
        UNIVERSAL NAV 
        ========================================================= */
     .topline{
-      position: sticky;
+      position: fixed;
       top:0;
+      left:0;
+      right:0;
       z-index: 100;
 
       backdrop-filter: blur(14px);
@@ -245,7 +247,7 @@
     .wrap{
       max-width: var(--content);
       margin: 0 auto;
-      padding: 52px 22px 110px;
+      padding: 112px 22px 110px;
     }
 
     .hero{
@@ -273,6 +275,46 @@
       margin: 34px 0;
     }
 
+    .tabs{
+      display:flex;
+      justify-content:center;
+      flex-wrap:wrap;
+      gap: 12px;
+      margin: 28px auto 0;
+      max-width: 980px;
+    }
+    .tab{
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.42);
+      color: rgba(255,255,255,.76);
+      border-radius: 999px;
+      padding: 12px 16px;
+      text-decoration:none;
+      font-size: 12px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: transform .16s ease, background .18s ease, border-color .18s ease, color .18s ease;
+    }
+    .tab:hover,
+    .tab.is-on{
+      color:#fff;
+      background: rgba(255,255,255,.09);
+      border-color: rgba(255,255,255,.24);
+      transform: translateY(-1px);
+    }
+
+    .surface{
+      border: 1px solid rgba(255,255,255,.12);
+      background: linear-gradient(180deg, rgba(0,0,0,.58), rgba(0,0,0,.36));
+      border-radius: 10px;
+      box-shadow: 0 28px 90px rgba(0,0,0,.46), inset 0 1px 0 rgba(255,255,255,.06);
+      padding: 28px;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
     .h2{
       font-size: 28px;
       letter-spacing: .14em;
@@ -293,8 +335,8 @@
     /* ===== Panels ===== */
     .panel{
       border: 1px solid var(--border);
-      background: rgba(255,255,255,.03);
-      border-radius: var(--radius);
+      background: rgba(0,0,0,.42);
+      border-radius: 8px;
       box-shadow: var(--shadow);
       padding: 22px;
     }
@@ -385,15 +427,15 @@
     }
     .card{
       border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
-      border-radius: 16px;
+      background: rgba(0,0,0,.38);
+      border-radius: 8px;
       overflow:hidden;
       box-shadow: var(--shadow);
       min-height: 210px;
       display:flex;
       flex-direction:column;
     }
-    .cap{ height: 6px; background: var(--g-focus); }
+    .cap{ height: 8px; background: var(--g-focus); }
     .card-body{
       padding: 16px 16px 18px;
     }
@@ -415,8 +457,8 @@
       max-width: 980px;
       margin: 0 auto;
       border: 1px solid rgba(255,255,255,.10);
-      border-radius: 16px;
-      background: rgba(0,0,0,.55);
+      border-radius: 8px;
+      background: rgba(0,0,0,.48);
       box-shadow: var(--shadow);
       padding: 22px 22px;
     }
@@ -553,7 +595,9 @@
       .top-links{ display:none; } /* matches your CONNECT behavior */
       .grid4, .gridTeam{ grid-template-columns: 1fr; }
       .input{ min-width: 240px; }
-      .wrap{ padding: 40px 18px 90px; }
+      .surface{ padding: 20px; }
+      .tabs{ justify-content:flex-start; }
+      .wrap{ padding: 104px 18px 90px; }
     }
   </style>
 </head>
@@ -575,7 +619,7 @@
       <a href="experiences.html">Experiences</a>
       <a href="how-it-works.html">How It Works</a>
       <a href="menu.html">Menu</a>
-      <a href="About-Connect.html">Connect</div>
+      <a href="About-Connect.html">Connect</a>
       <a href="contact.html">Contact</a>
 
       <div class="dropdown">
@@ -601,7 +645,7 @@
       </a>
 
       <!-- BOOKINGS -->
-      <a class="icon-link" href="booked.html" aria-label="Go to bookings">
+      <a class="icon-link" href="bookings.html" aria-label="Go to bookings">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M4 4h16v16H4z"/>
           <path d="M8 2v4M16 2v4M4 10h16"/>
@@ -611,7 +655,7 @@
 
       <!-- INQUIRIES -->
       <div class="dropdown icon-dropdown" aria-label="Inquiries menu">
-        <a class="icon-link" href="#" aria-label="Open inquiries options">
+        <a class="icon-link" href="inquiries.html" aria-label="Open inquiries options">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <circle cx="12" cy="7" r="4"/>
             <path d="M4 21c1.5-4 14.5-4 16 0"/>
@@ -627,22 +671,27 @@
     </div>
   </header>
 
-  <!-- IMPORTANT: your pasted code had </main> but no opening main -->
   <main class="wrap">
 
     <!-- HERO -->
     <section class="hero">
       <h1>ABOUT US</h1>
-      <p>Shift your mind. Shape your experience.</p><br>
+      <p>The story behind an adaptive cafe built for focus, restoration, play, and connection.</p>
+      <nav class="tabs" aria-label="About sections">
+        <a class="tab is-on" href="#story">Story</a>
+        <a class="tab" href="#values">Values</a>
+        <a class="tab" href="#philosophy">Philosophy</a>
+        <a class="tab" href="#team">Team</a>
+        <a class="tab" href="#vision">Vision</a>
+      </nav>
     </section>
 
     <!-- SUBSCRIBE (glassy panel) -->
-    <section class="panel inset newsletter" style="margin-top: 22px;">
+    <section class="panel inset newsletter" style="margin-top: 34px;">
       <div>
-        <h3>Stay Connected</h3><br>
+        <h3>Stay Connected</h3>
         <p>
-          Subscribe for updates, special offerings, and community news.
-          We send one thoughtful email per week.
+          Receive one thoughtful note each week: upcoming rituals, new experiences, and the stories shaping the space.
         </p>
         <div style="margin-top:10px; color:rgba(255,255,255,.55); font-size:12px; line-height:1.6;">
           We respect your privacy. Unsubscribe anytime.
@@ -650,7 +699,7 @@
       </div>
 
       <form class="nl-form" id="subscribeForm">
-     <br> <br>  <input class="input" id="subEmail" type="email" placeholder="Your email address" required />
+        <input class="input" id="subEmail" type="email" placeholder="Your email address" required />
         <button class="btn primary" type="submit">Subscribe</button>
       </form>
     </section>
@@ -658,35 +707,37 @@
     <div class="rule"></div>
 
     <!-- OUR STORY -->
-    <section>
-      <div class="h2">OUR STORY</div><br>
+    <section class="surface" id="story">
+      <div class="h2">OUR STORY</div>
       <p class="sub">
-      <h4> <em><strong> Botanic Elixir is a mood-aligned café and community space built for focus, restoration, play, and connection.</strong></em><br>
-      </p></h4>
+        Botanic Elixir is a mood-aligned cafe and community space built around intentional states.
+      </p>
 
-      <div class="story"><br>
-        <h2>Botanic Elixir was born from a simple question: What if our environments could adapt to our intentions instead of the other way around?</h2><br><br>
-        In a world of constant distraction and one-size-fits-all spaces, we envisioned something different — <em><strong>a place that supports focus, restoration, play, and connection.</strong></em>
-        Whether you arrive <strong>seeking</strong> <em>deep work</em>, <em>gentle renewal</em>, <em>playful energy</em>, or <em>social connection</em>, your <em><strong>environment responds</strong></em> to meet you where you are.<br><br>
-        We combine <em>experiential design</em>, <em>biophilic aesthetics</em>, <em>environmental psychology</em>, and <em>community building</em> to create intentional, mood-aligned spaces.
-        Not a blank café — an anchor for presence and a catalyst for meaningful engagement and change.<br><br>
-        <br>Located in the heart of Shoreditch, London, Botanic Elixir opened its doors in 2024.
-        Since then, we’ve welcomed thousands of visitors who’ve discovered that when you shift your world, you can shift your experience.
+      <div class="story">
+        <p style="margin:0 0 14px;">
+          Botanic Elixir began with a simple question: what if an environment could respond to a person's intention instead of asking that person to adapt to the room?
+        </p>
+        <p style="margin:0 0 14px;">
+          In a world of constant distraction and one-size-fits-all spaces, we designed a place that supports deep work, gentle renewal, playful energy, and meaningful connection. Light, sound, seating, scent, and ritual all work together to shape the state you came to access.
+        </p>
+        <p style="margin:0;">
+          Located in Shoreditch, Botanic Elixir is not a blank cafe. It is an anchor for presence, a catalyst for engagement, and a more imaginative way to spend time with yourself or with others.
+        </p>
       </div>
     </section>
 
     <div class="rule"></div>
 
     <!-- OUR VALUES -->
-    <section>
+    <section class="surface" id="values">
       <div class="h2">OUR VALUES</div>
-      <p class="sub">What guides every experience we design</p><br>
+      <p class="sub">What guides every experience we design.</p>
 
       <div class="grid4">
         <article class="card">
           <div class="cap" style="background: var(--g-focus);"></div>
           <div class="card-body">
-            <h4>Intentional Design</h4><br>
+            <h4>Intentional Design</h4>
             <p>Every detail supports presence — from lighting and layout to sound and flow. Design is direction.</p>
           </div>
         </article>
@@ -694,7 +745,7 @@
         <article class="card">
           <div class="cap" style="background: var(--g-connect);"></div>
           <div class="card-body">
-            <h4>Conscious Connection</h4><br>
+            <h4>Conscious Connection</h4>
             <p>We build spaces where conversations feel safe, meaningful, and human — with room for quiet and depth.</p>
           </div>
         </article>
@@ -702,7 +753,7 @@
         <article class="card">
           <div class="cap" style="background: var(--g-restore);"></div>
           <div class="card-body">
-            <h4>Botanic Wisdom</h4><br>
+            <h4>Botanic Wisdom</h4>
             <p>Plants, aromas, and ingredients are sensory tools for grounding, regulation, and renewal.</p>
           </div>
         </article>
@@ -710,8 +761,8 @@
         <article class="card">
           <div class="cap" style="background: var(--g-play);"></div>
           <div class="card-body">
-            <h4>Community First</h4><br>
-            <p>We design for belonging. The goal isn’t throughput — it’s a place people return to and grow within.</p>
+            <h4>Community First</h4>
+            <p>We design for belonging. The goal is not throughput; it is a place people return to and grow within.</p>
           </div>
         </article>
       </div>
@@ -720,52 +771,45 @@
     <div class="rule"></div>
 
     <!-- OUR PHILOSOPHY -->
-    <section>
+    <section class="surface" id="philosophy">
       <div class="h2">OUR PHILOSOPHY</div>
-      <p class="sub">A space is never neutral — it’s always shaping someone</p><br>
+      <p class="sub">A space is never neutral. It is always shaping attention, emotion, and behavior.</p>
 
       <div class="philo">
         <p>
-       <h2> <br> <em> “The space we build shapes our inner landscape. When we design with intention, we create the conditions for transformation.”</h2>
-       </em> </p><br>
-       <h3><p>
-         We believe environments do not simply sit — they actively influence our <em><strong>thoughts</strong>, <strong>emotions</strong>, and <strong>behavior</strong>.</em><br><br>
-       </h3></p>
-      <br><p> Traditional places focus on a single job to fulfill; Botanic Elixir is built to support a range of states and needs.
-        <br>
-        </p>
-          <p>This adaptive approach extends beyond physical space. Our mood-based experiences use botanical compounds to support your desired state —
-          whether it’s <em><strong>clarity</strong>, <strong>calm</strong>, <strong>courage</strong>, or <strong>creative coherence</strong>.</em><br></p>
+          We believe the spaces we enter become part of the way we think, feel, and relate. When a room is designed with intention, it can help create the conditions for focus, courage, calm, curiosity, and connection.
         </p>
         <p>
-         We’re <strong>not</strong> interested in escape or abstraction. We <strong>create</strong> containers for <em><strong>presence</em></strong>, <em><strong>purpose</em></strong>, and <em><strong>authentic engagement</strong></em> —
-          with your work, your community, or yourself.
-        </p></h6>
+          Traditional places often try to fulfill one job. Botanic Elixir is built for a wider emotional range. The adaptive experience extends from physical space into botanical rituals, guided choices, and community programming.
+        </p>
+        <p>
+          The goal is not escape. The goal is a more deliberate container for presence, purpose, and authentic engagement.
+        </p>
       </div>
     </section>
 
     <div class="rule"></div>
 
     <!-- OUR TEAM -->
-    <section>
-      <div class="h2">OUR TEAM</div><br>
-      <p class="sub">The people shaping the experience</p><br>
+    <section class="surface" id="team">
+      <div class="h2">OUR TEAM</div>
+      <p class="sub">The people shaping the experience.</p>
 
       <div class="gridTeam">
         <article class="card">
           <div class="cap" style="background: var(--g-focus);"></div>
           <div class="card-body">
-            <h4>Elena Martinez</h4><br>
-            <div class="role">Founder & Creative Director</div><br>
-            <p>Leads experiential design and the overall vision — shaping spaces that feel like guided emotional architecture.</p>
+            <h4>Elena Martinez</h4>
+            <div class="role">Founder &amp; Creative Director</div>
+            <p>Leads experiential design and the overall vision, shaping spaces that feel like guided emotional architecture.</p>
           </div>
         </article>
 
         <article class="card">
           <div class="cap" style="background: var(--g-connect);"></div>
           <div class="card-body">
-            <h4>James Chen</h4><br>
-            <div class="role">Rituals & Events</div><br>
+            <h4>James Chen</h4>
+            <div class="role">Rituals &amp; Events</div>
             <p>Designs gatherings and conversations that support belonging, curiosity, and real connection.</p>
           </div>
         </article>
@@ -773,18 +817,18 @@
         <article class="card">
           <div class="cap" style="background: var(--g-restore);"></div>
           <div class="card-body">
-            <h4>Anika Patel</h4><br>
-            <div class="role">Environmental Design</div><br>
-            <p>Focuses on light, sensory pacing, and spatial flow — ensuring each area supports the intended mood.</p>
+            <h4>Anika Patel</h4>
+            <div class="role">Environmental Design</div>
+            <p>Focuses on light, sensory pacing, and spatial flow so each area supports the intended mood.</p>
           </div>
         </article>
 
         <article class="card">
           <div class="cap" style="background: var(--g-pink);"></div>
           <div class="card-body">
-            <h4>Marcus Thompson</h4><br>
-            <div class="role">Community Operations</div><br>
-            <p>Keeps everything running smoothly — memberships, partnerships, and the rhythm of daily experience.</p>
+            <h4>Marcus Thompson</h4>
+            <div class="role">Community Operations</div>
+            <p>Keeps everything running smoothly: memberships, partnerships, and the rhythm of daily experience.</p>
           </div>
         </article>
       </div>
@@ -793,17 +837,14 @@
     <div class="rule"></div>
 
     <!-- OUR VISION -->
-    <section>
-      <div class="h2">OUR VISION</div><br>
+    <section class="surface" id="vision">
+      <div class="h2">OUR VISION</div>
       <p class="sub">Where this grows next</p>
 
       <div class="vision">
-        <strong>We envision a world where intentional experiences are the norm, not the exception.</strong><br><br><br>
-        Where people have access to spaces that support their highest purpose — and where environments become a helping hand
-        for who we are meant to become.<br><br><br>
-        Botanic Elixir is just the beginning. We’re pioneering a model of experiential design that inspires others to build
-        spaces that serve intention, honor presence, and support human flourishing.
-      </div><br><br>
+        <strong>We envision a world where intentional experiences are the norm, not the exception.</strong><br><br>
+        A world where people can enter spaces that support what they are becoming, not only what they are buying. Botanic Elixir is a prototype for experiential design that serves intention, honors presence, and supports human flourishing.
+      </div>
     </section>
 
     <!-- FOOTER -->

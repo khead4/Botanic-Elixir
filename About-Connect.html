@@ -75,8 +75,8 @@
       width:100%;
       height:100%;
       object-fit:cover;
-      opacity:.56;
-      filter:saturate(1.08) contrast(1.06) brightness(.96);
+      opacity:.66;
+      filter:saturate(1.16) contrast(1.14) brightness(1.03);
     }
     .video-bg::after{
       content:"";
@@ -84,7 +84,7 @@
       inset:0;
       background:
         radial-gradient(920px 540px at 50% 12%, rgba(216,189,114,.10), transparent 58%),
-        linear-gradient(180deg, rgba(0,0,0,.32), rgba(0,0,0,.76));
+        linear-gradient(180deg, rgba(0,0,0,.24), rgba(0,0,0,.68));
     }
 
     /* =========================================================
@@ -312,6 +312,46 @@
       margin: 44px 0;
     }
 
+    .tabs{
+      display:flex;
+      justify-content:center;
+      flex-wrap:wrap;
+      gap: 12px;
+      margin: 28px auto 0;
+      max-width: 980px;
+    }
+    .tab{
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.42);
+      color: rgba(255,255,255,.76);
+      border-radius: 999px;
+      padding: 12px 16px;
+      text-decoration:none;
+      font-size: .76rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: transform .16s ease, background .18s ease, border-color .18s ease, color .18s ease;
+    }
+    .tab:hover,
+    .tab.is-on{
+      color:#fff;
+      background: rgba(255,255,255,.09);
+      border-color: rgba(255,255,255,.24);
+      transform: translateY(-1px);
+    }
+
+    .surface{
+      border: 1px solid rgba(255,255,255,.12);
+      background: linear-gradient(180deg, rgba(0,0,0,.58), rgba(0,0,0,.36));
+      border-radius: 10px;
+      box-shadow: 0 28px 90px rgba(0,0,0,.46), inset 0 1px 0 rgba(255,255,255,.06);
+      padding: 28px;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
     /* ===== Section headers  ===== */
     .section-head{
       text-align:center;
@@ -337,26 +377,28 @@
     .gridCards{
       display:grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
+      gap: 18px;
     }
     .mini{
       border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
-      border-radius: 16px;
+      background: rgba(0,0,0,.38);
+      border-radius: 8px;
       box-shadow: var(--shadow);
       overflow:hidden;
       display:flex;
       flex-direction:column;
-      min-height: 168px;
+      min-height: 190px;
       transition: transform .12s ease, border-color .18s ease, background .18s ease;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
     }
     .mini:hover{
       transform: translateY(-2px);
       border-color: rgba(255,255,255,.18);
       background: rgba(255,255,255,.055);
     }
-    .mini .cap{ height: 6px; background: var(--g-focus); }
-    .mini .body{ padding: 14px 14px 14px; }
+    .mini .cap{ height: 8px; background: var(--g-focus); }
+    .mini .body{ padding: 17px 16px 15px; }
     .mini h4{
       margin:0 0 10px;
       font-size: var(--h3);
@@ -380,7 +422,7 @@
       white-space: pre-line;
     }
     .mini .foot{
-      padding: 12px 14px 14px;
+      padding: 12px 16px 16px;
       display:flex;
       justify-content:space-between;
       align-items:center;
@@ -407,8 +449,8 @@
     }
     .story{
       border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.03);
-      border-radius: 16px;
+      background: rgba(0,0,0,.38);
+      border-radius: 8px;
       box-shadow: var(--shadow);
       padding: 22px;
       color: rgba(255,255,255,.78);
@@ -417,8 +459,8 @@
     }
     .sidecard{
       border: 1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.45);
-      border-radius: 16px;
+      background: rgba(0,0,0,.48);
+      border-radius: 8px;
       box-shadow: var(--shadow);
       padding: 18px 18px 16px;
     }
@@ -442,8 +484,8 @@
     /* ===== Philosophy banner ===== */
     .philo{
       border: 1px solid rgba(255,255,255,.10);
-      border-radius: 16px;
-      background: rgba(0,0,0,.55);
+      border-radius: 8px;
+      background: rgba(0,0,0,.48);
       box-shadow: var(--shadow);
       padding: 28px 22px;
       max-width: 980px;
@@ -659,6 +701,8 @@
       .right-controls{ gap: 14px; }
       .icon-link{ min-width: 64px; }
       main{ padding: 92px 18px 100px; }
+      .surface{ padding: 20px; }
+      .tabs{ justify-content:flex-start; }
       .gridCards{ grid-template-columns: 1fr; }
       .gridTeam{ grid-template-columns: 1fr; }
       .input{ min-width: 240px; }
@@ -688,7 +732,7 @@
       <a href="experiences.html">Experiences</a>
       <a href="how-it-works.html">How It Works</a>
       <a href="menu.html">Menu</a>
-      <a class="active" href="connect.html">Connect</a>
+      <a class="active" href="About-Connect.html">Connect</a>
       <a href="contact.html">Contact</a>
 
       <!-- ABOUT DROPDOWN -->
@@ -715,7 +759,7 @@
       </a>
 
       <!-- BOOKINGS -->
-      <a class="icon-link" href="booked.html" aria-label="Go to bookings">
+      <a class="icon-link" href="bookings.html" aria-label="Go to bookings">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M4 4h16v16H4z"/>
           <path d="M8 2v4M16 2v4M4 10h16"/>
@@ -725,7 +769,7 @@
 
       <!-- INQUIRIES (icon + label + dropdown) -->
       <div class="dropdown icon-dropdown" aria-label="Inquiries menu">
-        <a class="icon-link" href="#" aria-label="Open inquiries options">
+        <a class="icon-link" href="inquiries.html" aria-label="Open inquiries options">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <circle cx="12" cy="7" r="4"/>
             <path d="M4 21c1.5-4 14.5-4 16 0"/>
@@ -745,27 +789,35 @@
 
     <!-- HERO -->
     <section class="hero">
-      <p class="kicker">COMMUNITY / RITUAL / CONTACT</p><br><br>
-      <h1>CONNECT</h1><br><br>
-     <h2> <p class="lead">
-        Botanic Elixir is an adaptive café designed to support focus, restoration, play, and connection —
-        through space, ritual, and community.<br>
-      </p></h2><br>
-      <p class="hero-note">
-        Use this page as a map: scan the cards for quick navigation, then drop into deeper sections when you want context.
+      <p class="kicker">COMMUNITY / RITUAL / CONTACT</p>
+      <h1>CONNECT</h1>
+      <p class="lead">
+        Botanic Elixir is an adaptive cafe designed to support focus, restoration, play, and connection
+        through space, ritual, and community.
       </p>
+      <p class="hero-note">
+        Story, values, philosophy, team, careers, and next steps converge into one guided view of the Botanic Elixir world.
+      </p>
+      <nav class="tabs" aria-label="Connect sections">
+        <a class="tab is-on" href="#experience">Experience</a>
+        <a class="tab" href="#story">Story</a>
+        <a class="tab" href="#values">Values</a>
+        <a class="tab" href="#philosophy">Philosophy</a>
+        <a class="tab" href="#team">Team</a>
+        <a class="tab" href="#careers">Careers</a>
+      </nav>
     </section>
 
     <div class="rule"></div>
 
     <!-- QUICK SECTIONS -->
-    <section>
+    <section class="surface" id="experience">
       <div class="section-head">
-        <div class="h2">EXPLORE THE EXPERIENCE</div><br>
+        <div class="h2">EXPLORE THE EXPERIENCE</div>
         <p class="sub">
-          Quick links for first-time visitors — then deeper blocks for story, values, philosophy, and team.
-        </p><br>
-      </div><br><br>
+          A curated path through the story, principles, people, and rituals behind the space.
+        </p>
+      </div>
 
       <div class="gridCards">
         <article class="mini">
@@ -853,7 +905,7 @@
     <div class="rule"></div>
 
     <!-- OUR STORY (split density: main text + side bullets) -->
-    <section id="story">
+    <section class="surface" id="story">
       <div class="section-head">
         <div class="h2">OUR STORY</div><br>
         <p class="sub">
@@ -896,7 +948,7 @@
     <div class="rule"></div>
 
     <!-- VALUES -->
-    <section id="values">
+    <section class="surface" id="values">
       <div class="section-head">
         <div class="h2">OUR VALUES</div><br>
         <p class="sub">The principles that guide every experience we design.</p><br>
@@ -940,7 +992,7 @@
     <div class="rule"></div>
 
     <!-- PHILOSOPHY -->
-    <section id="philosophy">
+    <section class="surface" id="philosophy">
       <div class="section-head">
         <div class="h2">OUR PHILOSOPHY</div><br>
         <p class="sub">A space is never neutral — it’s always shaping attention, emotion, and behavior.</p><br>
@@ -999,7 +1051,7 @@
     <div class="rule"></div>
 
     <!-- TEAM -->
-    <section id="team">
+    <section class="surface" id="team">
       <div class="section-head">
         <div class="h2">OUR TEAM</div>
         <p class="sub">The people shaping the experience.</p><br>
@@ -1047,7 +1099,7 @@
     <div class="rule"></div>
 
     <!-- VISION -->
-    <section id="vision">
+    <section class="surface" id="vision">
       <div class="section-head">
         <div class="h2">OUR VISION</div><br>
         <p class="sub">Where this grows next.</p>
@@ -1065,7 +1117,7 @@
     <div class="rule"></div>
 
     <!-- CAREERS -->
-    <section id="careers">
+    <section class="surface" id="careers">
       <div class="section-head">
         <div class="h2">CAREERS</div>
         <p class="sub">
