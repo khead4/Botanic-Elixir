@@ -310,6 +310,17 @@
       gap: 18px;
       align-items: stretch;
     }
+    .sr-only{
+      position:absolute;
+      width:1px;
+      height:1px;
+      padding:0;
+      margin:-1px;
+      overflow:hidden;
+      clip:rect(0,0,0,0);
+      white-space:nowrap;
+      border:0;
+    }
 
     /* ===== CARD ===== */
     .card{
@@ -810,6 +821,7 @@
 
     <!-- GRID PANEL -->
     <section class="panel">
+      <h2 class="sr-only">Choose an experience</h2>
       <div class="grid" id="experienceGrid">
 
         <!-- Focus -->
