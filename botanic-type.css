@@ -1,0 +1,118 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
+
+/*
+  Botanic Elixir type guide
+  Scale is anchored to the Menu page and restrained for dense How It Works panels.
+*/
+:root{
+  --be-heading-font: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+
+  --be-h1-size: 2.75rem;       /* 44px, Menu page title */
+  --be-h1-line: 1.08;
+  --be-h1-weight: 600;
+  --be-h1-tracking: .12em;
+
+  --be-h2-size: .875rem;       /* 14px, Menu section label */
+  --be-h2-line: 1.28;
+  --be-h2-weight: 700;
+  --be-h2-tracking: .22em;
+
+  --be-h3-size: .8125rem;      /* 13px, Menu card title */
+  --be-h3-line: 1.32;
+  --be-h3-weight: 700;
+  --be-h3-tracking: .06em;
+
+  --be-h4-size: .75rem;        /* 12px, modal/detail title */
+  --be-h4-line: 1.35;
+  --be-h4-weight: 700;
+  --be-h4-tracking: .12em;
+
+  --be-h5-size: .6875rem;      /* 11px, footer/eyebrow */
+  --be-h5-line: 1.4;
+  --be-h5-weight: 700;
+  --be-h5-tracking: .16em;
+
+  --be-h6-size: .625rem;       /* 10px, annotation */
+  --be-h6-line: 1.4;
+  --be-h6-weight: 700;
+  --be-h6-tracking: .18em;
+}
+
+@media (max-width: 1100px){
+  :root{
+    --be-h1-size: 2.5rem;
+    --be-h1-tracking: .11em;
+  }
+}
+
+@media (max-width: 640px){
+  :root{
+    --be-h1-size: 2.125rem;
+    --be-h1-tracking: .095em;
+  }
+}
+
+:where(h1, .hero-title, h1.title, h1.panel-title){
+  font-family: var(--be-heading-font) !important;
+  font-size: var(--be-h1-size) !important;
+  line-height: var(--be-h1-line) !important;
+  font-weight: var(--be-h1-weight) !important;
+  letter-spacing: var(--be-h1-tracking) !important;
+  text-transform: uppercase !important;
+  text-wrap: balance;
+}
+
+:where(h2, h2.h2, h2.label, h2.panel-title, h2.section-title, .section-title){
+  font-family: var(--be-heading-font) !important;
+  font-size: var(--be-h2-size) !important;
+  line-height: var(--be-h2-line) !important;
+  font-weight: var(--be-h2-weight) !important;
+  letter-spacing: var(--be-h2-tracking) !important;
+  text-transform: uppercase !important;
+  text-wrap: balance;
+}
+
+:where(h3, h3.label, h3.role-title, h3.modal-title, h3.prog-title, .card h3, .step-title, .exp-title, .ov-title){
+  font-family: var(--be-heading-font) !important;
+  font-size: var(--be-h3-size) !important;
+  line-height: var(--be-h3-line) !important;
+  font-weight: var(--be-h3-weight) !important;
+  letter-spacing: var(--be-h3-tracking) !important;
+  text-transform: uppercase !important;
+}
+
+:where(h4){
+  font-family: var(--be-heading-font) !important;
+  font-size: var(--be-h4-size) !important;
+  line-height: var(--be-h4-line) !important;
+  font-weight: var(--be-h4-weight) !important;
+  letter-spacing: var(--be-h4-tracking) !important;
+  text-transform: uppercase !important;
+}
+
+:where(h5){
+  font-family: var(--be-heading-font) !important;
+  font-size: var(--be-h5-size) !important;
+  line-height: var(--be-h5-line) !important;
+  font-weight: var(--be-h5-weight) !important;
+  letter-spacing: var(--be-h5-tracking) !important;
+  text-transform: uppercase !important;
+}
+
+:where(h6){
+  font-family: var(--be-heading-font) !important;
+  font-size: var(--be-h6-size) !important;
+  line-height: var(--be-h6-line) !important;
+  font-weight: var(--be-h6-weight) !important;
+  letter-spacing: var(--be-h6-tracking) !important;
+  text-transform: uppercase !important;
+}
+
+:where(.mini-title, .process-kicker, .step-tag, .f-title, .small-top, .cal-title .m){
+  font-family: var(--be-heading-font) !important;
+  font-size: var(--be-h5-size) !important;
+  line-height: var(--be-h5-line) !important;
+  font-weight: var(--be-h5-weight) !important;
+  letter-spacing: var(--be-h5-tracking) !important;
+  text-transform: uppercase !important;
+}
